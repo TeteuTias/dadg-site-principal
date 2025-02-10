@@ -3,6 +3,8 @@
 import React from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import Kindred from '@/public/fonts/lib/libFontKindred';
+import fontCormorantGaramond from '@/public/fonts/lib/libCormorant Garamond';
 
 export default function Home() {
   const handleDownload = async () => {
@@ -13,17 +15,17 @@ export default function Home() {
 
     // Seleciona os elementos de frente e verso
     const frontElement = document.getElementById('frontCert');
-    const backElement = document.getElementById('backCert');
-    if (!frontElement || !backElement) return;
+    // const backElement = document.getElementById('backCert');
+    if (!frontElement /* || !backElement*/) return;
 
     // Captura os dois elementos de forma concorrente
-    const [frontCanvas, backCanvas] = await Promise.all([
+    const [frontCanvas, /*backCanvas*/] = await Promise.all([
       html2canvas(frontElement, { scale }),
-      html2canvas(backElement, { scale }),
+      //html2canvas(backElement, { scale }),
     ]);
 
-    const frontImgData = frontCanvas.toDataURL('image/png');
-    const backImgData = backCanvas.toDataURL('image/png');
+    const frontImgData = frontCanvas.toDataURL('/certificates/templates/template02.png');
+    //const backImgData = backCanvas.toDataURL('image/png');
 
     // Cria o PDF usando as dimensões do canvas da frente
     const pdf = new jsPDF({
@@ -36,8 +38,8 @@ export default function Home() {
     pdf.addImage(frontImgData, 'PNG', 0, 0, frontCanvas.width, frontCanvas.height);
 
     // Adiciona uma nova página para a imagem do verso
-    pdf.addPage([backCanvas.width, backCanvas.height], 'landscape');
-    pdf.addImage(backImgData, 'PNG', 0, 0, backCanvas.width, backCanvas.height);
+    //pdf.addPage([backCanvas.width, backCanvas.height], 'landscape');
+    //pdf.addImage(backImgData, 'PNG', 0, 0, backCanvas.width, backCanvas.height);
 
     pdf.save('certificado.pdf');
   };
@@ -63,18 +65,21 @@ export default function Home() {
           style={{ width: '2000px', height: '1414px' }}
         >
           <img
-            src="/certificates/templates/template01.png"
+            src="/certificates/templates/template02.png"
             alt="Certificado"
             className="w-full h-full object-fill"
           />
-          <div className="absolute flex items-center justify-center top-0 text-2xl font-bold text-gray-800 w-full h-full">
-            <div className="relative -top-[100px] w-full">
-              <p className="text-center text-[50px]">MATEUS ROSA MARTINS</p>
+          <div className="absolute flex flex-col items-center justify-center top-0 text-2xl font-bold w-full h-full">
+            <div className=' w-[70%]'>
+              <div className="relative mb-[115px] w-full text-center">
+                <p className="text-center text-[120px] font-thin text-[#02425A]" style={Kindred.style}>Nicoly Gonzaga Ferreira</p>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Verso do Certificado */}
+        {/*
         <div
           id="backCert"
           className="relative w-full mt-10"
@@ -91,6 +96,7 @@ export default function Home() {
             </div>
           </div>
         </div>
+        */}
       </article>
     </main>
   );
