@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "@dadg.imepac",
   description: "Bem vindo(a) ao site do Dadg Imepac Araguari!",
+  icons: {
+    icon: "/logoDadg02.ico"
+  }
 };
 
 export default function RootLayout({
