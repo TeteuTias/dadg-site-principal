@@ -3,6 +3,8 @@ import React from 'react';
 import Image from "next/image";
 import { Poppins } from 'next/font/google';
 import { useState } from "react";
+import { ICertificate } from '../lib/models/CertificateModel';
+import Link from 'next/link';
 
 //
 
@@ -27,7 +29,7 @@ export default function Home() {
         <div>
           <h1 className='text-[23px] sm:text-[30px] font-bold text-center'>{`Validação de Certificados`.toLocaleUpperCase()}</h1>
           <div>
-            <h2 className='text-center font-semithin text-center'>Pesquise usando: Nome, Cpf, Evento ou Código Verificador</h2>
+            <h2 className='text-center font-semithin text-center'>Pesquise usando: Nome, Cpf, Email, Evento ou Código Verificador</h2>
           </div>
         </div>
       </article>
@@ -49,21 +51,36 @@ function SearchInput() {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [noResults, setNoResults] = useState(false);
+  const [data, setData] = useState<ICertificate[]>([])
 
-  const handleSearch = () => {
+
+
+  const handleSearch = async () => {
+    setData([])
     setIsLoading(true);
     setNoResults(false);
 
-    // Simula um carregamento entre 100 e 300ms
-    const randomDelay = Math.floor(Math.random() * 200) + 100;
-    setTimeout(() => {
-      setIsLoading(false);
-      setNoResults(true);
-    }, randomDelay);
+
+    const fetchData = await fetch(`/api/get/myCertificate/${inputValue}`)
+
+    const fetchDataJson: { data: ICertificate[] } = await fetchData.json()
+
+    if (!fetchData.ok) {
+      //let fetchDataJson2: { message: "string" } = await fetchData.json()
+      //console.log(fetchDataJson2)
+      setNoResults(true)
+      setIsLoading(false)
+      return;
+    }
+
+    setData(fetchDataJson.data)
+    setIsLoading(false)
+
   };
 
   return (
-    <div className="flex flex-col items-center justify-start">
+    <div className="flex flex-col items-center justify-start space-y-5">
+
       {/* Input e Label */}
       <div className='w-full'>
         <input
@@ -92,6 +109,43 @@ function SearchInput() {
       {noResults && (
         <div className="mt-4 text-red-600 font-medium">Nenhum resultado encontrado.</div>
       )}
+
+
+      {
+        !noResults && data.length > 0 &&
+        <div className='w-full max-h-64 overflow-auto'>
+          {
+            data.map((certificate) => {
+              return (
+                <div
+                  className='shadow-md border-t-[2px] bg-white border-[#09427D] w-full px-5 rounded-xl space-y-1 cursor-pointer' key={String(certificate._id)} style={stylePoppins.style}>
+                  <Link
+                    prefetch={true}
+                    href={`/certificados/meuCertificado/${String(certificate._id)}`}>
+                    <div>
+                      <h1 className='font-extrabold'>{certificate.eventName}</h1>
+                    </div>
+                    <div className=''>
+                      <div>
+                        <p className='text-[10.5px]'>Titular</p>
+                        <p className='font-medium'>{certificate.ownerName}</p>
+                      </div>
+                      <div>
+                        <p className='text-[10.5px]'>
+                          Código Verificador
+                        </p>
+                        <p className='font-medium'>
+                          {String(certificate._id)}
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              )
+            })
+          }
+        </div>
+      }
     </div>
   );
 }

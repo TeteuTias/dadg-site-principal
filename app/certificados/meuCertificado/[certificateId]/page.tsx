@@ -4,9 +4,24 @@ import React from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import Kindred from '@/public/fonts/lib/libFontKindred';
-import fontCormorantGaramond from '@/public/fonts/lib/libCormorant Garamond';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { ICertificate } from '@/app/lib/models/CertificateModel';
+import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
 
-export default function Home() {
+
+//  export default function Home({ params }: { params: { certificateId: string } }) {
+
+export default function Home({
+  params,
+}: {
+  params: Promise<{ certificateId: string }>
+}) {
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [data, setData] = useState<ICertificate | null>(null)
+  const router = useRouter()
+  //const [certificateId, setCertificateId] = useState<null | string>(null)
+
   const handleDownload = async () => {
     // Detecta se é dispositivo móvel (ajuste o valor conforme sua necessidade)
     const isMobile = window.innerWidth < 768;
@@ -44,16 +59,58 @@ export default function Home() {
     pdf.save('certificado.pdf');
   };
 
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { certificateId } = await params
+      const fetchData = await fetch(`/api/get/myCertificateById/${certificateId}`)
+
+      if (!fetchData.ok) {
+        router.push("/_error")
+        return;
+      }
+
+      const fetchDataJson: { data: ICertificate } = await fetchData.json()
+      setData(fetchDataJson.data)
+      setIsLoading(false)
+    }
+    fetchData()
+
+  }, [params, router])
+
+  if (isLoading) {
+    return (
+      <main className="relative flex flex-col max-w-screen overflow-hidden">
+        <div className="fixed inset-0 flex items-center justify-center bg-[#09427D] bg-opacity-50">
+          <div className="bg-white p-6 rounded-md shadow-md">
+            <p className="text-lg">C A R R E G A N D O</p>
+          </div>
+        </div>
+
+      </main>
+    )
+  }
+
   return (
     <main className="relative flex flex-col max-w-screen overflow-hidden">
+      <div className='absolute min-h-svg min-w-full z-[500]'>
+        <Fireworks autorun={{
+          speed: 1.5,
+          duration: 1500,
+          delay: 0
+        }} />
+      </div>
       {/* Cabeçalho fixo com o botão de download */}
-      <div className="fixed top-0 bg-gray-100 w-full z-50">
+      <div className="fixed top-0 flex justify-center items-center p-5 bg-blue-900 w-full z-50 flex flex-col">
         <button
           onClick={handleDownload}
-          className="px-4 py-2 bg-blue-600 text-white rounded"
+          className="w-fit px-4 py-2 bg-blue-600 text-white rounded bg-[#09427D] font-bold border-2 border-white hover:text-[#09427D] hover:border-[#09427D] hover:bg-white duration-300 ease-in"
         >
-          Baixar Certificado
+          BAIXAR CERTIFICADO
         </button>
+        <div>
+          <h1 className='text-white font-medium text-center'>Clique em baixar para ver o certificado completo</h1>
+        </div>
       </div>
 
       {/* Área de exibição dos certificados */}
@@ -71,10 +128,17 @@ export default function Home() {
           />
           <div className="absolute flex flex-col items-center justify-center top-0 text-2xl font-bold w-full h-full">
             <div className=' w-[70%]'>
-              <div className="relative mb-[115px] w-full text-center">
-                <p className="text-center text-[120px] font-thin text-[#02425A]" style={Kindred.style}>Nicoly Gonzaga Ferreira</p>
+              <div className="relative flex flex-col space-y-5 items-center content-center justify-center mb-[115px] w-full text-center">
+                <p className="text-center text-[120px] font-thin text-[#02425A]" style={Kindred.style}>{data?.ownerName}</p>
+                <br />
+                <br />
+                <p className='font-thin'>
+                  Código de Verificação: {String(data?._id)}
+                </p>
               </div>
             </div>
+
+
           </div>
         </div>
 
@@ -101,4 +165,3 @@ export default function Home() {
     </main>
   );
 }
-
