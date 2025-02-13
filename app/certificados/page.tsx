@@ -79,7 +79,7 @@ function SearchInput() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-start space-y-5">
+    <div className="flex flex-col items-center justify-start space-y-5 px-5 md:p-0 ">
 
       {/* Input e Label */}
       <div className='w-full'>
@@ -113,7 +113,7 @@ function SearchInput() {
 
       {
         !noResults && data.length > 0 &&
-        <div className='w-full max-h-64 overflow-auto'>
+        <div className='w-full max-h-64 overflow-auto space-y-5'>
           {
             data.map((certificate) => {
               return (

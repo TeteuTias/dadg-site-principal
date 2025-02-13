@@ -7,6 +7,7 @@ import Kindred from '@/public/fonts/lib/libFontKindred';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ICertificate } from '@/app/lib/models/CertificateModel';
+import { libSourceSerif4 } from '@/public/fonts/lib/libSourceSerif4';
 import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
 
 
@@ -83,7 +84,10 @@ export default function Home({
       <main className="relative flex flex-col max-w-screen overflow-hidden">
         <div className="fixed inset-0 flex items-center justify-center bg-[#09427D] bg-opacity-50">
           <div className="bg-white p-6 rounded-md shadow-md">
-            <p className="text-lg">C A R R E G A N D O</p>
+            <p className="text-lg" onClick={()=> {
+              // isso daqui so serve para eu colocar as fontes que uso, e conseguir contornar o ESlint rules.
+              console.log(Kindred)
+            }}>C A R R E G A N D O</p>
           </div>
         </div>
 
@@ -122,15 +126,14 @@ export default function Home({
           style={{ width: '2000px', height: '1414px' }}
         >
           <img
-            src="/certificates/templates/template02.png"
+            src={data?.certificatePath}
             alt="Certificado"
             className="w-full h-full object-fill"
           />
           <div className="absolute flex flex-col items-center justify-center top-0 text-2xl font-bold w-full h-full">
             <div className=' w-[70%]'>
               <div className="relative flex flex-col space-y-5 items-center content-center justify-center mb-[115px] w-full text-center">
-                <p className="text-center text-[120px] font-thin text-[#02425A]" style={Kindred.style}>{data?.ownerName}</p>
-                <br />
+                <p className="text-center text-[45px] font-thin text-[#02425A] leading-[1]" style={{ ...libSourceSerif4.style, fontWeight: "400" }}>{data?.ownerName}</p>
                 <br />
                 <p className='font-thin'>
                   Código de Verificação: {String(data?._id)}
