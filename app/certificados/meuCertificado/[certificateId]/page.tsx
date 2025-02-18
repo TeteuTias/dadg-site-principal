@@ -84,7 +84,7 @@ export default function Home({
       <main className="relative flex flex-col max-w-screen overflow-hidden">
         <div className="fixed inset-0 flex items-center justify-center bg-[#09427D] bg-opacity-50">
           <div className="bg-white p-6 rounded-md shadow-md">
-            <p className="text-lg" onClick={()=> {
+            <p className="text-lg" onClick={() => {
               // isso daqui so serve para eu colocar as fontes que uso, e conseguir contornar o ESlint rules.
               console.log(Kindred)
             }}>C A R R E G A N D O</p>
@@ -118,35 +118,37 @@ export default function Home({
       </div>
 
       {/* Área de exibição dos certificados */}
-      <article className="relative max-w-screen overflow-auto">
-        {/* Frente do Certificado */}
-        <div
-          id="frontCert"
-          className="relative w-full"
-          style={{ width: '2000px', height: '1414px' }}
-        >
-          <img
-            src={data?.certificatePath}
-            alt="Certificado"
-            className="w-full h-full object-fill"
-          />
-          <div className="absolute flex flex-col items-center justify-center top-0 text-2xl font-bold w-full h-full">
-            <div className=' w-[70%]'>
-              <div className="relative flex flex-col space-y-5 items-center content-center justify-center mb-[115px] w-full text-center">
-                <p className="text-center text-[45px] font-thin text-[#02425A] leading-[1]" style={{ ...libSourceSerif4.style, fontWeight: "400" }}>{data?.ownerName}</p>
-                <br />
-                <p className='font-thin'>
-                  Código de Verificação: {String(data?._id)}
-                </p>
+      {
+        !data?.frontBottomText || !data?.frontTopperText ?
+          <article className="relative max-w-screen overflow-auto">
+            {/* Frente do Certificado */}
+            <div
+              id="frontCert"
+              className="relative w-full"
+              style={{ width: '2000px', height: '1414px' }}
+            >
+              <img
+                src={data?.certificatePath}
+                alt="Certificado"
+                className="w-full h-full object-fill"
+              />
+              <div className="absolute flex flex-col items-center justify-center top-0 text-2xl font-bold w-full h-full">
+                <div className=' w-[70%]'>
+                  <div className="relative flex flex-col space-y-5 items-center content-center justify-center mb-[115px] w-full text-center">
+                    <p className="text-center text-[45px] font-thin text-[#02425A] leading-[1]" style={{ ...libSourceSerif4.style, fontWeight: "400" }}>{data?.ownerName}</p>
+                    <br />
+                    <p className='font-thin'>
+                      Código de Verificação: {String(data?._id)}
+                    </p>
+                  </div>
+                </div>
+
+
               </div>
             </div>
 
-
-          </div>
-        </div>
-
-        {/* Verso do Certificado */}
-        {/*
+            {/* Verso do Certificado */}
+            {/*
         <div
           id="backCert"
           className="relative w-full mt-10"
@@ -164,7 +166,76 @@ export default function Home({
           </div>
         </div>
         */}
-      </article>
+          </article>
+          :
+          <article className="relative max-w-screen overflow-auto">
+            {/* Frente do Certificado */}
+            <div
+              id="frontCert"
+              className="relative w-full"
+              style={{ width: '2000px', height: '1414px' }}
+            >
+              <img
+                src={data?.certificatePath}
+                alt="Certificado"
+                className="w-full h-full object-fill"
+              />
+              <div className="absolute flex flex-col items-center justify-center top-10 text-2xl font-bold w-full h-full">
+                <div className=' w-[70%]'>
+                  <div className="relative flex flex-col space-y-5 items-center content-center justify-center mb-[115px] w-full text-center">
+
+
+                    <p className=' text-[#02425A] text-center' style={{ ...libSourceSerif4.style, fontSize: "38px", fontWeight: "600", lineHeight: "1.4" }}>
+                      {
+                        !data?.frontTopperText ?
+                          ""
+                          : data?.frontTopperText
+                      }
+                    </p>
+                    <br />
+
+                    <p className="text-center font-thin text-[#02425A] leading-[1]" style={{ ...libSourceSerif4.style, fontSize: "38px", fontWeight: "600" }}>{data?.ownerName.toUpperCase()}</p>
+                    <br />
+                    <p className='font-thin'>
+                      Código de Verificação: {String(data?._id)}
+                    </p>
+
+                    <p className='text-[#02425A] text-center' style={{ ...libSourceSerif4.style, fontSize: "38px", lineHeight: "1.6", fontWeight: "600" }}>
+                      {
+                        !data?.frontBottomText ?
+                          "" :
+                          data?.frontBottomText
+                      }
+                    </p>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+
+            {/* Verso do Certificado */}
+            {/*
+        <div
+          id="backCert"
+          className="relative w-full mt-10"
+          style={{ width: '2000px', height: '1414px' }}
+        >
+          <img
+            src="/certificates/templates/template01.png"
+            alt="Certificado"
+            className="w-full h-full object-fill"
+          />
+          <div className="absolute flex items-center justify-center top-0 text-2xl font-bold text-gray-800 w-full h-full">
+            <div className="relative -top-[100px] w-full">
+              <p className="text-center text-[50px]">abcd</p>
+            </div>
+          </div>
+        </div>
+        */}
+          </article>
+      }
+
     </main>
   );
 }
