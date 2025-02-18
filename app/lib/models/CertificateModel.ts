@@ -9,6 +9,8 @@ export interface ICertificate {
     ownerCpf: string;
     eventName: string;
     ownerEmail: string;
+    frontTopperText?: string;
+    frontBottomText?: string;
     certificateHours: string;
     certificatePath: string;
 }
