@@ -21,6 +21,7 @@ export default function Home() {
             alt=""
             src="/logoDadg02.png"
           />
+          asdfasdfa
         </div>
         <div>
           <h1 className='text-[30px] font-bold text-center'>{`Diretório Acadêmico Diogo Guimarães`.toLocaleUpperCase()}</h1>
