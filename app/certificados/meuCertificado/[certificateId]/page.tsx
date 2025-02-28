@@ -31,14 +31,17 @@ export default function Home({
 
     // Seleciona os elementos de frente e verso
     const frontElement = document.getElementById('frontCert');
-    // const backElement = document.getElementById('backCert');
+    const backElement = document.getElementById('backCert');
     if (!frontElement /* || !backElement*/) return;
 
-    // Captura os dois elementos de forma concorrente
-    const [frontCanvas, /*backCanvas*/] = await Promise.all([
-      html2canvas(frontElement, { scale }),
-      //html2canvas(backElement, { scale }),
-    ]);
+    // Captura os elementos de forma concorrente, verificando se backElement existe
+const frontCanvas = await html2canvas(frontElement, { scale });
+
+let backCanvas: HTMLCanvasElement | null = null;
+if (backElement) {
+    backCanvas = await html2canvas(backElement, { scale });
+}
+
 
     const frontImgData = frontCanvas.toDataURL('/certificates/templates/template02.png');
     //const backImgData = backCanvas.toDataURL('image/png');
