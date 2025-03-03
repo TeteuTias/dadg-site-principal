@@ -6,7 +6,7 @@ import html2canvas from 'html2canvas';
 import Kindred from '@/public/fonts/lib/libFontKindred';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { ICertificate } from '@/app/lib/models/CertificateModel';
+import { ICertificateWithEventIdPopulate } from '@/app/lib/models/CertificateModel';
 import { libSourceSerif4 } from '@/public/fonts/lib/libSourceSerif4';
 import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
 
@@ -19,7 +19,7 @@ export default function Home({
   params: Promise<{ certificateId: string }>
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [data, setData] = useState<ICertificate | null>(null)
+  const [data, setData] = useState<ICertificateWithEventIdPopulate | null>(null)
   const router = useRouter()
   //const [certificateId, setCertificateId] = useState<null | string>(null)
 
@@ -71,7 +71,7 @@ export default function Home({
         return;
       }
 
-      const fetchDataJson: { data: ICertificate } = await fetchData.json()
+      const fetchDataJson: { data: ICertificateWithEventIdPopulate } = await fetchData.json()
       setData(fetchDataJson.data)
       setIsLoading(false)
     }
@@ -128,7 +128,7 @@ export default function Home({
               style={{ width: '2000px', height: '1414px' }}
             >
               <img
-                src={data?.certificatePath}
+                src={data?.eventId.templatePath}
                 alt="Certificado"
                 className="w-full h-full object-fill"
               />
@@ -172,44 +172,45 @@ export default function Home({
             {/* Frente do Certificado */}
             <div
               id="frontCert"
-              className="relative w-full"
+              className="relative"
               style={{ width: '2000px', height: '1414px' }}
             >
               <img
-                src={data?.certificatePath}
+                src={data?.eventId.templatePath}
                 alt="Certificado"
                 className="w-full h-full object-fill"
               />
-              <div className="absolute flex flex-col items-center justify-center top-10 text-2xl font-bold w-full h-full">
-                <div className=' w-[70%]'>
-                  <div className="relative flex flex-col space-y-5 items-center content-center justify-center mb-[115px] w-full text-center">
+              <div className="absolute top-[350px] -left-[125px] flex items-center justify-center content-center" style={{}}>
+
+                <div className='w-[85%]'>
+                  <div className="flex flex-col items-center justify-center text-2xl font-bold space-y-5">
+                    <div className="relative flex flex-col space-y-5 items-center content-center justify-center  w-full text-center" style={{ ...data?.eventId.styleContainer }}>
 
 
-                    <p className=' text-[#02425A] text-center' style={{ ...libSourceSerif4.style, fontSize: "38px", fontWeight: "600", lineHeight: "1.4" }}>
-                      {
-                        !data?.frontTopperText ?
-                          ""
-                          : data?.frontTopperText
-                      }
-                    </p>
-                    <br />
+                      <p className=' text-black text-center text-justify' style={{ ...libSourceSerif4.style, ...data?.eventId.styleFrontTopperText }}>
+                        {
+                          !data?.frontTopperText ?
+                            ""
+                            : data?.frontTopperText
+                        }
+                      </p>
 
-                    <p className="text-center font-thin text-[#02425A] leading-[1]" style={{ ...libSourceSerif4.style, fontSize: "38px", fontWeight: "600" }}>{data?.ownerName.toUpperCase()}</p>
-                    <br />
-                    <p className='font-thin'>
-                      Código de Verificação: {String(data?._id)}
-                    </p>
+                      <p className="text-center font-thin text-black leading-[1]" style={{ ...libSourceSerif4.style, fontSize: "33.5px", fontWeight: "800", lineHeight: 1.5 }}>{data?.ownerName.toUpperCase()}</p>
 
-                    <p className='text-[#02425A] text-center' style={{ ...libSourceSerif4.style, fontSize: "38px", lineHeight: "1.6", fontWeight: "600" }}>
-                      {
-                        !data?.frontBottomText ?
-                          "" :
-                          data?.frontBottomText
-                      }
-                    </p>
+                      <p className='font-thin' onClick={() => console.log(data)}>
+                        Código de Verificação: {String(data?._id)}
+                      </p>
+
+                      <p className='text-black text-center text-justify' style={{ ...libSourceSerif4.style, ...data?.eventId.styleFrontBottomText }}>
+                        {
+                          !data?.frontBottomText ?
+                            "" :
+                            data?.frontBottomText
+                        }
+                      </p>
+                    </div>
                   </div>
                 </div>
-
 
               </div>
             </div>
@@ -236,6 +237,6 @@ export default function Home({
           </article>
       }
 
-    </main>
+    </main >
   );
 }

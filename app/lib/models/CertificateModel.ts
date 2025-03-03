@@ -1,4 +1,5 @@
 import mongoose, { Schema, Model } from 'mongoose';
+import { IEventCertificate } from './EventCertificateModel';
 import { ObjectId } from 'mongoose';
 
 // Interface para o documento do usuário
@@ -12,7 +13,11 @@ export interface ICertificate {
     frontTopperText?: string;
     frontBottomText?: string;
     certificateHours: string;
-    certificatePath: string;
+    eventId: ObjectId;
+}
+
+export interface ICertificateWithEventIdPopulate extends Omit<ICertificate, "eventId"> {
+    eventId: IEventCertificate
 }
 
 // Definição do schema do usuário
@@ -24,7 +29,8 @@ const CertificateSchema: Schema<ICertificate> = new Schema(
         eventName: { type: String, required: true },
         ownerEmail: { type: String, required: true },
         certificateHours: { type: String, required: true },
-        certificatePath: { type: String, required: true },
+        eventId: { type: Schema.Types.ObjectId, required: true, ref: "EventCertificate" },
+
 
     },
     { timestamps: true, collection: "certificates.datails" }

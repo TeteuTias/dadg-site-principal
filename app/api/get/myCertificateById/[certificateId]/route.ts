@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 import { connectToDatabase } from "@/app/lib/mongodb";
 import CertificateModel from "@/app/lib/models/CertificateModel";
-
-
+import { IEventCertificate } from "@/app/lib/models/EventCertificateModel";
 //  export async function GET(req: NextRequest, { params }: { params: { certificateId: string } }) {
 
 export async function GET(req: NextRequest, {
@@ -22,7 +21,7 @@ export async function GET(req: NextRequest, {
 
     const owners = await CertificateModel.findOne({
         _id: certificateId
-    });
+    }).populate<{ eventId: IEventCertificate }>("eventId");
 
 
     return NextResponse.json({ "data": owners })
