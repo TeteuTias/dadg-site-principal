@@ -5,6 +5,8 @@ import CertificateModel from "@/app/lib/models/CertificateModel";
 import { IEventCertificate } from "@/app/lib/models/EventCertificateModel";
 //  export async function GET(req: NextRequest, { params }: { params: { certificateId: string } }) {
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(req: NextRequest, {
     params,
 }: {

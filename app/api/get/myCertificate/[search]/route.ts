@@ -4,7 +4,7 @@ import { connectToDatabase } from "@/app/lib/mongodb";
 import CertificateModel from "@/app/lib/models/CertificateModel";
 
 
-
+export const dynamic = 'force-dynamic'
 
 // export async function GET(req: NextRequest, { params }: { params: { search: string } }) {
 export async function GET(req: NextRequest, {
