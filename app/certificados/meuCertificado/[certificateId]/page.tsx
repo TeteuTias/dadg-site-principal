@@ -146,26 +146,6 @@ export default function Home({
 
               </div>
             </div>
-
-            {/* Verso do Certificado */}
-            {/*
-        <div
-          id="backCert"
-          className="relative w-full mt-10"
-          style={{ width: '2000px', height: '1414px' }}
-        >
-          <img
-            src="/certificates/templates/template01.png"
-            alt="Certificado"
-            className="w-full h-full object-fill"
-          />
-          <div className="absolute flex items-center justify-center top-0 text-2xl font-bold text-gray-800 w-full h-full">
-            <div className="relative -top-[100px] w-full">
-              <p className=" text-[50px]">abcd</p>
-            </div>
-          </div>
-        </div>
-        */}
           </article>
           :
           <article className="relative max-w-screen overflow-auto">

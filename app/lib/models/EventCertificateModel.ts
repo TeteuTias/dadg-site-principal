@@ -21,7 +21,7 @@ const EventCertificateSchema: Schema<IEventCertificate> = new Schema(
         styleContainer: { type: Object, required: true },
         styleFrontTopperText: { type: Object, required: true },
         styleFrontBottomText: { type: Object, required: true },
-        styleNameText: { type: ObjectId, required: true },
+        styleNameText: { type: Object, required: true },
         templatePath: { type: String, required: true },
     },
     { timestamps: true, collection: "certificates.events" },
