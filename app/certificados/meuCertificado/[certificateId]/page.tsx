@@ -132,10 +132,10 @@ export default function Home({
                 alt="Certificado"
                 className="w-full h-full object-fill"
               />
-              <div className="absolute flex flex-col items-center justify-center top-0 text-2xl font-bold w-full h-full">
+              <div className="absolute flex flex-col items-center justify-center top-0 font-bold w-full h-full">
                 <div className=' w-[70%]'>
                   <div className="relative flex flex-col space-y-5 items-center content-center justify-center mb-[115px] w-full ">
-                    <p className=" text-[45px] font-thin text-[#02425A] leading-[1]" style={{ ...libSourceSerif4.style, fontWeight: "400" }}>{data?.ownerName}</p>
+                    <p className="" style={{ ...libSourceSerif4.style, fontWeight: "400" }}>{data?.ownerName}</p>
                     <br />
                     <p className='font-thin'>
                       Código de Verificação: {String(data?._id)}
@@ -183,7 +183,7 @@ export default function Home({
               <div className="absolute top-[350px] -left-[125px] flex items-center justify-center content-center">
 
                 <div className='w-[85%]'>
-                  <div className="flex flex-col items-center justify-center text-2xl font-bold space-y-5">
+                  <div className="flex flex-col items-center justify-center font-bold space-y-5">
                     <div className="relative flex flex-col space-y-5 items-center content-center justify-center  w-full " style={{ ...data?.eventId.styleContainer, }}>
 
 
@@ -214,26 +214,6 @@ export default function Home({
 
               </div>
             </div>
-
-            {/* Verso do Certificado */}
-            {/*
-        <div
-          id="backCert"
-          className="relative w-full mt-10"
-          style={{ width: '2000px', height: '1414px' }}
-        >
-          <img
-            src="/certificates/templates/template01.png"
-            alt="Certificado"
-            className="w-full h-full object-fill"
-          />
-          <div className="absolute flex items-center justify-center top-0 text-2xl font-bold text-gray-800 w-full h-full">
-            <div className="relative -top-[100px] w-full">
-              <p className=" text-[50px]">abcd</p>
-            </div>
-          </div>
-        </div>
-        */}
           </article>
       }
 
