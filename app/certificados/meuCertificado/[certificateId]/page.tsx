@@ -181,11 +181,16 @@ export default function Home({
                         Código de Verificação: {String(data?._id)}
                       </p>
 
-                      <p style={{ ...libSourceSerif4.style, ...data?.eventId.styleFrontBottomText }}>
+                      <p className='whitespace-pre-line' style={{ ...libSourceSerif4.style, ...data?.eventId.styleFrontBottomText, whiteSpace: 'pre-wrap', }}>
                         {
                           !data?.frontBottomText ?
                             "" :
-                            data?.frontBottomText
+                            data?.frontBottomText.replace(/\\n/g, "\n").split("\n").map((linha, indice) => (
+                              <React.Fragment key={indice}>
+                                {linha}
+                                <br />
+                              </React.Fragment>
+                            ))
                         }
                       </p>
                     </div>
