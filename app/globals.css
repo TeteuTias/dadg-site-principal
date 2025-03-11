@@ -34,3 +34,9 @@ body {
   border-radius: 4px;         /* Arredonda as pontas do thumb */
   border: 1px solid #1E3A8A;  /* Cria uma “bordinha” para mesclar com o fundo */
 }
+
+/* Suporte para Firefox */
+.drawerContainer {
+  scrollbar-width: thin;
+  scrollbar-color: #073059 #1E3A8A;
+}
