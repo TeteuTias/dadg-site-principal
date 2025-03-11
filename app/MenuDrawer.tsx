@@ -11,7 +11,7 @@ export default function MenuDrawer() {
         style={{
           width: "100%",
           height: "50px",
-          backgroundColor: "#2A5B8D",
+          backgroundColor: "#09427d",
           position: "fixed",
           top: 0,
           left: 0,
