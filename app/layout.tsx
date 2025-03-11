@@ -20,17 +20,37 @@ export const metadata: Metadata = {
   }
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+    <html lang="pt-BR">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+
+        {/*Barra Superior*/}
+        <div
+          style={{
+            width: "100%",
+            height: "50px",
+            backgroundColor: "blue",
+            position: "fixed",
+            top: 0,
+            left: 0,
+            zIndex: 1000,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "blue",
+            fontWeight: "bold",
+            fontSize: "16px"
+          }}
+        >
+          Barra Superior
+        </div>
+
+        {/*Conteúdo Principal  Margem para Não Ser Escondido pela Barra */}
+        <div style={{ marginTop: "60px" }}>
+          {children}
+        </div>
+
       </body>
     </html>
   );
