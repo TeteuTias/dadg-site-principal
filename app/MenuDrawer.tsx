@@ -25,8 +25,8 @@ export default function MenuDrawer() {
           top: 0,
           left: 0,
           width: "100%",
-          height: scrolled ? "40px" : "60px",
-          backgroundColor: "#2A5B8D",
+          height: scrolled ? "25px" : "40px",
+          backgroundColor: "#09427d",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -43,7 +43,7 @@ export default function MenuDrawer() {
           src="/logoDadg02.ico"
           alt="Logo DADG"
           style={{
-            height: scrolled ? "25px" : "30px",
+            height: scrolled ? "20px" : "30px",
             cursor: "pointer",
           }}
           onClick={() => setMenuAberto(true)}
