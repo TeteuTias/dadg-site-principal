@@ -1,44 +1,59 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 export default function MenuDrawer() {
   const [menuAberto, setMenuAberto] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Atualiza o estado 'scrolled' conforme a rolagem
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50); // Ajuste esse valor conforme necessário
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <>
-      {/* Barra Superior */}
-      <div
+      {/* Cabeçalho que encolhe ao rolar */}
+      <header
         style={{
-          width: "100%",
-          height: "50px",
-          backgroundColor: "#09427d",
           position: "fixed",
           top: 0,
           left: 0,
-          zIndex: 1000,
+          width: "100%",
+          height: scrolled ? "40px" : "60px",
+          backgroundColor: "#2A5B8D",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
           padding: "0 15px",
           color: "white",
           fontWeight: "bold",
-          fontSize: "16px"
+          fontSize: scrolled ? "14px" : "16px",
+          transition: "all 0.3s ease",
+          zIndex: 1000,
         }}
       >
-        {/* Ícone do menu (logo) */}
-        <img 
-          src="/logoDadg02.ico" 
-          alt="Logo DADG" 
-          style={{ height: "30px", cursor: "pointer" }} 
+        {/* Ícone que abre o DrawerMenu */}
+        <img
+          src="/logoDadg02.ico"
+          alt="Logo DADG"
+          style={{
+            height: scrolled ? "25px" : "30px",
+            cursor: "pointer",
+          }}
           onClick={() => setMenuAberto(true)}
         />
         Diretório Acadêmico
-      </div>
+      </header>
 
-      {/* Menu Lateral (Drawer) */}
+      {/* DrawerMenu: aparece quando 'menuAberto' for true */}
       {menuAberto && (
-        <div 
+        <div
           style={{
             position: "fixed",
             top: 0,
@@ -52,19 +67,19 @@ export default function MenuDrawer() {
             flexDirection: "column",
             gap: "15px",
             zIndex: 1100,
-            boxShadow: "2px 0 10px rgba(0, 0, 0, 0.5)"
+            boxShadow: "2px 0 10px rgba(0, 0, 0, 0.5)",
           }}
         >
-          {/* Botão de Fechar */}
-          <button 
-            onClick={() => setMenuAberto(false)} 
+          {/* Botão de fechar */}
+          <button
+            onClick={() => setMenuAberto(false)}
             style={{
               background: "none",
               border: "none",
               color: "white",
               fontSize: "20px",
               alignSelf: "flex-end",
-              cursor: "pointer"
+              cursor: "pointer",
             }}
           >
             ✖
@@ -74,7 +89,10 @@ export default function MenuDrawer() {
           <Link href="/" style={{ color: "white", textDecoration: "none" }}>
             🏠 Início
           </Link>
-          <Link href="/certificados" style={{ color: "white", textDecoration: "none" }}>
+          <Link
+            href="/certificados"
+            style={{ color: "white", textDecoration: "none" }}
+          >
             📃 Certificados
           </Link>
           <Link href="/eventos" style={{ color: "white", textDecoration: "none" }}>
