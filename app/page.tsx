@@ -32,7 +32,7 @@ export default function Home() {
       </article>
       <article>
         <div>
-          <Link prefetch={true} href={"/certificados"} className='bg-[#09427D] text-white border-[0.5px] border-black px-2 py-1 font-bold rounded-xl hover:text-[#09427D] hover:bg-white duration-150 ease-in'>CERTIFICADOS</Link>
+         
         </div>
       </article>
     </main>
