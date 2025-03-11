@@ -1,11 +1,18 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 export default function MenuDrawer() {
   const [menuAberto, setMenuAberto] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [clamSubmenuOpen, setClamSubmenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Define cores dinâmicas para o header e o drawer
+  const headerBackgroundColor = pathname.startsWith("/clam") ? "#16a34a" : "#09427d";
+  const drawerBackgroundColor = pathname.startsWith("/clam") ? "#16a34a" : "#1E3A8A";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -53,17 +60,14 @@ export default function MenuDrawer() {
     "LAOTO",
     "LAOA",
     "LIAP",
-    "LAE"
+    "LAE",
   ];
 
-  // Calcula a altura máxima para o submenu (aprox. 30px por item)
-  const submenuMaxHeight = clamSubmenuOpen
-    ? `${clamSubmenuItems.length * 30}px`
-    : "0px";
+  const submenuMaxHeight = clamSubmenuOpen ? `${clamSubmenuItems.length * 30}px` : "0px";
 
   return (
     <>
-      {/* Cabeçalho fixo fora do menu */}
+      {/* Cabeçalho fixo */}
       <header
         style={{
           position: "fixed",
@@ -71,7 +75,7 @@ export default function MenuDrawer() {
           left: 0,
           width: "100%",
           height: scrolled ? "35px" : "45px",
-          backgroundColor: "#09427d",
+          backgroundColor: headerBackgroundColor,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -83,29 +87,88 @@ export default function MenuDrawer() {
           zIndex: 1000,
         }}
       >
-        {/* Ícone para abrir o menu */}
-        <img
-          src="/logoDadg02.ico"
-          alt="Logo DADG"
-          style={{
-            height: scrolled ? "20px" : "30px",
-            cursor: "pointer",
-          }}
-          onClick={() => setMenuAberto(true)}
-        />
-        Diretório Acadêmico
+        {/* Botão Hamburger à esquerda */}
+        <div className="flex items-center">
+          <button
+            onClick={() => setMenuAberto(true)}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "4px",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: 0,
+            }}
+          >
+            <span
+              style={{
+                width: "24px",
+                height: "4px",
+                backgroundColor: "white",
+                borderRadius: "4px",
+                display: "block",
+              }}
+            ></span>
+            <span
+              style={{
+                width: "24px",
+                height: "4px",
+                backgroundColor: "white",
+                borderRadius: "4px",
+                display: "block",
+              }}
+            ></span>
+            <span
+              style={{
+                width: "24px",
+                height: "4px",
+                backgroundColor: "white",
+                borderRadius: "4px",
+                display: "block",
+              }}
+            ></span>
+          </button>
+        </div>
+
+        {/* Links centrais com espaçamento ampliado (space-x-48) e uppercase */}
+        <div
+          className="flex items-center justify-center space-x-48"
+          style={{ textTransform: "uppercase" }}
+        >
+          <Link href="/" style={{ color: "white", textDecoration: "none" }}>
+            Início
+          </Link>
+          <Link href="/certificados" style={{ color: "white", textDecoration: "none" }}>
+            Certificados
+          </Link>
+          <Link href="/clam" style={{ color: "white", textDecoration: "none" }}>
+            CLAM
+          </Link>
+        </div>
+
+        {/* Ícone à direita */}
+        <div className="flex-shrink-0">
+          <Image
+            src="/dadg_sem_fundo.png"
+            alt="Logo DADG"
+            width={30}
+            height={30}
+            className="object-contain"
+          />
+        </div>
       </header>
 
-      {/* DrawerMenu com animação de slide e scroll */}
+      {/* DrawerMenu */}
       <div
-        className="drawerContainer" // Adicionada a classe
+        className={`drawerContainer ${pathname.startsWith("/clam") ? "clam-scroll" : ""}`}
         style={{
           position: "fixed",
           top: 0,
           left: 0,
           width: "250px",
           height: "100vh",
-          backgroundColor: "#1E3A8A",
+          backgroundColor: drawerBackgroundColor,
           color: "white",
           padding: "20px",
           boxSizing: "border-box",
@@ -135,14 +198,11 @@ export default function MenuDrawer() {
           ✖
         </button>
 
-        {/* Links principais */}
+        {/* Links principais no Drawer */}
         <Link href="/" style={{ color: "white", textDecoration: "none" }}>
           🏠 Início
         </Link>
-        <Link
-          href="/certificados"
-          style={{ color: "white", textDecoration: "none" }}
-        >
+        <Link href="/certificados" style={{ color: "white", textDecoration: "none" }}>
           📃 Certificados
         </Link>
         <Link href="/eventos" style={{ color: "white", textDecoration: "none" }}>
@@ -155,7 +215,7 @@ export default function MenuDrawer() {
           ℹ️ Sobre Nós
         </Link>
 
-        {/* Submenu CLAM */}
+        {/* Submenu para CLAM */}
         <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
           <div
             style={{
