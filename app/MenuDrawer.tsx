@@ -9,7 +9,7 @@ export default function MenuDrawer() {
   // Atualiza o estado 'scrolled' conforme a rolagem
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50); // Ajuste esse valor conforme necessário
+      setScrolled(window.scrollY > 50);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -100,6 +100,12 @@ export default function MenuDrawer() {
           </Link>
           <Link href="/contato" style={{ color: "white", textDecoration: "none" }}>
             📧 Contato
+          </Link>
+          <Link href="/sobre" style={{ color: "white", textDecoration: "none" }}>
+            ℹ️ Sobre Nós
+          </Link>
+          <Link href="/clam" style={{ color: "white", textDecoration: "none" }}>
+            ⚕️ CLAM
           </Link>
         </div>
       )}
