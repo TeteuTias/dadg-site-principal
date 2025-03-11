@@ -30,7 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           style={{
             width: "100%",
             height: "50px",
-            backgroundColor: "blue",
+            backgroundColor: "#2A5B8D",
             position: "fixed",
             top: 0,
             left: 0,
@@ -38,12 +38,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            color: "blue",
+            color: "white",
             fontWeight: "bold",
             fontSize: "16px"
           }}
         >
-          Barra Superior
+          Diretório Acadêmico 
         </div>
 
         {/*Conteúdo Principal  Margem para Não Ser Escondido pela Barra */}
