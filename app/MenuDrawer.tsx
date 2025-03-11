@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function MenuDrawer() {
   const [menuAberto, setMenuAberto] = useState(false);
@@ -11,7 +12,7 @@ export default function MenuDrawer() {
         style={{
           width: "100%",
           height: "50px",
-          backgroundColor: "#09427d",
+          backgroundColor: "#2A5B8D",
           position: "fixed",
           top: 0,
           left: 0,
@@ -22,7 +23,7 @@ export default function MenuDrawer() {
           padding: "0 15px",
           color: "white",
           fontWeight: "bold",
-          fontSize: "16px",
+          fontSize: "16px"
         }}
       >
         {/* Ícone do menu (logo) */}
@@ -51,7 +52,7 @@ export default function MenuDrawer() {
             flexDirection: "column",
             gap: "15px",
             zIndex: 1100,
-            boxShadow: "2px 0 10px rgba(0, 0, 0, 0.5)",
+            boxShadow: "2px 0 10px rgba(0, 0, 0, 0.5)"
           }}
         >
           {/* Botão de Fechar */}
@@ -63,17 +64,25 @@ export default function MenuDrawer() {
               color: "white",
               fontSize: "20px",
               alignSelf: "flex-end",
-              cursor: "pointer",
+              cursor: "pointer"
             }}
           >
             ✖
           </button>
 
           {/* Links do Menu */}
-          <a href="/" style={{ color: "white", textDecoration: "none" }}>🏠 Início</a>
-          <a href="/sobre" style={{ color: "white", textDecoration: "none" }}>ℹ️ Sobre</a>
-          <a href="/eventos" style={{ color: "white", textDecoration: "none" }}>📅 Eventos</a>
-          <a href="/contato" style={{ color: "white", textDecoration: "none" }}>📧 Contato</a>
+          <Link href="/" style={{ color: "white", textDecoration: "none" }}>
+            🏠 Início
+          </Link>
+          <Link href="/certificados" style={{ color: "white", textDecoration: "none" }}>
+            📃 Certificados
+          </Link>
+          <Link href="/eventos" style={{ color: "white", textDecoration: "none" }}>
+            📅 Eventos
+          </Link>
+          <Link href="/contato" style={{ color: "white", textDecoration: "none" }}>
+            📧 Contato
+          </Link>
         </div>
       )}
     </>

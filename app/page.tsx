@@ -26,7 +26,7 @@ export default function Home() {
         <div>
           <h1 className='text-[30px] font-bold text-center'>{`Diretório Acadêmico Diogo Guimarães`.toLocaleUpperCase()}</h1>
           <div>
-            <h1 className='text-center font-semithin text-center'>[ Novidades Em Breve ]</h1>
+          
           </div>
         </div>
       </article>
