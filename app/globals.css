@@ -21,3 +21,16 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 */
+.drawerContainer::-webkit-scrollbar {
+  width: 8px;                 /* Largura da barra de rolagem */
+}
+
+.drawerContainer::-webkit-scrollbar-track {
+  background: #1E3A8A;        /* Cor de fundo da trilha (track) */
+}
+
+.drawerContainer::-webkit-scrollbar-thumb {
+  background-color: #073059;     /* Cor do “thumb” que o usuário arrasta */
+  border-radius: 4px;         /* Arredonda as pontas do thumb */
+  border: 1px solid #1E3A8A;  /* Cria uma “bordinha” para mesclar com o fundo */
+}
