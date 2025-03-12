@@ -8,6 +8,7 @@ export default function MenuDrawer() {
   const [menuAberto, setMenuAberto] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [clamSubmenuOpen, setClamSubmenuOpen] = useState(false);
+  const [drawerWidth, setDrawerWidth] = useState("250px");
   const pathname = usePathname();
 
   // Define cores dinâmicas para o header e o drawer
@@ -20,6 +21,20 @@ export default function MenuDrawer() {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Atualiza a largura do drawer conforme o tamanho da tela
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth < 768) { // telas menores que 768px
+        setDrawerWidth("80%");
+      } else {
+        setDrawerWidth("250px");
+      }
+    }
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const toggleClamSubmenu = () => setClamSubmenuOpen((prev) => !prev);
@@ -87,7 +102,7 @@ export default function MenuDrawer() {
           zIndex: 1000,
         }}
       >
-        {/* Botão Hamburger à esquerda */}
+        {/* Botão Hamburger */}
         <div className="flex items-center">
           <button
             onClick={() => setMenuAberto(true)}
@@ -101,41 +116,14 @@ export default function MenuDrawer() {
               padding: 0,
             }}
           >
-            <span
-              style={{
-                width: "24px",
-                height: "4px",
-                backgroundColor: "white",
-                borderRadius: "4px",
-                display: "block",
-              }}
-            ></span>
-            <span
-              style={{
-                width: "24px",
-                height: "4px",
-                backgroundColor: "white",
-                borderRadius: "4px",
-                display: "block",
-              }}
-            ></span>
-            <span
-              style={{
-                width: "24px",
-                height: "4px",
-                backgroundColor: "white",
-                borderRadius: "4px",
-                display: "block",
-              }}
-            ></span>
+            <span style={{ width: "24px", height: "4px", backgroundColor: "white", borderRadius: "4px", display: "block" }}></span>
+            <span style={{ width: "24px", height: "4px", backgroundColor: "white", borderRadius: "4px", display: "block" }}></span>
+            <span style={{ width: "24px", height: "4px", backgroundColor: "white", borderRadius: "4px", display: "block" }}></span>
           </button>
         </div>
 
-        {/* Links centrais com espaçamento ampliado (space-x-48) e uppercase */}
-        <div
-          className="flex items-center justify-center space-x-48"
-          style={{ textTransform: "uppercase" }}
-        >
+        {/* Links centrais visíveis em todas as telas */}
+        <div className="flex items-center justify-center space-x-4" style={{ textTransform: "uppercase" }}>
           <Link href="/" style={{ color: "white", textDecoration: "none" }}>
             Início
           </Link>
@@ -166,7 +154,7 @@ export default function MenuDrawer() {
           position: "fixed",
           top: 0,
           left: 0,
-          width: "250px",
+          width: drawerWidth,
           height: "100vh",
           backgroundColor: drawerBackgroundColor,
           color: "white",
@@ -198,7 +186,7 @@ export default function MenuDrawer() {
           ✖
         </button>
 
-        {/* Links principais no Drawer */}
+        {/* Links do Drawer */}
         <Link href="/" style={{ color: "white", textDecoration: "none" }}>
           🏠 Início
         </Link>
@@ -217,25 +205,13 @@ export default function MenuDrawer() {
 
         {/* Submenu para CLAM */}
         <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <Link href="/clam" style={{ color: "white", textDecoration: "none" }}>
               ⚕️ CLAM
             </Link>
             <button
               onClick={toggleClamSubmenu}
-              style={{
-                background: "none",
-                border: "none",
-                color: "white",
-                cursor: "pointer",
-                fontSize: "16px",
-              }}
+              style={{ background: "none", border: "none", color: "white", cursor: "pointer", fontSize: "16px" }}
               className="hover:text-gray-300"
             >
               {clamSubmenuOpen ? "−" : "+"}
@@ -251,11 +227,7 @@ export default function MenuDrawer() {
           >
             <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
               {clamSubmenuItems.map((item) => (
-                <Link
-                  key={item}
-                  href={`/clam/${item.toLowerCase()}`}
-                  style={{ color: "white", textDecoration: "none" }}
-                >
+                <Link key={item} href={`/clam/${item.toLowerCase()}`} style={{ color: "white", textDecoration: "none" }}>
                   {item}
                 </Link>
               ))}
