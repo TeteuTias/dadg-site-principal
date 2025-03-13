@@ -20,4 +20,62 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
-*/
+/* Reset básico */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Scrollbar padrão para o DrawerMenu */
+.drawerContainer::-webkit-scrollbar {
+  width: 8px;
+}
+
+.drawerContainer::-webkit-scrollbar-track {
+  background: #1E3A8A;
+}
+
+.drawerContainer::-webkit-scrollbar-thumb {
+  background-color: #073059;
+  border-radius: 4px;
+  border: 1px solid #1E3A8A;
+}
+
+.drawerContainer {
+  scrollbar-width: thin;
+  scrollbar-color: #073059 #1E3A8A;
+}
+
+/* Scrollbar para o DrawerMenu na página CLAM */
+.clam-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.clam-scroll::-webkit-scrollbar-track {
+  background: #16a34a; /* Fundo do track em verde */
+}
+
+.clam-scroll::-webkit-scrollbar-thumb {
+  background-color: #15803d; /* Thumb em um verde um pouco mais escuro */
+  border-radius: 4px;
+  border: 1px solid #16a34a;
+}
+
+.clam-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #15803d #16a34a;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom right, #eff6ff, white, #eff6ff);
+}

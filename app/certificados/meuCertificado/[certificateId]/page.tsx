@@ -31,14 +31,13 @@ export default function Home({
 
     // Seleciona os elementos de frente e verso
     const frontElement = document.getElementById('frontCert');
-    // const backElement = document.getElementById('backCert');
     if (!frontElement /* || !backElement*/) return;
 
-    // Captura os dois elementos de forma concorrente
-    const [frontCanvas, /*backCanvas*/] = await Promise.all([
-      html2canvas(frontElement, { scale }),
-      //html2canvas(backElement, { scale }),
-    ]);
+    // Captura os elementos de forma concorrente, verificando se backElement existe
+const frontCanvas = await html2canvas(frontElement, { scale });
+
+
+
 
     const frontImgData = frontCanvas.toDataURL('/certificates/templates/template02.png');
     //const backImgData = backCanvas.toDataURL('image/png');
@@ -74,6 +73,7 @@ export default function Home({
       const fetchDataJson: { data: ICertificateWithEventIdPopulate } = await fetchData.json()
       setData(fetchDataJson.data)
       setIsLoading(false)
+      console.log(fetchDataJson)
     }
     fetchData()
 
@@ -105,7 +105,7 @@ export default function Home({
         }} />
       </div>
       {/* Cabeçalho fixo com o botão de download */}
-      <div className="fixed top-0 flex justify-center items-center p-5 bg-blue-900 w-full z-50 flex flex-col">
+      <div className="flex justify-center items-center p-5 bg-blue-900 w-full z-50 flex flex-col">
         <button
           onClick={handleDownload}
           className="w-fit px-4 py-2 bg-blue-600 text-white rounded bg-[#09427D] font-bold border-2 border-white hover:text-[#09427D] hover:border-[#09427D] hover:bg-white duration-300 ease-in"

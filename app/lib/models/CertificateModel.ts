@@ -2,7 +2,7 @@ import mongoose, { Schema, Model } from 'mongoose';
 import { IEventCertificate } from './EventCertificateModel';
 import { ObjectId } from 'mongoose';
 
-// Interface para o documento do usuário
+// Interface para o documento do certificado
 export interface ICertificate {
     _id: ObjectId;
     ownerId: ObjectId;
@@ -20,24 +20,24 @@ export interface ICertificateWithEventIdPopulate extends Omit<ICertificate, "eve
     eventId: IEventCertificate
 }
 
-// Definição do schema do usuário
+// Definição do esquema do certificado
 const CertificateSchema: Schema<ICertificate> = new Schema(
     {
-        ownerId: { type: Schema.Types.ObjectId },
+        ownerId: { type: Schema.Types.ObjectId, required: true },
         ownerName: { type: String, required: true },
         ownerCpf: { type: String, required: true },
         eventName: { type: String, required: true },
         ownerEmail: { type: String, required: true },
+        frontTopperText: { type: String },
+        frontBottomText: { type: String },
         certificateHours: { type: String, required: true },
         eventId: { type: Schema.Types.ObjectId, required: true, ref: "EventCertificate" },
-
 
     },
     { timestamps: true, collection: "certificates.datails" }
 );
 
-// Criação do modelo com Mongoose
+// Criação do modelo no Mongoose
 const CertificateModel: Model<ICertificate> = mongoose.models.Certificate || mongoose.model<ICertificate>('Certificate', CertificateSchema);
 
 export default CertificateModel;
-
