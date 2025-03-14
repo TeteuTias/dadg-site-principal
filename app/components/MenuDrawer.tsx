@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -158,6 +158,12 @@ export default function MenuDrawer() {
         <Link href="/certificados" style={{ color: "white", textDecoration: "none" }}>
           📃 Certificados
         </Link>
+
+        {/* Novo botão "Mural 📬" inserido acima de "CLAM" */}
+        <Link href="/mural" style={{ color: "white", textDecoration: "none" }}>
+          📬Mural 
+        </Link>
+
         <Link href="/eventos" style={{ color: "white", textDecoration: "none" }}>
           📅 Eventos
         </Link>
@@ -193,10 +199,6 @@ export default function MenuDrawer() {
             <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
               {clamSubmenuItems.map((item) => (
                 <Link key={item} href={`/clam/`} style={{ color: "white", textDecoration: "none" }}>
-                  {/* 
-                  A alteração de href do Link foi feita para não termos erros ao clicar em uma rota não existente. 
-                  O próximo passo será criar tanto a lista quanto a partir de dados do banco de dados.
-                   */}
                   {item}
                 </Link>
               ))}
