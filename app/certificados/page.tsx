@@ -17,19 +17,22 @@ export default function Home() {
       style={stylePoppins.style}
     >
       <article className='space-y-5'>
-        <div className='flex items-center justify-center'>
-          <Image
-            className='rounded-full'
-            width={115}
-            height={115}
-            alt=""
-            src="/logoDadg02.png"
-          />
-        </div>
-        <div>
-          <h1 className='text-[23px] sm:text-[30px] font-bold text-center'>{`Validação de Certificados`.toLocaleUpperCase()}</h1>
+        <div className=''>
+          <div className='flex items-center justify-center'>
+            <div className="relative w-32 h-32 mb-6">
+              <Image
+                src="/logoDadg02.png"
+                alt="Logo Diretório Acadêmico"
+                fill
+                className="rounded-full object-cover"
+              />
+            </div>
+          </div>
           <div>
-            <h2 className='text-center font-semithin text-center'>Pesquise usando: Nome, Cpf, Email, Evento ou Código Verificador</h2>
+            <h1 className='text-[30px] sm:text-[40px] font-bold text-center'>{`Validação de Certificados`.toLocaleUpperCase()}</h1>
+            <div>
+              <h2 className='text-center font-semithin text-center'>Pesquise usando: Nome, Cpf, Email, Evento ou Código Verificador</h2>
+            </div>
           </div>
         </div>
       </article>
@@ -118,10 +121,10 @@ function SearchInput() {
             data.map((certificate) => {
               return (
                 <div
-                  className='shadow-md border-t-[2px] bg-white border-[#09427D] w-full px-5 rounded-xl space-y-1 cursor-pointer' key={String(certificate._id)} style={stylePoppins.style}>
+                  className='shadow-md border-t-[2px] bg-white border-[#09427D] w-full px-5 rounded-xl space-y-1 cursor-pointer min-w-[400px] max-w-[400px] sm:min-w-[550px] sm:max-w-[550px]' key={String(certificate._id)} style={stylePoppins.style}>
                   <Link
                     prefetch={true}
-                    href={`/certificados/meuCertificado/${String(certificate._id)}`}>
+                    href={`/certificados/meuCertificado/${String(certificate._id)}`} target='_blank'>
                     <div>
                       <h1 className='font-extrabold'>{certificate.eventName}</h1>
                     </div>

@@ -1,8 +1,9 @@
 
 "use client"
 import React from 'react';
-import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { PDFDocument } from 'pdf-lib';
+
 import Kindred from '@/public/fonts/lib/libFontKindred';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -24,39 +25,46 @@ export default function Home({
   //const [certificateId, setCertificateId] = useState<null | string>(null)
 
   const handleDownload = async () => {
-    // Detecta se é dispositivo móvel (ajuste o valor conforme sua necessidade)
-    const isMobile = window.innerWidth < 768;
-    // Se mobile, reduz o scale para diminuir a carga de processamento (ex.: 0.8 em vez de 1)
-    const scale = isMobile ? 0.8 : 1;
-
     // Seleciona os elementos de frente e verso
     const frontElement = document.getElementById('frontCert');
+    // const backElement = document.getElementById('backCert');
     if (!frontElement /* || !backElement*/) return;
 
-    // Captura os elementos de forma concorrente, verificando se backElement existe
-const frontCanvas = await html2canvas(frontElement, { scale });
+    // Captura os dois elementos de forma concorrente
+    const [frontCanvas, /*backCanvas*/] = await Promise.all([
+      html2canvas(frontElement,),
+      //html2canvas(backElement, { scale }),
+    ]);
+    const imgUrl = frontCanvas.toDataURL(`image/png`)
+    const response = await fetch(imgUrl)
+    const blob = await response.blob()
 
-
-
-
-    const frontImgData = frontCanvas.toDataURL('/certificates/templates/template02.png');
-    //const backImgData = backCanvas.toDataURL('image/png');
-
-    // Cria o PDF usando as dimensões do canvas da frente
-    const pdf = new jsPDF({
-      orientation: 'landscape',
-      unit: 'px',
-      format: [frontCanvas.width, frontCanvas.height],
+    const pdfDoc = await PDFDocument.create();
+    // Embute a imagem PNG no PDF
+    const arrayBuffer = await blob.arrayBuffer();
+    const pngImage = await pdfDoc.embedPng(arrayBuffer);
+    const { width, height } = pngImage.scale(1);
+    // Adiciona uma página com as dimensões da imagem
+    const page = pdfDoc.addPage([width, height]);
+    page.drawImage(pngImage, {
+      x: 0,
+      y: 0,
+      width,
+      height,
     });
 
-    // Adiciona a primeira página com a imagem da frente
-    pdf.addImage(frontImgData, 'PNG', 0, 0, frontCanvas.width, frontCanvas.height);
-
-    // Adiciona uma nova página para a imagem do verso
-    //pdf.addPage([backCanvas.width, backCanvas.height], 'landscape');
-    //pdf.addImage(backImgData, 'PNG', 0, 0, backCanvas.width, backCanvas.height);
-
-    pdf.save('certificado.pdf');
+    // Gera os bytes do PDF
+    const pdfBytes = await pdfDoc.save();
+    // Cria um Blob para o PDF
+    const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
+    // Cria uma URL para o Blob e força o download
+    const blobUrl = URL.createObjectURL(pdfBlob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = `${data?.eventName} - ${data?.ownerName}.pdf`;
+    link.click();
+    // Revoga a URL criada
+    URL.revokeObjectURL(blobUrl);
   };
 
 
