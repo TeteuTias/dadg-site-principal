@@ -28,7 +28,7 @@ export default async function Mural() {
                 href="/certificados"
                 className="block mb-6"
               >
-                {hasArco ? (
+                {hasArco ? ( //isso aqui define se vai ter borda colorida ou nao dependendo do ID
                   <div className="rainbow-glow p-[2px] rounded-xl transition-transform duration-300 hover:scale-105 hover:shadow-md">
                     <div className="bg-white rounded-xl p-4">
                       <p className="text-lg text-gray-700">
@@ -39,7 +39,7 @@ export default async function Mural() {
                       </p>
                     </div>
                   </div>
-                ) : (
+                ) : (// garantindo borda abaulada mesmo no hover
                   <div className="bg-white rounded-xl p-4 transition-transform duration-300 hover:scale-105 hover:shadow-md">
                     <p className="text-lg text-gray-700">
                       {mural.fields.listaDoMural}
