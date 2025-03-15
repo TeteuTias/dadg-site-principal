@@ -1,32 +1,51 @@
-import { client } from '../lib/contentful';
+import Link from "next/link";
+import { client } from "../lib/contentful";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export default async function Mural() {
-  const response = await client.getEntries({ content_type: 'mural' });
+  const response = await client.getEntries({
+    content_type: "mural"
+  });
   const murais = response.items;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-50 py-12 px-6">
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-4xl font-bold text-center mb-8 text-gray-800">
+        <h1 className="text-4xl font-extrabold text-center mb-10 text-[#09427d]">
           Mural de Avisos
         </h1>
         {murais.length === 0 ? (
-          <p className="text-center text-gray-600">
-            Nenhum aviso encontrado. Verifique se as entradas estão publicadas.
+          <p className="text-center text-red-600">
+            Nenhum aviso encontrado. Tente novamente mais tarde.
           </p>
         ) : (
-          murais.map((mural: any) => (
-            <div
-              key={mural.sys.id}
-              className="bg-white shadow-md rounded-lg p-6 mb-6 transition transform hover:-translate-y-1 hover:shadow-lg"
-            >
-              <p className="text-lg text-gray-700">
-                {mural.fields.listaDoMural}
-              </p>
-            </div>
-          ))
+          murais.map((mural: any) => {
+            
+            // Tente usar o id que você espera – por exemplo, tagID
+            const tagField = mural.fields.tag;
+            const isImportante = tagField
+              ? Array.isArray(tagField)
+                ? tagField.map((t: string) => t.trim().toLowerCase()).includes("importante")
+                : tagField.trim().toLowerCase() === "importante"
+              : false;
+
+            return (
+              <Link
+                key={mural.sys.id}
+                href="/certificados"
+                className={`mb-8 transition duration-300 hover:scale-105 hover:shadow-md block ${
+                  isImportante ? "rainbow-glow" : ""
+                }`}
+              >
+                <div className="card bg-white rounded-xl p-8">
+                  <p className="text-lg text-gray-700">
+                    {mural.fields.listaDoMural}
+                  </p>
+                </div>
+              </Link>
+            );
+          })
         )}
       </div>
     </div>

@@ -1,25 +1,61 @@
 'use client'
-import React from 'react';
+import React, { useState } from "react";
+import ReactDOM from "react-dom";
 import Image from "next/image";
-import { Poppins } from 'next/font/google';
-import { useState } from "react";
-import { ICertificate } from '../lib/models/CertificateModel';
-import Link from 'next/link';
+import { Poppins } from "next/font/google";
+import Link from "next/link";
+import { ICertificate } from "../lib/models/CertificateModel";
+import "../globals.css"; // Importa o global.css
 
-//
+const stylePoppins = Poppins({
+  subsets: ["latin", "latin-ext"],
+  weight: [
+    "100",
+    "200",
+    "300",
+    "400",
+    "500",
+    "600",
+    "700",
+    "800",
+    "900",
+  ],
+  style: ["normal", "italic"],
+});
 
-const stylePoppins = Poppins({ subsets: ["latin", "latin-ext"], weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'], style: ['normal', 'italic'] })
+// Componente Loader via Portal
+function Loader() {
+  // Cria o overlay diretamente no body
+  return ReactDOM.createPortal(
+    <div className="showbox">
+      <div className="loader">
+        <svg className="circular" viewBox="25 25 50 50">
+          <circle
+            className="path"
+            cx="50"
+            cy="50"
+            r="20"
+            fill="none"
+            strokeWidth="2"
+            strokeMiterlimit="10"
+          />
+        </svg>
+      </div>
+    </div>,
+    document.body
+  );
+}
 
-//
 export default function Home() {
   return (
-    <main className="flex flex-col items-center justify-center content-center max-w-screen overflow-hidden bg-white min-h-svh w-full space-y-10"
+    <main
+      className="flex flex-col items-center justify-center content-center max-w-screen overflow-hidden bg-white min-h-svh w-full space-y-10"
       style={stylePoppins.style}
     >
-      <article className='space-y-5'>
-        <div className='flex items-center justify-center'>
+      <article className="space-y-5">
+        <div className="flex items-center justify-center">
           <Image
-            className='rounded-full'
+            className="rounded-full"
             width={115}
             height={115}
             alt=""
@@ -27,9 +63,13 @@ export default function Home() {
           />
         </div>
         <div>
-          <h1 className='text-[23px] sm:text-[30px] font-bold text-center'>{`Validação de Certificados`.toLocaleUpperCase()}</h1>
+          <h1 className="text-[23px] sm:text-[30px] font-bold text-center">
+            {`Validação de Certificados`.toLocaleUpperCase()}
+          </h1>
           <div>
-            <h2 className='text-center font-semithin text-center'>Pesquise usando: Nome, Cpf, Email, Evento ou Código Verificador</h2>
+            <h2 className="text-center font-semithin">
+              Pesquise usando: Nome, Cpf, Email, Evento ou Código Verificador
+            </h2>
           </div>
         </div>
       </article>
@@ -41,48 +81,35 @@ export default function Home() {
     </main>
   );
 }
-// <Link prefetch={true} href={"/certificados"} className='bg-[#09427D] text-white border-[0.5px] border-black px-2 py-1 font-bold rounded-xl hover:text-[#09427D] hover:bg-white duration-150 ease-in'>CERTIFICADOS</Link>
-
-
-
-
 
 function SearchInput() {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [noResults, setNoResults] = useState(false);
-  const [data, setData] = useState<ICertificate[]>([])
-
-
+  const [data, setData] = useState<ICertificate[]>([]);
 
   const handleSearch = async () => {
-    setData([])
+    setData([]);
     setIsLoading(true);
     setNoResults(false);
 
-
-    const fetchData = await fetch(`/api/get/myCertificate/${inputValue}`)
-
-    const fetchDataJson: { data: ICertificate[] } = await fetchData.json()
+    const fetchData = await fetch(`/api/get/myCertificate/${inputValue}`);
+    const fetchDataJson: { data: ICertificate[] } = await fetchData.json();
 
     if (!fetchData.ok) {
-      //let fetchDataJson2: { message: "string" } = await fetchData.json()
-      //console.log(fetchDataJson2)
-      setNoResults(true)
-      setIsLoading(false)
+      setNoResults(true);
+      setIsLoading(false);
       return;
     }
 
-    setData(fetchDataJson.data)
-    setIsLoading(false)
-
+    setData(fetchDataJson.data);
+    setIsLoading(false);
   };
 
   return (
-    <div className="flex flex-col items-center justify-start space-y-5 px-5 md:p-0 ">
-
+    <div className="flex flex-col items-center justify-start space-y-5 px-5 md:p-0">
       {/* Input e Label */}
-      <div className='w-full'>
+      <div className="w-full">
         <input
           type="text"
           value={inputValue}
@@ -92,60 +119,49 @@ function SearchInput() {
               handleSearch();
             }
           }}
-          className="border p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 border-1 border-blue-800"
+          className="border p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 border-blue-800"
           placeholder="Pressione 'Enter' para pesquisar..."
         />
       </div>
-      {/* Modal de Carregamento */}
-      {isLoading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-          <div className="bg-white p-6 rounded-md shadow-md">
-            <p className="text-lg">Carregando...</p>
-          </div>
-        </div>
-      )}
-
+      {/* Loader de Carregamento */}
+      {isLoading && <Loader />}
       {/* Mensagem de Nenhum Resultado Encontrado */}
       {noResults && (
-        <div className="mt-4 text-red-600 font-medium">Nenhum resultado encontrado.</div>
-      )}
-
-
-      {
-        !noResults && data.length > 0 &&
-        <div className='w-full max-h-64 overflow-auto space-y-5'>
-          {
-            data.map((certificate) => {
-              return (
-                <div
-                  className='shadow-md border-t-[2px] bg-white border-[#09427D] w-full px-5 rounded-xl space-y-1 cursor-pointer' key={String(certificate._id)} style={stylePoppins.style}>
-                  <Link
-                    prefetch={true}
-                    href={`/certificados/meuCertificado/${String(certificate._id)}`}>
-                    <div>
-                      <h1 className='font-extrabold'>{certificate.eventName}</h1>
-                    </div>
-                    <div className=''>
-                      <div>
-                        <p className='text-[10.5px]'>Titular</p>
-                        <p className='font-medium'>{certificate.ownerName}</p>
-                      </div>
-                      <div>
-                        <p className='text-[10.5px]'>
-                          Código Verificador
-                        </p>
-                        <p className='font-medium'>
-                          {String(certificate._id)}
-                        </p>
-                      </div>
-                    </div>
-                  </Link>
-                </div>
-              )
-            })
-          }
+        <div className="mt-4 text-red-600 font-medium">
+          Nenhum resultado encontrado.
         </div>
-      }
+      )}
+      {/* Lista de Resultados */}
+      {!noResults && data.length > 0 && (
+        <div className="w-full max-h-64 overflow-auto space-y-5">
+          {data.map((certificate) => (
+            <div
+              key={String(certificate._id)}
+              className="shadow-md border-t-[2px] bg-white border-[#09427D] w-full px-5 rounded-xl space-y-1 cursor-pointer"
+              style={stylePoppins.style}
+            >
+              <Link
+                prefetch={true}
+                href={`/certificados/meuCertificado/${String(certificate._id)}`}
+              >
+                <div>
+                  <h1 className="font-extrabold">{certificate.eventName}</h1>
+                </div>
+                <div>
+                  <div>
+                    <p className="text-[10.5px]">Titular</p>
+                    <p className="font-medium">{certificate.ownerName}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10.5px]">Código Verificador</p>
+                    <p className="font-medium">{String(certificate._id)}</p>
+                  </div>
+                </div>
+              </Link>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
