@@ -10,7 +10,7 @@ export default async function Mural() {
   const murais = response.items;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-50 py-12 px-6">
+    <div className="min-h-screen bg-blue-50 py-12 px-6">
       <div className="max-w-3xl mx-auto">
         <h1 className="text-4xl font-extrabold text-center mb-10 text-[#09427d]">
           Mural de Avisos
@@ -21,28 +21,31 @@ export default async function Mural() {
           </p>
         ) : (
           murais.map((mural: any) => {
-            
-            // Tente usar o id que você espera – por exemplo, tagID
-            const tagField = mural.fields.tag;
-            const isImportante = tagField
-              ? Array.isArray(tagField)
-                ? tagField.map((t: string) => t.trim().toLowerCase()).includes("importante")
-                : tagField.trim().toLowerCase() === "importante"
-              : false;
-
+            const hasArco = mural.fields.arco;
             return (
               <Link
                 key={mural.sys.id}
                 href="/certificados"
-                className={`mb-8 transition duration-300 hover:scale-105 hover:shadow-md block ${
-                  isImportante ? "rainbow-glow" : ""
-                }`}
+                className="block mb-6"
               >
-                <div className="card bg-white rounded-xl p-8">
-                  <p className="text-lg text-gray-700">
-                    {mural.fields.listaDoMural}
-                  </p>
-                </div>
+                {hasArco ? (
+                  <div className="rainbow-glow p-[2px] rounded-xl transition-transform duration-300 hover:scale-105 hover:shadow-md">
+                    <div className="bg-white rounded-xl p-4">
+                      <p className="text-lg text-gray-700">
+                        {mural.fields.listaDoMural}
+                      </p>
+                      <p className="text-lg text-gray-700 mt-2">
+                        {mural.fields.arco}
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="bg-white rounded-xl p-4 transition-transform duration-300 hover:scale-105 hover:shadow-md">
+                    <p className="text-lg text-gray-700">
+                      {mural.fields.listaDoMural}
+                    </p>
+                  </div>
+                )}
               </Link>
             );
           })
