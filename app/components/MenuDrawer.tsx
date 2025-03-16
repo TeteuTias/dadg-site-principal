@@ -12,8 +12,8 @@ export default function MenuDrawer() {
   const pathname = usePathname();
 
   // Define cores dinâmicas para o header e o drawer
-  const headerBackgroundColor = pathname.startsWith("/clam") ? "#16a34a" : "#09427d";
-  const drawerBackgroundColor = pathname.startsWith("/clam") ? "#16a34a" : "#1E3A8A";
+  const headerBackgroundColor = pathname.startsWith("/clam") ? "#056653" : "#09427d";
+  const drawerBackgroundColor = pathname.startsWith("/clam") ? "#056653" : "#1E3A8A";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,7 +39,7 @@ export default function MenuDrawer() {
 
   const toggleClamSubmenu = () => setClamSubmenuOpen((prev) => !prev);
 
-  const clamSubmenuItems = [ // futuramente os dados vão vir diretamente do Banco de Dados
+  const clamSubmenuItems = [ // futuramente os dados vão vir do Banco de Dados
     "EM BREVE"
   ];
 
@@ -87,7 +87,7 @@ export default function MenuDrawer() {
           </button>
         </div>
 
-        {/* Links centrais visíveis em todas as telas */}
+        {/* Links centrais */}
         <div className="flex items-center justify-center space-x-4" style={{ textTransform: "uppercase" }}>
           <Link href="/" style={{ color: "white", textDecoration: "none" }}>
             Início
@@ -136,20 +136,14 @@ export default function MenuDrawer() {
           overflowX: "hidden",
         }}
       >
-        {/* Botão de fechar */}
-        <button
+        {/* Botão de fechar posicionado à direita */}
+        <div
+          className="container zoom_invert"
           onClick={() => setMenuAberto(false)}
-          style={{
-            background: "none",
-            border: "none",
-            color: "white",
-            fontSize: "20px",
-            alignSelf: "flex-end",
-            cursor: "pointer",
-          }}
+          style={{ cursor: "pointer", alignSelf: "flex-end" }}
         >
-          ✖
-        </button>
+          <div className="close_icon zoom_invert"></div>
+        </div>
 
         {/* Links do Drawer */}
         <Link href="/" style={{ color: "white", textDecoration: "none" }}>
@@ -158,12 +152,10 @@ export default function MenuDrawer() {
         <Link href="/certificados" style={{ color: "white", textDecoration: "none" }}>
           📃 Certificados
         </Link>
-
         {/* Novo botão "Mural 📬" inserido acima de "CLAM" */}
         <Link href="/mural" style={{ color: "white", textDecoration: "none" }}>
-          📬Mural 
+          📬 Mural 
         </Link>
-
         <Link href="/eventos" style={{ color: "white", textDecoration: "none" }}>
           📅 Eventos
         </Link>
