@@ -310,3 +310,44 @@ body {
   font-size: 1.2em;
   color: rgba(50,50,50,0.8);
 }
+
+/* Efeito Hover com Gradiente de Rosa (Instagram) com bordas arredondadas */
+.instagram-hover {
+  position: relative;
+  border-radius: 0.75rem; /* Certifique-se de usar o mesmo valor do rounded-xl */
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Sombra forte para destacar do fundo */
+  transition: transform 0.3s;
+  overflow: hidden; /* Garante que o pseudo-elemento respeite o border-radius */
+}
+
+.instagram-hover::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  border: 3px solid transparent; /* Define a espessura da "borda" */
+  
+  /* Cria o gradiente na "borda" */
+  background: linear-gradient(45deg, #ff6ec4, #ee0979) border-box;
+  
+  /*
+    Usa máscara para que o fundo interno (content-box) seja recortado,
+    deixando apenas a "borda" visível.
+  */
+  -webkit-mask: 
+    linear-gradient(white, white) content-box, 
+    linear-gradient(white, white);
+  -webkit-mask-composite: destination-out;
+          mask-composite: exclude;
+  
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.instagram-hover:hover::after {
+  opacity: 1;
+}

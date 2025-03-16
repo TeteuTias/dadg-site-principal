@@ -46,7 +46,7 @@ const instagramAccounts = [
 export default function ContatoPage() {
   return (
     <main
-      className="relative min-h-screen w-full overflow-hidden pb-40" // Adicionei pb-40 para espaçamento na parte inferior
+      className="relative min-h-screen w-full overflow-hidden pb-40" // pb-40 para espaçamento na parte inferior
       style={{
         ...poppins.style,
         backgroundColor: "#ffffff",
@@ -66,7 +66,7 @@ export default function ContatoPage() {
               key={account.handle}
               href={account.url}
               target="_blank"
-              className="flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-md transition-transform duration-300 hover:scale-105 cursor-pointer"
+              className="instagram-hover flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-md transition-transform duration-300 hover:scale-105 cursor-pointer"
             >
               <div className="mb-4">
                 <FaInstagram className="w-12 h-12 text-[#09427d]" />
