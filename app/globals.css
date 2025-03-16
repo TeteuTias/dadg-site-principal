@@ -351,3 +351,42 @@ body {
 .instagram-hover:hover::after {
   opacity: 1;
 }
+
+/* Wrapper externo para a sombra do email */
+.email-shadow-wrapper {
+  border-radius: 0.75rem; /* mesmo valor de rounded-xl */
+  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.3);
+  /* Opcional: adicionar margin-bottom para espaçamento, se necessário */
+}
+
+/* Efeito Hover para o container de Email com borda azul em gradiente */
+.email-hover {
+  position: relative;
+  border-radius: 0.75rem; /* mesmo valor do rounded-xl */
+  overflow: hidden; /* garante que o pseudo-elemento respeite os cantos arredondados */
+  transition: transform 0.3s ease; /* para o scale */
+}
+
+.email-hover::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  border: 3px solid transparent;
+  background: linear-gradient(45deg, #09427d, #3366cc) border-box;
+  -webkit-mask: 
+    linear-gradient(white, white) content-box, 
+    linear-gradient(white, white);
+  -webkit-mask-composite: destination-out;
+          mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out; /* duração reduzida para 0.2s */
+  pointer-events: none;
+}
+
+.email-hover:hover::after {
+  opacity: 1;
+}

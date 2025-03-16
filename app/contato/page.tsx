@@ -83,17 +83,24 @@ export default function ContatoPage() {
       </div>
 
       {/* Container com o Email centralizado */}
-      <section className="mt-12 w-full max-w-4xl mx-auto">
-        <div className="p-6 bg-white rounded-xl shadow-md text-center transition-transform duration-300 hover:scale-105 mx-auto">
-          <h2 className="text-2xl font-bold text-[#09427d] uppercase mb-2">Email</h2>
-          <a
-            href="mailto:dadg.imepac@gmail.com"
-            className="text-lg text-gray-600 hover:text-[#09427d] transition-colors duration-300"
-          >
-            dadg.imepac@gmail.com
-          </a>
-        </div>
-      </section>
+      {/* Container com o Email centralizado */}
+<section className="mt-12 w-full max-w-4xl mx-auto">
+  <div className="email-shadow-wrapper mx-auto">
+    <div className="p-6 bg-white rounded-xl email-hover text-center transition-transform duration-300 hover:scale-105">
+      <h2 className="text-2xl font-bold text-[#09427d] uppercase mb-2">Email</h2>
+      <a
+        href="mailto:dadg.imepac@gmail.com"
+        className="text-lg text-gray-600 hover:text-[#09427d] transition-colors duration-300"
+      >
+        dadg.imepac@gmail.com
+      </a>
+    </div>
+  </div>
+</section>
+
+
+
+
 
       {/* Fundo com Onda SVG na parte inferior */}
       <div

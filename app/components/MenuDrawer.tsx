@@ -13,7 +13,7 @@ export default function MenuDrawer() {
 
   // Define cores dinâmicas para o header e o drawer
   const headerBackgroundColor = pathname.startsWith("/clam") ? "#056653" : "#09427d";
-  const drawerBackgroundColor = pathname.startsWith("/clam") ? "#056653" : "#1E3A8A";
+  const drawerBackgroundColor = pathname.startsWith("/clam") ? "#056653" : "#09427d";
 
   useEffect(() => {
     const handleScroll = () => {
