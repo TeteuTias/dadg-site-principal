@@ -390,3 +390,48 @@ body {
 .email-hover:hover::after {
   opacity: 1;
 }
+
+
+
+/* Estilo global para os containers verdes */
+.container-green {
+  background-color: #056653;
+  color: white;
+  padding: 3rem;
+  border-radius: 16px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+  max-width: 900px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.container-green:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Estiliza também os containers brancos para ficarem interativos */
+.container-white {
+  background-color: white;
+  padding: 3rem;
+  border-radius: 16px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.container-white:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Ajusta o conteúdo principal */
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100vh; /* Agora cobre toda a tela */
+  padding: 4rem 1.5rem;
+  gap: 3rem;
+}

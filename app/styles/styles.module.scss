@@ -4,7 +4,7 @@ $returnEasing: cubic-bezier(0.445, 0.05, 0.55, 0.95);
 
 .pageWrapper {
   display: flex;
-  background:#90ccfd;
+  background:linear-gradient(135deg, #023e8a, #00b4d8, #028f58);
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
