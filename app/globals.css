@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -78,4 +79,359 @@ html, body {
   margin: 0;
   padding: 0;
   background: linear-gradient(to bottom right, #eff6ff, white, #eff6ff);
+}
+
+.rainbow-glow {
+  padding: 3px;
+  border-radius: 1rem;
+  background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8f00ff);
+  background-size: 400% 400%;
+  animation: rainbow 5s ease infinite;
+}
+@keyframes rainbow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.card {
+  background: white;
+  border-radius: 0.75rem;
+}
+
+.showbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.loader {
+  width: 80px;
+  height: 80px;
+}
+
+.circular {
+  animation: rotate 2s linear infinite;
+  width: 100%;
+  height: 100%;
+}
+
+.path {
+  stroke: #4285F4;
+  stroke-linecap: round;
+  animation: dash 1.5s ease-in-out infinite;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35px;
+  }
+  100% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -124px;
+  }
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.blinking-cursor {
+  font-weight: 100;
+  font-size: 1em;
+  margin-left: 2px;
+  animation: blink 2s step-end infinite;
+}
+
+.blinking-cursor {
+  font-weight: 100;
+  font-size: 1em;
+  margin-left: 2px;
+  animation: blink 2s step-end infinite;
+}
+
+@keyframes blink {
+  from, to {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Import Google Fonts */
+.waves {
+  position: relative;
+  width: 100%;
+  height: 15vh;
+  margin-bottom: -7px; /* Corrige gap no Safari */
+  min-height: 100px;
+  max-height: 150px;
+}
+
+.parallax > use {
+  animation: move-forever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
+}
+.parallax > use:nth-child(1) {
+  animation-delay: -2s;
+  animation-duration: 7s;
+}
+.parallax > use:nth-child(2) {
+  animation-delay: -3s;
+  animation-duration: 10s;
+}
+.parallax > use:nth-child(3) {
+  animation-delay: -4s;
+  animation-duration: 13s;
+}
+.parallax > use:nth-child(4) {
+  animation-delay: -5s;
+  animation-duration: 20s;
+}
+
+@keyframes move-forever {
+  0% {
+    transform: translate3d(-90px, 0, 0);
+  }
+  100% {
+    transform: translate3d(85px, 0, 0);
+  }
+}
+
+.blinking-cursor {
+  font-weight: 100;
+  font-size: 1em;
+  margin-left: 2px;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+body {
+  background-color: #000000;
+  padding: 0;
+  margin: 0;
+}
+
+#gradient {
+  width: 100%;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+}
+
+/* Base para o close button */
+.container {
+  position: relative;
+  width: 2em;
+  height: 2em;
+}
+.container:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 0;
+  width: 0;
+  border: 1em solid rgba(100,100,100,0.8);
+  border-radius: 6em;
+  transition: all 0.2s ease-in-out;
+}
+.close_icon {
+  transition: all 0.075s ease-in-out;
+  position: absolute;
+  width: 2em;
+  height: 2em;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  border: 0.1em solid;
+  border-color: rgba(250,250,250,0.8);
+  border-radius: 6em;
+}
+.close_icon:after {
+  transition: all 0.075s ease-in-out;
+  font: 1em Helvetica, arial;
+  font-size: 1em;
+  width: 100%;
+  height: 100%;
+  content:"x";
+  color: rgba(250,250,250,0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translate(0,-5%) scale(1.25,1);
+}
+
+/* Inverted Zoom animações */
+.container.zoom_invert:hover:before {
+  font-size: 1.4em;
+  border-color: rgba(200,200,200,0.6);
+}
+.container.zoom_invert:hover .close_icon.zoom_invert {
+  border-color: rgba(200,200,200,1);
+}
+.container.zoom_invert:hover .close_icon.zoom_invert:after {
+  color: rgba(100,100,100,1);
+}
+
+.container.zoom_invert:active:before {
+  font-size: 1.2em;
+  border-color: rgba(200,100,100,0.8);
+}
+.container.zoom_invert:active .close_icon.zoom_invert {
+  transition: all 0.05s ease-in-out;
+  font-size: 1.2em;
+  border-color: rgba(50,50,50,0.8);
+}
+.container.zoom_invert:active .close_icon.zoom_invert:after {
+  transition: all 0.05s ease-in-out;
+  font-size: 1.2em;
+  color: rgba(50,50,50,0.8);
+}
+
+/* Efeito Hover com Gradiente de Rosa (Instagram) com bordas arredondadas */
+.instagram-hover {
+  position: relative;
+  border-radius: 0.75rem; /* Certifique-se de usar o mesmo valor do rounded-xl */
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Sombra forte para destacar do fundo */
+  transition: transform 0.3s;
+  overflow: hidden; /* Garante que o pseudo-elemento respeite o border-radius */
+}
+
+.instagram-hover::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  border: 3px solid transparent; /* Define a espessura da "borda" */
+  
+  /* Cria o gradiente na "borda" */
+  background: linear-gradient(45deg, #ff6ec4, #ee0979) border-box;
+  
+  /*
+    Usa máscara para que o fundo interno (content-box) seja recortado,
+    deixando apenas a "borda" visível.
+  */
+  -webkit-mask: 
+    linear-gradient(white, white) content-box, 
+    linear-gradient(white, white);
+  -webkit-mask-composite: destination-out;
+          mask-composite: exclude;
+  
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.instagram-hover:hover::after {
+  opacity: 1;
+}
+
+/* Wrapper externo para a sombra do email */
+.email-shadow-wrapper {
+  border-radius: 0.75rem; /* mesmo valor de rounded-xl */
+  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.3);
+  /* Opcional: adicionar margin-bottom para espaçamento, se necessário */
+}
+
+/* Efeito Hover para o container de Email com borda azul em gradiente */
+.email-hover {
+  position: relative;
+  border-radius: 0.75rem; /* mesmo valor do rounded-xl */
+  overflow: hidden; /* garante que o pseudo-elemento respeite os cantos arredondados */
+  transition: transform 0.3s ease; /* para o scale */
+}
+
+.email-hover::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  border: 3px solid transparent;
+  background: linear-gradient(45deg, #09427d, #3366cc) border-box;
+  -webkit-mask: 
+    linear-gradient(white, white) content-box, 
+    linear-gradient(white, white);
+  -webkit-mask-composite: destination-out;
+          mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out; /* duração reduzida para 0.2s */
+  pointer-events: none;
+}
+
+.email-hover:hover::after {
+  opacity: 1;
+}
+
+
+
+/* Estilo global para os containers verdes */
+.container-green {
+  background-color: #056653;
+  color: white;
+  padding: 3rem;
+  border-radius: 16px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+  max-width: 900px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.container-green:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Estiliza também os containers brancos para ficarem interativos */
+.container-white {
+  background-color: white;
+  padding: 3rem;
+  border-radius: 16px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.container-white:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Ajusta o conteúdo principal */
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100vh; /* Agora cobre toda a tela */
+  padding: 4rem 1.5rem;
+  gap: 3rem;
 }
