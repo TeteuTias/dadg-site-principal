@@ -72,102 +72,80 @@ export default function MenuDrawer() {
 
   return (
     <>
-      {/* Cabeçalho fixo */}
-      <header
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: scrolled ? "35px" : "45px",
-          backgroundColor: headerBackgroundColor,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "0 15px",
-          color: "white",
-          fontWeight: "bold",
-          fontSize: headerFontSize,
-          transition: "all 0.3s ease",
-          zIndex: 1000,
-        }}
-      >
-        {/* Botão Hamburger */}
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <button
-            onClick={() => setMenuAberto(true)}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "4px",
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              padding: 0,
-            }}
-          >
-            <span
-              style={{
-                width: "24px",
-                height: "4px",
-                backgroundColor: "white",
-                borderRadius: "4px",
-                display: "block",
-              }}
-            ></span>
-            <span
-              style={{
-                width: "24px",
-                height: "4px",
-                backgroundColor: "white",
-                borderRadius: "4px",
-                display: "block",
-              }}
-            ></span>
-            <span
-              style={{
-                width: "24px",
-                height: "4px",
-                backgroundColor: "white",
-                borderRadius: "4px",
-                display: "block",
-              }}
-            ></span>
-          </button>
-        </div>
+{/* Cabeçalho fixo */}
+<header
+  style={{
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: scrolled ? "35px" : "45px",
+    backgroundColor: headerBackgroundColor,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "0 15px",
+    color: "white",
+    fontWeight: "bold",
+    fontSize: headerFontSize,
+    transition: "all 0.3s ease",
+    zIndex: 1000,
+  }}
+>
+  {/* Botão Hamburger */}
+  <div style={{ display: "flex", alignItems: "center" }}>
+    <button
+      onClick={() => setMenuAberto(true)}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "4px",
+        background: "none",
+        border: "none",
+        cursor: "pointer",
+        padding: 0,
+      }}
+    >
+      <span style={{ width: "24px", height: "4px", backgroundColor: "white", borderRadius: "4px", display: "block" }}></span>
+      <span style={{ width: "24px", height: "4px", backgroundColor: "white", borderRadius: "4px", display: "block" }}></span>
+      <span style={{ width: "24px", height: "4px", backgroundColor: "white", borderRadius: "4px", display: "block" }}></span>
+    </button>
+  </div>
 
-        {/* Links centrais */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "16px",
-            textTransform: "uppercase",
-          }}
-        >
-          <Link href="/certificados" style={{ color: "white", textDecoration: "none" }}>
-            Certificados
-          </Link>
-          <Link href="/" style={{ color: "white", textDecoration: "none" }}>
-            Início
-          </Link>
-          <Link href="/coordenadorias" style={{ color: "white", textDecoration: "none" }}>
-          Coordenadorias
-          </Link>
-        </div>
+  {/* Links centrais - Agora alinhados corretamente */}
+  <div
+  style={{
+    flex: 1,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "16px",
+    textTransform: "uppercase",
+    textAlign: "center",
+  }}
+>
+  <Link href="/coordenadorias" style={{ color: "white", textDecoration: "none", position: "relative" }}>
+    <span style={{ position: "relative", left: "-12px" }}>Coordenadorias</span>
+  </Link>
+  <Link href="/" style={{ color: "white", textDecoration: "none", position: "relative" }}>
+    <span style={{ position: "relative", left: "-12px" }}>Início</span>
+  </Link>
+  <Link href="/certificados" style={{ color: "white", textDecoration: "none", position: "relative" }}>
+    <span style={{ position: "relative", left: "-12px" }}>Certificados</span>
+  </Link>
+</div>
 
-        {/* Ícone à direita */}
-        <div style={{ flexShrink: 0 }}>
-          <Image
-            src="/dadg_sem_fundo.png"
-            alt="Logo DADG"
-            width={30}
-            height={30}
-            className="object-contain"
-          />
-        </div>
-      </header>
+  {/* Ícone à direita */}
+  <div style={{ flexShrink: 0 }}>
+    <Image
+      src="/dadg_sem_fundo.png"
+      alt="Logo DADG"
+      width={30}
+      height={30}
+      className="object-contain"
+    />
+  </div>
+</header>
 
       {/* DrawerMenu */}
       <div
