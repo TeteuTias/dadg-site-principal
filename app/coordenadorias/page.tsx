@@ -20,7 +20,7 @@ export default function CoordenadoriasPage() {
         </div>
       </div>
       <div className={styles.container}>
-        <Link href="/coordenadorias/caep">
+        <Link href="/coordenadorias/embreve">
     
             <Card
               dataImage="/CAEP.png"
@@ -29,7 +29,7 @@ export default function CoordenadoriasPage() {
             />
           
         </Link>
-        <Link href="/coordenadorias/caes">
+        <Link href="/coordenadorias/embreve">
           
             <Card
               dataImage="/CAES.jpg"
@@ -38,7 +38,7 @@ export default function CoordenadoriasPage() {
             />
           
         </Link>
-        <Link href="/coordenadorias/clam">
+        <Link href="/coordenadorias/embreve">
           
             <Card
               dataImage="/CLAM.png"
@@ -47,7 +47,7 @@ export default function CoordenadoriasPage() {
             />
           
         </Link>
-        <Link href="/coordenadorias/clev">
+        <Link href="/coordenadorias/embreve">
           
             <Card
               dataImage="/CLEV.jpg"

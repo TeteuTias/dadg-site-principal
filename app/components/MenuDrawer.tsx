@@ -51,10 +51,10 @@ export default function MenuDrawer() {
 
   // Submenu para coordenadorias com as rotas atualizadas
   const coordenadoriasSubmenuItems = [
-    { label: "CAEP", href: "/coordenadorias/caep" },
-    { label: "CAES", href: "/coordenadorias/caes" },
-    { label: "CLAM", href: "/coordenadorias/clam" },
-    { label: "CLEV", href: "/coordenadorias/clev" },
+    { label: "CAEP", href: "/coordenadorias/embreve" },
+    { label: "CAES", href: "/coordenadorias/embreve" },
+    { label: "CLAM", href: "/coordenadorias/embreve" },
+    { label: "CLEV", href: "/coordenadorias/embreve" },
   ];
 
   const coordenadoriasSubmenuMaxHeight = coordenadoriasSubmenuOpen
@@ -258,7 +258,7 @@ export default function MenuDrawer() {
             <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
               {coordenadoriasSubmenuItems.map((item) => (
                 <Link
-                  key={item.href}
+                  key={item.label}
                   href={item.href}
                   style={{
                     color: "white",

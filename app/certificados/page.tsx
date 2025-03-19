@@ -155,7 +155,7 @@ function SearchInput() {
         </div>
       )}
       {!noResults && data.length > 0 && (
-        <div className="w-full max-h-64 overflow-auto space-y-4 mt-4">
+        <div className="w-full max-h-64 overflow-auto space-x-2 mt-4">
           {data.map((certificate) => (
             <Link
               key={String(certificate._id)}
