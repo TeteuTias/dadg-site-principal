@@ -20,7 +20,7 @@ export default async function Mural() {
             Nenhum aviso encontrado. Tente novamente mais tarde.
           </p>
         ) : (
-          murais.map((mural: any) => {
+          murais.map((mural) => {
             const hasArco = mural.fields.arco;
             return (
               <Link
@@ -32,17 +32,17 @@ export default async function Mural() {
                   <div className="rainbow-glow p-[2px] rounded-xl transition-transform duration-300 hover:scale-105 hover:shadow-md">
                     <div className="bg-white rounded-xl p-4">
                       <p className="text-lg text-gray-700">
-                        {mural.fields.listaDoMural}
+                        {String(mural.fields.listaDoMural || '')}
                       </p>
                       <p className="text-lg text-gray-700 mt-2">
-                        {mural.fields.arco}
+                        {String(mural.fields.arco || '')}
                       </p>
                     </div>
                   </div>
                 ) : (// garantindo borda abaulada mesmo no hover
                   <div className="bg-white rounded-xl p-4 transition-transform duration-300 hover:scale-105 hover:shadow-md">
                     <p className="text-lg text-gray-700">
-                      {mural.fields.listaDoMural}
+                      {String(mural.fields.listaDoMural || '')}
                     </p>
                   </div>
                 )}
