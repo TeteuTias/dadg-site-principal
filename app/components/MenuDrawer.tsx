@@ -9,15 +9,12 @@ export default function MenuDrawer() {
   const [scrolled, setScrolled] = useState(false);
   const [coordenadoriasSubmenuOpen, setCoordenadoriasSubmenuOpen] = useState(false);
   const [drawerWidth, setDrawerWidth] = useState("250px");
-  const [windowWidth, setWindowWidth] = useState<number>(
-    typeof window !== "undefined" ? window.innerWidth : 1024
-  );
+  const [windowWidth, setWindowWidth] = useState<number>(typeof window !== "undefined" ? window.innerWidth : 1024);
   const pathname = usePathname();
 
-  // Mantém o efeito "verde" para CLAM
   const headerBackgroundColor =
     pathname.startsWith("/coordenadorias/clam")
-      ? "#0A7A1A" // verde
+      ? "#0A7A1A"
       : pathname.startsWith("/coordenadorias/caes")
       ? "#056653"
       : "#09427d";
@@ -31,7 +28,6 @@ export default function MenuDrawer() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Atualiza a largura do drawer conforme o tamanho da tela
   useEffect(() => {
     function handleResize() {
       setWindowWidth(window.innerWidth);
@@ -46,10 +42,8 @@ export default function MenuDrawer() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const toggleCoordenadoriasSubmenu = () =>
-    setCoordenadoriasSubmenuOpen((prev) => !prev);
+  const toggleCoordenadoriasSubmenu = () => setCoordenadoriasSubmenuOpen((prev) => !prev);
 
-  // Submenu para coordenadorias com as rotas atualizadas
   const coordenadoriasSubmenuItems = [
     { label: "CAEP", href: "/coordenadorias/caep" },
     { label: "CAES", href: "/coordenadorias/caes" },
@@ -61,25 +55,22 @@ export default function MenuDrawer() {
     ? `${coordenadoriasSubmenuItems.length * 30}px`
     : "0px";
 
-  // Define o tamanho da fonte do header de forma responsiva
-  const headerFontSize = scrolled
-    ? windowWidth < 768
-      ? "12px"
-      : "14px"
-    : windowWidth < 768
-    ? "14px"
-    : "16px";
+  // Verifica se é tela pequena (mobile)
+  const isMobile = windowWidth < 768;
+  // Define altura, tamanho da fonte e espaçamento responsivos
+  const headerHeight = isMobile ? (scrolled ? "30px" : "35px") : (scrolled ? "35px" : "45px");
+  const headerFontSize = isMobile ? (scrolled ? "10px" : "12px") : (scrolled ? "14px" : "16px");
+  const headerGap = isMobile ? "8px" : "16px";
 
   return (
     <>
-      {/* Cabeçalho fixo */}
       <header
         style={{
           position: "fixed",
           top: 0,
           left: 0,
           width: "100%",
-          height: scrolled ? "35px" : "45px",
+          height: headerHeight,
           backgroundColor: headerBackgroundColor,
           display: "flex",
           alignItems: "center",
@@ -106,54 +97,34 @@ export default function MenuDrawer() {
               padding: 0,
             }}
           >
-            <span
-              style={{
-                width: "24px",
-                height: "4px",
-                backgroundColor: "white",
-                borderRadius: "4px",
-                display: "block",
-              }}
-            ></span>
-            <span
-              style={{
-                width: "24px",
-                height: "4px",
-                backgroundColor: "white",
-                borderRadius: "4px",
-                display: "block",
-              }}
-            ></span>
-            <span
-              style={{
-                width: "24px",
-                height: "4px",
-                backgroundColor: "white",
-                borderRadius: "4px",
-                display: "block",
-              }}
-            ></span>
+            <span style={{ width: "24px", height: "4px", backgroundColor: "white", borderRadius: "4px", display: "block" }}></span>
+            <span style={{ width: "24px", height: "4px", backgroundColor: "white", borderRadius: "4px", display: "block" }}></span>
+            <span style={{ width: "24px", height: "4px", backgroundColor: "white", borderRadius: "4px", display: "block" }}></span>
           </button>
         </div>
 
         {/* Links centrais */}
         <div
           style={{
+            position: "absolute",
+            left: "50%",
+            transform: "translateX(-50%)",
             display: "flex",
-            alignItems: "center",
             justifyContent: "center",
-            gap: "16px",
+            alignItems: "center",
+            gap: headerGap,
             textTransform: "uppercase",
+            textAlign: "center",
           }}
         >
-          <Link href="/certificados" style={{ color: "white", textDecoration: "none" }}>
-            Certificados
+          <Link href="/coordenadorias" style={{ color: "white", textDecoration: "none" }}>
+            Coordenadorias
           </Link>
           <Link href="/" style={{ color: "white", textDecoration: "none" }}>
             Início
           </Link>
-          <Link href="/coordenadorias" style={{ color: "white", textDecoration: "none" }}>
-          Coordenadorias
+          <Link href="/certificados" style={{ color: "white", textDecoration: "none" }}>
+            Certificados
           </Link>
         </div>
 
@@ -193,7 +164,6 @@ export default function MenuDrawer() {
           overflowX: "hidden",
         }}
       >
-        {/* Botão de fechar com o X estilizado */}
         <div
           className="container zoom_invert"
           onClick={() => setMenuAberto(false)}
@@ -202,37 +172,30 @@ export default function MenuDrawer() {
           <div className="close_icon zoom_invert"></div>
         </div>
 
-        {/* Links do Drawer */}
         <Link href="/" style={{ color: "white", textDecoration: "none" }} onClick={() => setMenuAberto(false)}>
           🏠 Início
         </Link>
         <Link href="/certificados" style={{ color: "white", textDecoration: "none" }} onClick={() => setMenuAberto(false)}>
           📃 Certificados
         </Link>
-        <Link href="/mural" style={{ color: "white", textDecoration: "none" }} onClick={() => setMenuAberto(false)}> 
+        <Link href="/mural" style={{ color: "white", textDecoration: "none" }} onClick={() => setMenuAberto(false)}>
           📬 Mural
         </Link>
-        <Link href="/eventos" style={{ color: "white", textDecoration: "none" }} onClick={() => setMenuAberto(false)}> 
+        <Link href="/eventos" style={{ color: "white", textDecoration: "none" }} onClick={() => setMenuAberto(false)}>
           📅 Eventos
         </Link>
-        <Link href="/contato" style={{ color: "white", textDecoration: "none" }}onClick={() => setMenuAberto(false)}> 
+        <Link href="/contato" style={{ color: "white", textDecoration: "none" }} onClick={() => setMenuAberto(false)}>
           📧 Contato
         </Link>
-        <Link href="/sobre" style={{ color: "white", textDecoration: "none" }}onClick={() => setMenuAberto(false)}> 
+        <Link href="/sobre" style={{ color: "white", textDecoration: "none" }} onClick={() => setMenuAberto(false)}>
           ℹ️ Sobre Nós
         </Link>
 
         {/* Submenu para Coordenadorias */}
         <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Link href="/coordenadorias" style={{ color: "white", textDecoration: "none" }} onClick={() => setMenuAberto(false)}> 
-            ⚕️Coordenadorias
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <Link href="/coordenadorias" style={{ color: "white", textDecoration: "none" }} onClick={() => setMenuAberto(false)}>
+              ⚕️ Coordenadorias
             </Link>
             <button
               onClick={toggleCoordenadoriasSubmenu}
@@ -263,7 +226,6 @@ export default function MenuDrawer() {
                   style={{
                     color: "white",
                     textDecoration: "none",
-                    // Exemplo: se o pathname corresponder ao item, pode-se aplicar um estilo de destaque
                     fontWeight: pathname === item.href ? "normal" : "normal",
                   }}
                 >
