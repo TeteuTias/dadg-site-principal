@@ -25,7 +25,7 @@ export default function CoordenadoriasPage() {
             <Card
               dataImage="/CAEP.png"
               header="CAEP"
-              content="Descrição para CAEP."
+              content="Coordenadoria Acadêmica de Extensão e Pesquisa."
             />
           
         </Link>
@@ -34,7 +34,7 @@ export default function CoordenadoriasPage() {
             <Card
               dataImage="/CAES.jpg"
               header="CAES"
-              content="Descrição para CAES."
+              content="Coordenadoria Acadêmica de Educação em Saúde."
             />
           
         </Link>
@@ -43,16 +43,16 @@ export default function CoordenadoriasPage() {
             <Card
               dataImage="/CLAM.png"
               header="CLAM"
-              content="Descrição para CLAM."
+              content="Coordenadoria de Ligas Acadêmicas de Medicina."
             />
           
         </Link>
-        <Link href="/coordenadorias/clev">
+        <Link href="/coordenadorias/cac">
           
             <Card
-              dataImage="/CLEV.jpg"
-              header="CLEV"
-              content="Descrição para CLEV."
+              dataImage="/CAC.jpeg"
+              header="CAC"
+              content="Coordenadoria Acadêmica de Certificados e TI."
             />
           
         </Link>
