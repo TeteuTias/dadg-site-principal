@@ -37,9 +37,9 @@ const LeaguesPage = () => {
 
         {/* Sobre nós e Nossa Missão */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <Card className="border-green-100 bg-white/80 backdrop-blur-sm">
+          <Card className="border-green-100 bg-white/80 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:shadow-green-100 hover:-translate-y-1">
             <CardHeader className="flex flex-row items-center gap-2">
-              <Info className="h-5 w-5 text-green-600" />
+              <Info className="h-5 w-5 text-green-600 transition-transform duration-300 group-hover:scale-110" />
               <CardTitle className="text-green-700">Sobre Nós</CardTitle>
             </CardHeader>
             <CardContent>
@@ -52,9 +52,9 @@ const LeaguesPage = () => {
             </CardContent>
           </Card>
 
-          <Card className="border-green-100 bg-white/80 backdrop-blur-sm">
+          <Card className="border-green-100 bg-white/80 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:shadow-green-100 hover:-translate-y-1">
             <CardHeader className="flex flex-row items-center gap-2">
-              <Target className="h-5 w-5 text-green-600" />
+              <Target className="h-5 w-5 text-green-600 transition-transform duration-300 group-hover:scale-110" />
               <CardTitle className="text-green-700">Nossa Missão</CardTitle>
             </CardHeader>
             <CardContent>
@@ -75,9 +75,9 @@ const LeaguesPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {leagueData.map((league) => (
             <Link to={`/leagues/${league.id}`} key={league.id}>
-              <Card className="h-full transition-all hover:shadow-md hover:-translate-y-1 border-green-100 bg-white/80 backdrop-blur-sm">
+              <Card className="h-full transition-all duration-300 hover:shadow-md hover:shadow-green-200 hover:-translate-y-1 hover:bg-green-50/50 border-green-100 bg-white/80 backdrop-blur-sm">
                 <CardHeader className="flex flex-row items-center gap-2">
-                  <GraduationCap className="h-5 w-5 text-green-600" />
+                  <GraduationCap className="h-5 w-5 text-green-600 transition-transform duration-300 group-hover:rotate-12" />
                   <CardTitle className="text-green-700">{league.name}</CardTitle>
                 </CardHeader>
                 <CardContent>
