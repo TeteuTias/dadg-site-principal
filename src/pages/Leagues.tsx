@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { leagueData } from "@/models/League";
@@ -27,10 +26,10 @@ const LeaguesPage = () => {
       <div className="relative z-10 w-full max-w-4xl flex flex-col gap-12 animate-in fade-in duration-500">
         {/* Seção de título e introdução */}
         <section className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-green-700 mb-4">
+          <h1 className="text-5xl font-extrabold bg-gradient-to-r from-green-600 via-green-700 to-green-800 bg-clip-text text-transparent mb-4 tracking-tight leading-tight">
             Coordenadoria de Ligas Acadêmicas de Medicina
           </h1>
-          <p className="text-xl text-green-600 max-w-2xl mx-auto">
+          <p className="text-xl text-green-600 max-w-2xl mx-auto font-medium tracking-wide">
             Conheça todas as nossas ligas acadêmicas e suas atividades
           </p>
         </section>
