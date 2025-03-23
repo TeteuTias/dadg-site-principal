@@ -1,9 +1,18 @@
-'use client';
+"use client"
 import React from 'react';
 import Image from 'next/image';
 import './style.css';
 
 const CacPage = () => {
+  const teamMembers = [
+    { name: 'Mateus Rosa', role: 'Coordenador', photo: '/mateus.jpg' },
+    { name: 'Nicoly Gonzaga', role: 'Coordenadora', photo: '/nicoly.jpeg' },
+    { name: 'Gianluca Zambiazi', role: 'Núcleo de Apoio', photo: '/gianluca.jpeg' },
+    { name: 'Rafaela Luiza Gonzaga', role: 'Núcleo de Apoio', photo: '/rafaela.jpg' },
+    { name: 'Lucas Borges', role: 'Núcleo de Apoio', photo: '/lucas.jpg' },
+    { name: 'Heloísa Benatt', role: 'Núcleo de Apoio', photo: '/heloisa.jpg' }
+  ];
+
   return (
     <div className="cac-page">
       <div className="main-container">
@@ -37,10 +46,30 @@ const CacPage = () => {
         </div>
       </div>
       <div className="credit-section fade-in">
-  <p className="credit-text">
-    Todo este site é fruto dos esforços do <strong>CAC</strong> da gestão <strong>2025</strong>.
-  </p>
-</div>
+        <p className="credit-text">
+          Todo este site é fruto dos esforços do <strong>CAC da gestão 2025</strong>.
+        </p>
+        <h2 className="credit-title">Equipe CAC 2025</h2>
+        <div className="team-container">
+          {teamMembers.map((member, index) => (
+            <div key={index} className="team-member">
+              <div className="photo-frame">
+                <Image 
+                  src={member.photo} 
+                  alt={member.name}
+                  width={150}
+                  height={150}
+                  className="member-photo"
+                />
+              </div>
+              <div className="member-info">
+                <h3 className="member-name">{member.name}</h3>
+                <p className="member-role">{member.role}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
