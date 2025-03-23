@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { GraduationCap } from "lucide-react";
+import { GraduationCap, Info, Target } from "lucide-react";
 
 const LeaguesPage = () => {
   return (
@@ -34,6 +34,43 @@ const LeaguesPage = () => {
             Conheça todas as nossas ligas acadêmicas e suas atividades
           </p>
         </section>
+
+        {/* Sobre nós e Nossa Missão */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <Card className="border-green-100 bg-white/80 backdrop-blur-sm">
+            <CardHeader className="flex flex-row items-center gap-2">
+              <Info className="h-5 w-5 text-green-600" />
+              <CardTitle className="text-green-700">Sobre Nós</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-green-600/80">
+                A Coordenadoria de Ligas Acadêmicas de Medicina (CLAM) é responsável por supervisionar 
+                e apoiar todas as ligas acadêmicas da faculdade de medicina. Trabalhamos para garantir 
+                que cada liga tenha os recursos necessários para desenvolver atividades de ensino, 
+                pesquisa e extensão de alta qualidade.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-green-100 bg-white/80 backdrop-blur-sm">
+            <CardHeader className="flex flex-row items-center gap-2">
+              <Target className="h-5 w-5 text-green-600" />
+              <CardTitle className="text-green-700">Nossa Missão</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-green-600/80">
+                Nossa missão é promover a excelência acadêmica através do suporte às ligas, 
+                incentivando o desenvolvimento de habilidades clínicas, de pesquisa e comunicação. 
+                Buscamos criar um ambiente integrado onde estudantes possam aprofundar seus 
+                conhecimentos em diversas especialidades médicas.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
+        <h2 className="text-2xl font-bold text-green-700 text-center mt-4 mb-6">
+          Nossas Ligas Acadêmicas
+        </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {leagueData.map((league) => (
