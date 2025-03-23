@@ -328,21 +328,16 @@ body {
   width: 100%;
   height: 100%;
   border-radius: inherit;
-  border: 3px solid transparent; /* Define a espessura da "borda" */
-  
-  /* Cria o gradiente na "borda" */
+  border: 3px solid transparent;
   background: linear-gradient(45deg, #ff6ec4, #ee0979) border-box;
-  
-  /*
-    Usa máscara para que o fundo interno (content-box) seja recortado,
-    deixando apenas a "borda" visível.
-  */
   -webkit-mask: 
     linear-gradient(white, white) content-box, 
     linear-gradient(white, white);
+  mask: 
+    linear-gradient(white, white) content-box, 
+    linear-gradient(white, white);
   -webkit-mask-composite: destination-out;
-          mask-composite: exclude;
-  
+  mask-composite: exclude;
   opacity: 0;
   transition: opacity 0.3s;
   pointer-events: none;
@@ -380,10 +375,13 @@ body {
   -webkit-mask: 
     linear-gradient(white, white) content-box, 
     linear-gradient(white, white);
+  mask: 
+    linear-gradient(white, white) content-box, 
+    linear-gradient(white, white);
   -webkit-mask-composite: destination-out;
-          mask-composite: exclude;
+  mask-composite: exclude;
   opacity: 0;
-  transition: opacity 0.2s ease-in-out; /* duração reduzida para 0.2s */
+  transition: opacity 0.2s ease-in-out;
   pointer-events: none;
 }
 
@@ -434,4 +432,140 @@ body {
   min-height: 100vh; /* Agora cobre toda a tela */
   padding: 4rem 1.5rem;
   gap: 3rem;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes title-glow {
+  0% {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5),
+                 0 0 20px rgba(255, 255, 255, 0.3),
+                 0 0 30px rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.7),
+                 0 0 30px rgba(255, 255, 255, 0.5),
+                 0 0 40px rgba(255, 255, 255, 0.3);
+  }
+  100% {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5),
+                 0 0 20px rgba(255, 255, 255, 0.3),
+                 0 0 30px rgba(255, 255, 255, 0.2);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-title-glow {
+  animation: title-glow 3s ease-in-out infinite;
+}
+
+.animate-fade-in {
+  animation: fade-in 1s ease-out;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+/* Classes de delay para animações sequenciais */
+.delay-200 {
+  animation-delay: 200ms;
+}
+
+.delay-300 {
+  animation-delay: 300ms;
+}
+
+.delay-400 {
+  animation-delay: 400ms;
+}
+
+.delay-500 {
+  animation-delay: 500ms;
+}
+
+.delay-600 {
+  animation-delay: 600ms;
 }

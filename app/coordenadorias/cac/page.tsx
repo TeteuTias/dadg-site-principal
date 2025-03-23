@@ -1,11 +1,9 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import './style.css';
 
 const CacPage = () => {
-  const [showModal, setShowModal] = useState(false);
-
   const teamMembers = [
     { name: 'Mateus Rosa', role: 'Coordenador', photo: '/mateus.jpg' },
     { name: 'Nicoly Gonzaga', role: 'Coordenadora', photo: '/nicoly.jpeg' },
@@ -48,45 +46,30 @@ const CacPage = () => {
         </div>
       </div>
       <div className="credit-section fade-in">
-  <p className="credit-text">
-    Todo este site é fruto dos esforços do{' '}
-    <span 
-      className="clickable-text"
-      onClick={() => setShowModal(true)}
-      style={{ cursor: 'pointer' }}
-    >
-      CAC da gestão 2025
-    </span>.
-  </p>
-</div>
-
-      {showModal && (
-        <div className="modal-overlay" onClick={() => setShowModal(false)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
-            <button className="close-button" onClick={() => setShowModal(false)}>×</button>
-            <h2 className="modal-title">Equipe CAC 2025</h2>
-            <div className="team-container">
-              {teamMembers.map((member, index) => (
-                <div key={index} className="team-member">
-                  <div className="photo-frame">
-                    <Image 
-                      src={member.photo} 
-                      alt={member.name}
-                      width={150}
-                      height={150}
-                      className="member-photo"
-                    />
-                  </div>
-                  <div className="member-info">
-                    <h3 className="member-name">{member.name}</h3>
-                    <p className="member-role">{member.role}</p>
-                  </div>
-                </div>
-              ))}
+        <p className="credit-text">
+          Todo este site é fruto dos esforços do <strong>CAC da gestão 2025</strong>.
+        </p>
+        <h2 className="credit-title">Equipe CAC 2025</h2>
+        <div className="team-container">
+          {teamMembers.map((member, index) => (
+            <div key={index} className="team-member">
+              <div className="photo-frame">
+                <Image 
+                  src={member.photo} 
+                  alt={member.name}
+                  width={150}
+                  height={150}
+                  className="member-photo"
+                />
+              </div>
+              <div className="member-info">
+                <h3 className="member-name">{member.name}</h3>
+                <p className="member-role">{member.role}</p>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
-      )}
+      </div>
     </div>
   );
 };

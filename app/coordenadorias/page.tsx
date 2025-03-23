@@ -47,12 +47,12 @@ export default function CoordenadoriasPage() {
             />
           
         </Link>
-        <Link href="/coordenadorias/clev">
+        <Link href="/coordenadorias/cac">
           
             <Card
-              dataImage="/CLEV.jpg"
-              header="CLEV"
-              content="Descrição para CLEV."
+              dataImage="/CAC.jpeg"
+              header="CAC"
+              content="Coordenadoria de Certificados e TI."
             />
           
         </Link>

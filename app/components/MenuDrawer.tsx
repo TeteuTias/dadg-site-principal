@@ -17,6 +17,10 @@ export default function MenuDrawer() {
       ? "#0A7A1A"
       : pathname.startsWith("/coordenadorias/caes")
       ? "#056653"
+      : pathname.startsWith("/coordenadorias/caep")
+      ? "#000066"
+      : pathname.startsWith("/coordenadorias/cac")
+      ? "#050a4a"
       : "#09427d";
   const drawerBackgroundColor = headerBackgroundColor;
 
@@ -79,8 +83,10 @@ export default function MenuDrawer() {
           color: "white",
           fontWeight: "bold",
           fontSize: headerFontSize,
-          transition: "all 0.3s ease",
+          transition: "all 0.5s ease-in-out",
           zIndex: 1000,
+          backdropFilter: "blur(8px)",
+          WebkitBackdropFilter: "blur(8px)",
         }}
       >
         {/* Botão Hamburger */}
@@ -159,7 +165,7 @@ export default function MenuDrawer() {
           zIndex: 1100,
           boxShadow: "2px 0 10px rgba(0, 0, 0, 0.5)",
           transform: menuAberto ? "translateX(0)" : "translateX(-100%)",
-          transition: "transform 0.3s ease",
+          transition: "transform 0.3s ease, background-color 0.5s ease-in-out",
           overflowY: "auto",
           overflowX: "hidden",
         }}
