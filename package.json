@@ -9,11 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-scroll-area": "^1.2.3",
+    "@radix-ui/react-slot": "^1.1.2",
+    "@tanstack/react-query": "^5.69.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "contentful": "^11.5.7",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.5.0",
     "html2canvas": "^1.4.1",
     "jspdf": "^1.4.0",
+    "lucide-react": "^0.483.0",
     "mongoose": "^8.10.0",
     "next": "15.1.6",
     "pdf-lib": "^1.17.1",
@@ -23,8 +29,11 @@
     "react-canvas-confetti": "^2.0.7",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
+    "react-router-dom": "^7.4.0",
     "sass": "^1.85.1",
-    "scss": "^0.2.4"
+    "scss": "^0.2.4",
+    "tailwind-merge": "^3.0.2",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -32,6 +41,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/react-router-dom": "^5.3.3",
     "autoprefixer": "^10.4.20",
     "eslint": "^9",
     "eslint-config-next": "15.1.6",
