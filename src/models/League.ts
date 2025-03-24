@@ -15,6 +15,9 @@ export interface League {
   fullDescription?: string;
   specialty?: string;
   activities?: string[];
+  aboutUs?: string;
+  mission?: string;
+  logoUrl?: string;
 }
 
 export const leagueData: League[] = [
@@ -23,7 +26,9 @@ export const leagueData: League[] = [
     name: "LACOHP", 
     description: "Liga Acadêmica de Cirurgia Oral e Hospitalar Pediátrica",
     specialty: "Pediatria/Cirurgia",
-    activities: ["Aulas teóricas", "Atividades práticas", "Pesquisa científica"]
+    activities: ["Aulas teóricas", "Atividades práticas", "Pesquisa científica"],
+    aboutUs: "Somos uma liga dedicada ao estudo da cirurgia oral e hospitalar pediátrica, fundada em 2015 por estudantes interessados em aprofundar conhecimentos nesta área específica.",
+    mission: "Promover o conhecimento especializado em cirurgia pediátrica, desenvolver habilidades técnicas e formar profissionais conscientes das necessidades específicas dos pacientes infantis."
   },
   { 
     id: "lafim", 
