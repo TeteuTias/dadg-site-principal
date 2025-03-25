@@ -14,7 +14,7 @@ import { GraduationCap, Info, Target } from "lucide-react";
 const LeaguesPage = () => {
   return (
     <main className="relative min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-br from-green-50 via-white to-green-50 overflow-hidden p-8">
-      {/* Imagem de fundo com opacidade */}
+      {/* Background image with opacity */}
       <div className="absolute inset-0 z-0 flex items-center justify-center">
         <img
           src="/lovable-uploads/09d1671a-1808-48c0-97b3-78772fa97b1f.png"
@@ -23,9 +23,9 @@ const LeaguesPage = () => {
         />
       </div>
 
-      {/* Conteúdo principal */}
+      {/* Main content */}
       <div className="relative z-10 w-full max-w-4xl flex flex-col gap-12 animate-in fade-in duration-500">
-        {/* Seção de título e introdução */}
+        {/* Title and introduction section */}
         <section className="text-center mb-8">
           <h1 className="text-5xl font-extrabold bg-gradient-to-r from-green-600 via-green-700 to-green-800 bg-clip-text text-transparent mb-4 tracking-tight leading-tight">
             Coordenadoria de Ligas Acadêmicas de Medicina
@@ -35,7 +35,7 @@ const LeaguesPage = () => {
           </p>
         </section>
 
-        {/* Sobre nós e Nossa Missão */}
+        {/* About Us and Our Mission */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <Card className="border-green-100 bg-white/80 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:shadow-green-100 hover:-translate-y-1">
             <CardHeader className="flex flex-row items-center gap-2">
@@ -74,14 +74,16 @@ const LeaguesPage = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {leagueData.map((league) => (
-            <Link to={`/leagues/${league.id}`} key={league.id}>
-              <Card className="h-full transition-all duration-300 hover:shadow-md hover:shadow-green-200 hover:-translate-y-1 hover:bg-green-50/50 border-green-100 bg-white/80 backdrop-blur-sm">
-                <CardHeader className="flex flex-row items-center gap-2">
-                  <GraduationCap className="h-5 w-5 text-green-600 transition-transform duration-300 group-hover:rotate-12" />
-                  <CardTitle className="text-green-700">{league.name}</CardTitle>
+            <Link to={`/leagues/${league.id}`} key={league.id} className="group">
+              <Card className="h-full overflow-hidden border-green-100 bg-white/80 backdrop-blur-sm transition-all duration-300 hover:shadow-md hover:shadow-green-200 hover:-translate-y-1 hover:bg-green-50/50">
+                <CardHeader className="flex flex-row items-center gap-2 pb-2">
+                  <div className="p-2 rounded-full bg-green-50 flex items-center justify-center group-hover:bg-green-100 transition-colors">
+                    <GraduationCap className="h-5 w-5 text-green-600 transition-transform duration-300 group-hover:rotate-12" />
+                  </div>
+                  <CardTitle className="text-green-700 text-lg">{league.name}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="text-green-600/80">
+                  <CardDescription className="text-green-600/80 line-clamp-2">
                     {league.description || "Clique para ver mais detalhes sobre esta liga acadêmica."}
                   </CardDescription>
                 </CardContent>
