@@ -2,7 +2,7 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
 import { leagueData } from "@/app/models/League";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/components/ui/button";
 import { ArrowLeft, Mail, GraduationCap, Users, Calendar, Info, Target } from "lucide-react";
 import {
   Card,
@@ -10,7 +10,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/app/components/ui/card";
 
 const LeagueDetail = () => {
   const { id } = useParams<{ id: string }>();

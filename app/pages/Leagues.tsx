@@ -8,7 +8,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/app/components/ui/card";
 import { GraduationCap, Info, Target } from "lucide-react";
 
 const LeaguesPage = () => {
