@@ -1,8 +1,6 @@
 
-// Importamos e reexportamos do componente original
-// Isso mantém a compatibilidade com o código existente
+import { toast, useToast as originalUseToast } from "@/src/hooks/use-toast";
 
-import { useToast as originalUseToast } from "@/app/hooks/use-toast";
-
+export { toast };
 export const useToast = originalUseToast;
-export type { Toast, ToasterToast } from "@/app/hooks/use-toast";
+export type { Toast, ToasterToast } from "@/src/hooks/use-toast";
