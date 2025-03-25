@@ -1,7 +1,7 @@
 
 import React from "react";
 import { useParams, Link } from "react-router-dom";
-import { leagueData } from "@/models/League";
+import { leagueData } from "@/app/models/League";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Mail, GraduationCap, Users, Calendar, Info, Target } from "lucide-react";
 import {
