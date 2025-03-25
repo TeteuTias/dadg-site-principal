@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { leagueData } from "@/app/models/League";
+import { leagueData } from "@/app/models/leagues";
 import {
   Card,
   CardContent,
