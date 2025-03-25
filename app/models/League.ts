@@ -94,136 +94,163 @@ export const leagueData: League[] = [
   { 
     id: "laplast", 
     name: "Liga Acadêmica de Cirurgia Plástica",
-    description: "LAPLAST" 
+    description: "LAPLAST",
+    specialty: "Cirurgia Plástica" 
   },
   { 
     id: "lacca", 
     name: "Liga Acadêmica de Clínica Cirúrgica de Araguari",
-    description: "LACCA" 
+    description: "LACCA",
+    specialty: "Clínica Cirúrgica" 
   },
   { 
     id: "lamelp", 
     name: "Liga Acadêmica de Medicina Legal e Perícias Médicas",
-    description: "LAMELP" 
+    description: "LAMELP",
+    specialty: "Medicina Legal" 
   },
   { 
     id: "laot", 
     name: "Liga Acadêmica de Ortopedia e Traumatologia",
-    description: "LAOT" 
+    description: "LAOT",
+    specialty: "Ortopedia" 
   },
   { 
     id: "uroliga", 
     name: "Liga Academia de Urologia",
-    description: "UROLIGA" 
+    description: "UROLIGA",
+    specialty: "Urologia" 
   },
   { 
     id: "luma", 
     name: "Liga Universitária de Mastologia",
-    description: "LUMA" 
+    description: "LUMA",
+    specialty: "Mastologia" 
   },
   { 
     id: "lume", 
     name: "Liga Universitária de Medicina de Emergência",
-    description: "LUME" 
+    description: "LUME",
+    specialty: "Medicina de Emergência" 
   },
   { 
     id: "lucmsc", 
     name: "Liga Acadêmica de Clínica Médica e Saúde Coletiva",
-    description: "LUCMSC" 
+    description: "LUCMSC",
+    specialty: "Clínica Médica e Saúde Coletiva" 
   },
   { 
     id: "lagastro", 
     name: "Liga Acadêmica de Gastroenterologia",
-    description: "LAGASTRO" 
+    description: "LAGASTRO",
+    specialty: "Gastroenterologia" 
   },
   { 
     id: "lagem", 
     name: "Liga Academia de Genética e Embriologia Médica",
-    description: "LAGEM" 
+    description: "LAGEM",
+    specialty: "Genética e Embriologia" 
   },
   { 
     id: "lanut", 
     name: "Liga Acadêmica de Nutrologia",
-    description: "LANUT" 
+    description: "LANUT",
+    specialty: "Nutrologia" 
   },
   { 
     id: "lasem", 
     name: "Liga Acadêmica de Semiologia Médica",
-    description: "LASEM" 
+    description: "LASEM",
+    specialty: "Semiologia" 
   },
   { 
     id: "laad", 
     name: "Liga Acadêmica de Anatomia e Dissecação",
-    description: "LAAD" 
+    description: "LAAD",
+    specialty: "Anatomia" 
   },
   { 
     id: "lacor", 
     name: "Liga de Cardiologia de Araguari",
-    description: "LACOR" 
+    description: "LACOR",
+    specialty: "Cardiologia" 
   },
   { 
     id: "laderm", 
     name: "Liga Acadêmica de Dermatologia",
-    description: "LADERM" 
+    description: "LADERM",
+    specialty: "Dermatologia" 
   },
   { 
     id: "lago", 
     name: "Liga Acadêmica de Ginecologia e Obstetrícia",
-    description: "LAGO" 
+    description: "LAGO",
+    specialty: "Ginecologia e Obstetrícia" 
   },
   { 
     id: "lane", 
     name: "Liga Acadêmica de Neurologia",
-    description: "LANE" 
+    description: "LANE",
+    specialty: "Neurologia" 
   },
   { 
     id: "laonco", 
     name: "Liga Acadêmica de Oncologia",
-    description: "LAONCO" 
+    description: "LAONCO",
+    specialty: "Oncologia" 
   },
   { 
     id: "lanefro", 
     name: "Liga Acadêmica de Nefrologia",
-    description: "LANEFRO" 
+    description: "LANEFRO",
+    specialty: "Nefrologia" 
   },
   { 
     id: "lar", 
     name: "Liga Acadêmica de Reumatologia",
-    description: "LAR" 
+    description: "LAR",
+    specialty: "Reumatologia" 
   },
   { 
     id: "lupa", 
     name: "Liga Acadêmica de Psiquiatria de Araguari",
-    description: "LUPA" 
+    description: "LUPA",
+    specialty: "Psiquiatria" 
   },
   { 
     id: "laard", 
     name: "Liga Acadêmica de Anestesiologia, Reanimação e Dor",
-    description: "LAARD" 
+    description: "LAARD",
+    specialty: "Anestesiologia" 
   },
   { 
     id: "laoto", 
     name: "Liga Acadêmica de Otorrinolaringologia",
-    description: "LAOTO" 
+    description: "LAOTO",
+    specialty: "Otorrinolaringologia" 
   },
   { 
     id: "laoa", 
     name: "Liga Acadêmica de Oftalmologia",
-    description: "LAOA" 
+    description: "LAOA",
+    specialty: "Oftalmologia" 
   },
   { 
     id: "liap", 
     name: "Liga Academia de Pneumologia",
-    description: "LIAP" 
+    description: "LIAP",
+    specialty: "Pneumologia" 
   },
   { 
     id: "lae", 
     name: "Liga Acadêmica de Endocrinologia",
-    description: "LAE" 
+    description: "LAE",
+    specialty: "Endocrinologia" 
   },
   { 
     id: "laget", 
     name: "Liga de Gestão, Empreendedorismo e Tecnologia",
-    description: "LAGET" 
+    description: "LAGET",
+    specialty: "Gestão e Empreendedorismo" 
   }
 ];
