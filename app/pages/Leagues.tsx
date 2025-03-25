@@ -80,11 +80,19 @@ const LeaguesPage = () => {
                   <div className="p-2 rounded-full bg-green-50 flex items-center justify-center group-hover:bg-green-100 transition-colors">
                     <GraduationCap className="h-5 w-5 text-green-600 transition-transform duration-300 group-hover:rotate-12" />
                   </div>
-                  <CardTitle className="text-green-700 text-lg">{league.name}</CardTitle>
+                  <div>
+                    <CardTitle className="text-green-700 text-lg">{league.description}</CardTitle>
+                    <p className="text-sm text-green-600/90 mt-0.5">{league.name}</p>
+                  </div>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="text-green-600/80 line-clamp-2">
-                    {league.description || "Clique para ver mais detalhes sobre esta liga acadêmica."}
+                  {league.specialty && (
+                    <p className="text-xs font-medium bg-green-100 text-green-800 px-2 py-1 rounded-full inline-block mb-2">
+                      {league.specialty}
+                    </p>
+                  )}
+                  <CardDescription className="text-green-600/80 line-clamp-2 mt-1">
+                    Clique para ver mais detalhes sobre esta liga acadêmica.
                   </CardDescription>
                 </CardContent>
               </Card>
