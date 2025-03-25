@@ -173,7 +173,7 @@ export default function MenuDrawer() {
         <div
           className="container zoom_invert"
           onClick={() => setMenuAberto(false)}
-          style={{ cursor: "pointer", alignSelf: "flex-end" }}
+          style={{ cursor: "pointer", alignSelf: "flex-end", marginRight: "-10px", marginTop: "-10px" }}
         >
           <div className="close_icon zoom_invert"></div>
         </div>
