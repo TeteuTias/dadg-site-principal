@@ -1,14 +1,14 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { leagueData } from "@/app/models/leagues";
+import { leagueData } from "../models/leagues";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/app/components/ui/card";
+} from "../components/ui/card";
 import { GraduationCap, Info, Target } from "lucide-react";
 
 const LeaguesPage = () => {

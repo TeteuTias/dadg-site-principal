@@ -1,8 +1,7 @@
-
 import React from "react";
 import { useParams, Link } from "react-router-dom";
-import { leagueData } from "@/app/models/leagues";
-import { Button } from "@/app/components/ui/button";
+import { leagueData } from "../models/leagues";
+import { Button } from "../components/ui/button";
 import { ArrowLeft, Mail, GraduationCap, Users, Calendar, Info, Target } from "lucide-react";
 import {
   Card,
@@ -10,7 +9,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/app/components/ui/card";
+} from "../components/ui/card";
 
 const LeagueDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -38,10 +37,8 @@ const LeagueDetail = () => {
       </Button>
 
       <div className="grid grid-cols-1 gap-10">
-        {/* Cabeçalho da liga com logo e título */}
         <div className="flex flex-col md:flex-row items-center gap-6 bg-white/90 backdrop-blur-sm rounded-lg p-6 border border-green-100 shadow-sm">
           <div className="flex-shrink-0 w-32 h-32 bg-green-50 rounded-full flex items-center justify-center border-2 border-green-200">
-            {/* Placeholder para logo da liga */}
             <GraduationCap className="h-16 w-16 text-green-600" />
           </div>
           
@@ -57,7 +54,6 @@ const LeagueDetail = () => {
           </div>
         </div>
 
-        {/* Sobre nós e Nossa Missão */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Card className="border-green-100 bg-white/80 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:shadow-green-100 hover:-translate-y-1">
             <CardHeader className="flex flex-row items-center gap-2">
@@ -84,7 +80,6 @@ const LeagueDetail = () => {
           </Card>
         </div>
 
-        {/* Informações detalhadas */}
         <Card className="border-green-100 bg-white/80 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="text-green-700">Informações</CardTitle>
