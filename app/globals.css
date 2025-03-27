@@ -671,3 +671,26 @@ body {
     padding-top: 45px; /* valor para desktop */
   }
 }
+
+@keyframes gradientFlow {
+  from {
+    background-position: 0% center;
+  }
+  to {
+    background-position: 200% center;
+  }
+}
+
+.gradient-text {
+  background: linear-gradient(
+    90deg,
+    #60a5fa,
+    #93c5fd,
+    #60a5fa
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradientFlow 3s linear infinite;
+}

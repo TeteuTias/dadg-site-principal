@@ -1,5 +1,7 @@
+"use client"
 import React from "react";
 import "../../globals.css";
+import "./styles.scss";
 
 const ClevPage: React.FC = () => {
   return (
@@ -14,7 +16,7 @@ const ClevPage: React.FC = () => {
         <section className="mb-16 sm:mb-24">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
             <div className="w-full lg:w-1/2 text-center lg:text-left">
-              <h1 className="text-6xl sm:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-200 to-blue-400 mb-6">
+              <h1 className="text-6xl sm:text-8xl font-bold gradient-text mb-6">
                 CLEV
               </h1>
               <h2 className="text-2xl sm:text-3xl text-white/90 font-light tracking-wide mb-6">
@@ -101,7 +103,19 @@ const ClevPage: React.FC = () => {
             ].map((valor, index) => (
               <div key={index} className="group bg-blue-900/20 p-6 rounded-xl border border-blue-500/20 hover:border-blue-400/50 transition-all duration-500">
                 <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center mb-4 group-hover:bg-blue-500/30 transition-colors duration-500">
-                  <span className="text-blue-400 text-xl">✓</span>
+                  <svg 
+                    className="w-6 h-6 text-blue-400 check-icon" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round" 
+                      strokeWidth={2} 
+                      d="M5 13l4 4L19 7" 
+                    />
+                  </svg>
                 </div>
                 <h3 className="text-xl font-semibold text-white mb-2">{valor.title}</h3>
                 <p className="text-blue-100/70">{valor.description}</p>

@@ -1,0 +1,33 @@
+@use "sass:math";
+@use "sass:color";
+
+// Estilos para o efeito de paralaxe
+.parallax-container {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.parallax-item {
+  transform: translateZ(0);
+  will-change: transform;
+  transition: transform 0.1s ease-out;
+}
+
+.check-icon {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1.5s ease;
+}
+
+.group:hover .check-icon {
+  stroke-dashoffset: 100;
+  animation: drawCheck 1.5s ease forwards;
+}
+
+@keyframes drawCheck {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+// Mantendo apenas os estilos necessários para o efeito de paralaxe 
