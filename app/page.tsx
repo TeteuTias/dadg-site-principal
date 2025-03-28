@@ -20,7 +20,6 @@ export default function Home() {
       className="relative flex flex-col items-center justify-center min-h-screen w-full p-8 bg-gradient-to-br from-blue-50 via-white to-blue-50 overflow-hidden"
       style={stylePoppins.style}
     >
-      Silvio s2
       <div className="z-10 flex flex-col items-center text-center">
         <div className="relative w-32 h-32 mb-6">
           <Image
