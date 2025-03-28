@@ -10,7 +10,7 @@ export default function MenuDrawer() {
   const [coordenadoriasSubmenuOpen, setCoordenadoriasSubmenuOpen] = useState(false);
   const [drawerWidth, setDrawerWidth] = useState("250px");
   const [windowWidth, setWindowWidth] = useState<number>(typeof window !== "undefined" ? window.innerWidth : 1024);
-  const pathname = usePathname();
+  const pathname = usePathname() || '/';
 
   const headerBackgroundColor =
     pathname.startsWith("/coordenadorias/clam")
@@ -21,6 +21,8 @@ export default function MenuDrawer() {
       ? "#000066"
       : pathname.startsWith("/coordenadorias/cac")
       ? "#050a4a"
+      : pathname.startsWith("/coordenadorias/clev")
+      ? "#09427d"
       : "#09427d";
   const drawerBackgroundColor = headerBackgroundColor;
 
@@ -158,6 +160,7 @@ export default function MenuDrawer() {
           backgroundColor: drawerBackgroundColor,
           color: "white",
           padding: "20px",
+          paddingTop: "80px",
           boxSizing: "border-box",
           display: "flex",
           flexDirection: "column",
@@ -170,13 +173,12 @@ export default function MenuDrawer() {
           overflowX: "hidden",
         }}
       >
-        <div
-          className="container zoom_invert"
+        <button 
+          className="menu-close-button"
           onClick={() => setMenuAberto(false)}
-          style={{ cursor: "pointer", alignSelf: "flex-end" }}
         >
-          <div className="close_icon zoom_invert"></div>
-        </div>
+          <span className="menu-close-icon"></span>
+        </button>
 
         <Link href="/" style={{ color: "white", textDecoration: "none" }} onClick={() => setMenuAberto(false)}>
           🏠 Início

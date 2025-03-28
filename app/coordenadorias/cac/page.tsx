@@ -10,7 +10,7 @@ const CacPage = () => {
     { name: 'Gianluca Zambiazi', role: 'Núcleo de Apoio', photo: '/gianluca.jpeg' },
     { name: 'Rafaela Luiza Gonzaga', role: 'Núcleo de Apoio', photo: '/rafaela.jpg' },
     { name: 'Lucas Borges', role: 'Núcleo de Apoio', photo: '/lucas.jpg' },
-    { name: 'Heloísa Benatt', role: 'Núcleo de Apoio', photo: '/heloisa.jpg' }
+    { name: 'Heloísa Benatt', role: 'Núcleo de Apoio', photo: '/helo.jpeg' }
   ];
 
   return (

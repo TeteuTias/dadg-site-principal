@@ -1,85 +1,78 @@
 'use client'
 import React from 'react';
-import Image from 'next/image';
-import { Poppins } from 'next/font/google';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import Image from 'next/image';
+import './styles.css';
 
-const poppins = Poppins({
-  subsets: ['latin', 'latin-ext'],
-  weight: ['400', '600', '700'],
-  style: ['normal'],
-});
-
-export default function SobreNos() {
+export default function Sobre() {
   return (
-    <main
-      className="relative flex flex-col items-center justify-center min-h-screen w-full px-6 md:px-12 py-16 bg-gradient-to-br from-blue-100 via-white to-blue-100 text-[#09427d] overflow-hidden"
-      style={poppins.style}
-    >
-      {/* Seção de Cabeçalho */}
-      <motion.section 
-        className="w-full max-w-4xl mb-12 text-center"
-        initial={{ opacity: 0, y: -50 }} 
-        animate={{ opacity: 1, y: 0 }} 
-        transition={{ duration: 0.8 }}
-      >
-        <h1 className="text-5xl font-bold text-[#0b3d91] mb-6 tracking-wide">
-          Sobre Nós
-        </h1>
-        <p className="text-gray-700 text-lg leading-relaxed">
-          O Diretório Acadêmico Diogo Guimarães é uma entidade representativa dos estudantes da Faculdade IMEPAC, 
-          que tem como principal missão fomentar a integração, a participação e o engajamento acadêmico dos alunos.
-        </p>
-      </motion.section>
+    <div className="sobre-container">
+      <div className="sobre-content">
+        <section className="sobre-section">
+          <h1 className="sobre-title">Sobre Nós</h1>
+          <div className="sobre-grid">
+            <div className="sobre-text-content">
+              <p className="sobre-text">
+                O DADG (Diretório Acadêmico Diogo Guimarães) é uma entidade representativa dos estudantes de Medicina do Imepac, 
+                comprometida com a excelência acadêmica e o desenvolvimento profissional de seus membros.
+              </p>
+              <p className="sobre-text">
+                Nossa missão é promover a integração entre os alunos, fomentar o debate médico e contribuir para a formação 
+                de profissionais éticos e comprometidos com a saúde da população.
+              </p>
+            </div>
+            <div className="sobre-image">
+              <Image
+                src="/logoDadg02.png"
+                alt="Logo DADG"
+                width={500}
+                height={300}
+                className="sobre-img"
+              />
+            </div>
+          </div>
+        </section>
 
-      {/* Seção com imagem e texto sobre a história */}
-      <motion.section 
-        className="flex flex-col md:flex-row items-center w-full max-w-5xl gap-10 mb-16"
-        initial={{ opacity: 0, y: 50 }} 
-        animate={{ opacity: 1, y: 0 }} 
-        transition={{ duration: 0.8, delay: 0.3 }}
-      >
-        <div className="relative w-full md:w-1/2 h-80 shadow-xl rounded-lg overflow-hidden">
-          <Image
-            src="/logoDadg02.png"
-            alt="Sobre Nós"
-            fill
-            className="object-cover transform  transition-all duration-500"
-          />
-        </div>
-        <div className="w-full md:w-1/2">
-          <h2 className="text-3xl font-semibold text-[#0b3d91] mb-4">
-            Nosso Papel
-          </h2>
-          <p className="text-gray-700 text-lg leading-relaxed">
-            O diretório acadêmico representa e defende os interesses dos estudantes, atuando como elo entre os alunos e 
-            a administração da instituição. Além disso, organiza eventos culturais e acadêmicos, promovendo integração 
-            e incentivando o engajamento na vida universitária.
+        <section className="sobre-section">
+          <div className="missao-valores">
+            <div className="missao-card">
+              <h2 className="missao-title">Nossa Missão</h2>
+              <p className="sobre-text">
+                Representar e defender os interesses dos estudantes de Medicina, promovendo atividades acadêmicas, 
+                culturais e sociais que contribuam para a formação integral dos alunos e o fortalecimento da comunidade acadêmica.
+              </p>
+            </div>
+
+            <div className="valores-card">
+              <h2 className="valores-title">Nossos Valores</h2>
+              <ul className="valores-list">
+                <li className="valores-item">Excelência Acadêmica</li>
+                <li className="valores-item">Compromisso com a Saúde</li>
+                <li className="valores-item">Ética e Transparência</li>
+                <li className="valores-item">Integração e Colaboração</li>
+                <li className="valores-item">Responsabilidade Social</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section className="sobre-section">
+          <h2 className="sobre-title">Nossa História</h2>
+          <p className="sobre-text">
+            Fundado com o propósito de representar os interesses dos estudantes de Medicina do Imepac, o DADG tem se destacado por sua atuação proativa e comprometida com a qualidade do ensino médico. Ao longo dos anos, temos organizado diversos eventos acadêmicos, palestras, workshops e atividades culturais que enriquecem a formação dos nossos alunos.
           </p>
-        </div>
-      </motion.section>
+        </section>
 
-      {/* Seção com a missão */}
-      <motion.section 
-        className="w-full max-w-4xl text-center bg-blue-50 px-6 py-8 rounded-lg shadow-lg"
-        initial={{ opacity: 0, scale: 0.9 }} 
-        animate={{ opacity: 1, scale: 1 }} 
-        transition={{ duration: 0.8, delay: 0.5 }}
-      >
-        <h2 className="text-3xl font-semibold text-[#0b3d91] mb-4">
-          Contato
-        </h2>
-        <p className="text-gray-700 text-lg mb-4 leading-relaxed">
-          Fique à vontade para entrar em contato conosco por nossas
-        </p>
-        <Link
-          className="inline-block bg-red-700 px-6 py-3 font-bold text-white text-lg rounded-full shadow-md hover:bg-red-800 transition-all duration-300"
-          href="/contato"
-        >
-          Redes Sociais
-        </Link>
-      </motion.section>
-    </main>
+        <section className="sobre-section contato-section">
+          <h2 className="sobre-title">Entre em Contato</h2>
+          <p className="sobre-text">
+            Fique à vontade para entrar em contato conosco através de nossas redes sociais
+          </p>
+          <Link href="/contato" className="contato-button">
+            Redes Sociais
+          </Link>
+        </section>
+      </div>
+    </div>
   );
 }

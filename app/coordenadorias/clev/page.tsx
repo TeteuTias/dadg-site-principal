@@ -2,6 +2,7 @@
 import React from "react";
 import "../../globals.css";
 import "./styles.scss";
+import Link from "next/link";
 
 const ClevPage: React.FC = () => {
   return (
