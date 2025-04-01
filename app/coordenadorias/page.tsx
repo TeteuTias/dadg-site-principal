@@ -20,41 +20,40 @@ export default function CoordenadoriasPage() {
         </div>
       </div>
       <div className={styles.container}>
-        <Link href="/coordenadorias/embreve">
-    
-            <Card
-              dataImage="/CAEP.png"
-              header="CAEP"
-              content="Descrição para CAEP."
-            />
-          
+        <Link href="/coordenadorias/caep">
+          <Card
+            dataImage="/CAEP.png"
+            header="CAEP"
+            content="Coordenadoria Acadêmica de Extensão e Pesquisa."
+          />
         </Link>
-        <Link href="/coordenadorias/embreve">
-          
-            <Card
-              dataImage="/CAES.jpg"
-              header="CAES"
-              content="Descrição para CAES."
-            />
-          
+        <Link href="/coordenadorias/caes">
+          <Card
+            dataImage="/CAES.jpg"
+            header="CAES"
+            content="Coordenadoria Acadêmica de Educação em Saúde."
+          />
         </Link>
-        <Link href="/coordenadorias/embreve">
-          
-            <Card
-              dataImage="/CLAM.png"
-              header="CLAM"
-              content="Descrição para CLAM."
-            />
-          
+        <Link href="/coordenadorias/clam">
+          <Card
+            dataImage="/CLAM.png"
+            header="CLAM"
+            content="Coordenadoria de Ligas Acadêmicas de Medicina."
+          />
         </Link>
-        <Link href="/coordenadorias/embreve">
-          
-            <Card
-              dataImage="/CLEV.jpg"
-              header="CLEV"
-              content="Descrição para CLEV."
-            />
-          
+        <Link href="/coordenadorias/cac">
+          <Card
+            dataImage="/CAC.jpeg"
+            header="CAC"
+            content="Coordenadoria Acadêmica de Certificados e TI."
+          />
+        </Link>
+        <Link href="/coordenadorias/clev">
+          <Card
+            dataImage="/CLEV.jpg"
+            header="CLEV"
+            content="Coordenadoria Local de Estágios e Vivências."
+          />
         </Link>
       </div>
     </div>

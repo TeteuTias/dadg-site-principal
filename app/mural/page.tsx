@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { client } from "../lib/contentful";
+import './styles.css';
 
 export const dynamic = "force-dynamic";
 
@@ -10,46 +11,44 @@ export default async function Mural() {
   const murais = response.items;
 
   return (
-    <div className="min-h-screen bg-blue-50 py-12 px-6">
-      <div className="max-w-3xl mx-auto">
-        <h1 className="text-4xl font-extrabold text-center mb-10 text-[#09427d]">
-          Mural de Avisos
-        </h1>
-        {murais.length === 0 ? (
-          <p className="text-center text-red-600">
-            Nenhum aviso encontrado. Tente novamente mais tarde.
-          </p>
-        ) : (
-          murais.map((mural) => {
-            const hasArco = mural.fields.arco;
-            return (
-              <Link
-                key={mural.sys.id}
-                href="/certificados"
-                className="block mb-6"
-              >
-                {hasArco ? ( //isso aqui define se vai ter borda colorida ou nao dependendo do ID
-                  <div className="rainbow-glow p-[2px] rounded-xl transition-transform duration-300 hover:scale-105 hover:shadow-md">
-                    <div className="bg-white rounded-xl p-4">
-                      <p className="text-lg text-gray-700">
-                        {String(mural.fields.listaDoMural || '')}
-                      </p>
-                      <p className="text-lg text-gray-700 mt-2">
-                        {String(mural.fields.arco || '')}
-                      </p>
-                    </div>
-                  </div>
-                ) : (// garantindo borda abaulada mesmo no hover
-                  <div className="bg-white rounded-xl p-4 transition-transform duration-300 hover:scale-105 hover:shadow-md">
-                    <p className="text-lg text-gray-700">
-                      {String(mural.fields.listaDoMural || '')}
-                    </p>
-                  </div>
-                )}
-              </Link>
-            );
-          })
-        )}
+    <div className="mural-container">
+      <div className="mural-content">
+        <h1 className="mural-title">Mural de Avisos</h1>
+        <div className="mural-list">
+          {murais.length === 0 ? (
+            <p className="no-mural">
+              Nenhum aviso encontrado. Tente novamente mais tarde.
+            </p>
+          ) : (
+            murais.map((mural: any) => {
+              const hasArco = mural.fields.arco;
+              return (
+                <div key={mural.sys.id} className="mural-item">
+                  <Link href="/certificados">
+                    {hasArco ? (
+                      <div className="rainbow-glow">
+                        <div className="mural-card">
+                          <p className="mural-text">
+                            {mural.fields.listaDoMural}
+                          </p>
+                          <p className="mural-arc">
+                            {mural.fields.arco}
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="mural-card">
+                        <p className="mural-text">
+                          {mural.fields.listaDoMural}
+                        </p>
+                      </div>
+                    )}
+                  </Link>
+                </div>
+              );
+            })
+          )}
+        </div>
       </div>
     </div>
   );

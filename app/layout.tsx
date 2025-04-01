@@ -10,7 +10,6 @@ export const metadata: Metadata = {
   }
 };
 
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">
@@ -18,8 +17,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Componente Client que contém a interatividade */}
         <MenuDrawer />
 
-        {/* Conteúdo Principal com margem para não ser escondido pela barra */}
-        <div style={{ marginTop: "40px" }}>
+        {/* Conteúdo Principal com padding para evitar sobreposição do header */}
+        <div className="main-content">
           {children}
         </div>
       </body>

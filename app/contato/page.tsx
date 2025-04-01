@@ -45,14 +45,7 @@ const instagramAccounts = [
 
 export default function ContatoPage() {
   return (
-    <main
-      className="relative min-h-screen w-full overflow-hidden pb-40" // pb-40 para espaçamento na parte inferior
-      style={{
-        ...poppins.style,
-        backgroundColor: "#ffffff",
-      }}
-    >
-      {/* Conteúdo Principal */}
+    <main className="relative min-h-screen w-full overflow-hidden pb-40" style={{ ...poppins.style, backgroundColor: "#ffffff" }}>
       <div className="relative flex flex-col items-center justify-center p-8">
         <header className="mb-12 text-center">
           <h1 className="text-4xl font-bold text-[#09427d] uppercase mb-4">Contato</h1>
@@ -60,6 +53,7 @@ export default function ContatoPage() {
             Siga-nos no Instagram para ficar por dentro das novidades
           </p>
         </header>
+
         <section className="w-full max-w-4xl grid gap-8 sm:grid-cols-2 md:grid-cols-3">
           {instagramAccounts.map((account) => (
             <Link
@@ -80,39 +74,23 @@ export default function ContatoPage() {
             </Link>
           ))}
         </section>
+
+        <section className="mt-12 w-full max-w-4xl mx-auto">
+          <div className="email-shadow-wrapper mx-auto">
+            <div className="p-6 bg-white rounded-xl email-hover text-center transition-transform duration-300 hover:scale-105">
+              <h2 className="text-2xl font-bold text-[#09427d] uppercase mb-2">Email</h2>
+              <a
+                href="mailto:dadg.imepac@gmail.com"
+                className="text-lg text-gray-600 hover:text-[#09427d] transition-colors duration-300"
+              >
+                dadg.imepac@gmail.com
+              </a>
+            </div>
+          </div>
+        </section>
       </div>
 
-      {/* Container com o Email centralizado */}
-      {/* Container com o Email centralizado */}
-<section className="mt-12 w-full max-w-4xl mx-auto">
-  <div className="email-shadow-wrapper mx-auto">
-    <div className="p-6 bg-white rounded-xl email-hover text-center transition-transform duration-300 hover:scale-105">
-      <h2 className="text-2xl font-bold text-[#09427d] uppercase mb-2">Email</h2>
-      <a
-        href="mailto:dadg.imepac@gmail.com"
-        className="text-lg text-gray-600 hover:text-[#09427d] transition-colors duration-300"
-      >
-        dadg.imepac@gmail.com
-      </a>
-    </div>
-  </div>
-</section>
-
-
-
-
-
-      {/* Fundo com Onda SVG na parte inferior */}
-      <div
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          width: '100%',
-          overflow: 'hidden',
-          lineHeight: 0,
-        }}
-      >
+      <div className="absolute bottom-0 left-0 w-full overflow-hidden" style={{ lineHeight: 0 }}>
         <svg
           viewBox="0 0 500 150"
           preserveAspectRatio="none"
