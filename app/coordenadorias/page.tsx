@@ -22,35 +22,35 @@ export default function CoordenadoriasPage() {
       <div className={styles.container}>
         <Link href="/coordenadorias/caep">
           <Card
-            dataImage="/CAEP.png"
+            dataImage="/coordinators/CAEP.png"
             header="CAEP"
             content="Coordenadoria Acadêmica de Extensão e Pesquisa."
           />
         </Link>
         <Link href="/coordenadorias/caes">
           <Card
-            dataImage="/CAES.jpg"
+            dataImage="/coordinators/CAES.jpg"
             header="CAES"
             content="Coordenadoria Acadêmica de Educação em Saúde."
           />
         </Link>
         <Link href="/coordenadorias/clam">
           <Card
-            dataImage="/CLAM.png"
+            dataImage="/coordinators/CLAM.png"
             header="CLAM"
             content="Coordenadoria de Ligas Acadêmicas de Medicina."
           />
         </Link>
         <Link href="/coordenadorias/cac">
           <Card
-            dataImage="/CAC.jpeg"
+            dataImage="/coordinators/CAC.jpeg"
             header="CAC"
             content="Coordenadoria Acadêmica de Certificados e TI."
           />
         </Link>
         <Link href="/coordenadorias/clev">
           <Card
-            dataImage="/CLEV.jpg"
+            dataImage="/coordinators/CLEV.jpg"
             header="CLEV"
             content="Coordenadoria Local de Estágios e Vivências."
           />

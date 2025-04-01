@@ -16,14 +16,14 @@ export default function MenuDrawer() {
     pathname.startsWith("/coordenadorias/clam")
       ? "#0A7A1A"
       : pathname.startsWith("/coordenadorias/caes")
-      ? "#056653"
-      : pathname.startsWith("/coordenadorias/caep")
-      ? "#000066"
-      : pathname.startsWith("/coordenadorias/cac")
-      ? "#050a4a"
-      : pathname.startsWith("/coordenadorias/clev")
-      ? "#09427d"
-      : "#09427d";
+        ? "#056653"
+        : pathname.startsWith("/coordenadorias/caep")
+          ? "#000066"
+          : pathname.startsWith("/coordenadorias/cac")
+            ? "#050a4a"
+            : pathname.startsWith("/coordenadorias/clev")
+              ? "#526c94"
+              : "#09427d";
   const drawerBackgroundColor = headerBackgroundColor;
 
   useEffect(() => {
@@ -51,10 +51,11 @@ export default function MenuDrawer() {
   const toggleCoordenadoriasSubmenu = () => setCoordenadoriasSubmenuOpen((prev) => !prev);
 
   const coordenadoriasSubmenuItems = [
-    { label: "CAEP", href: "/coordenadorias/embreve" },
-    { label: "CAES", href: "/coordenadorias/embreve" },
-    { label: "CLAM", href: "/coordenadorias/embreve" },
-    { label: "CLEV", href: "/coordenadorias/embreve" },
+    { label: "CAC", href: "/coordenadorias/cac" },
+    { label: "CAEP", href: "/coordenadorias/caep" },
+    { label: "CAES", href: "/coordenadorias/caes" },
+    { label: "CLAM", href: "/coordenadorias/clam" },
+    { label: "CLEV", href: "/coordenadorias/clev" },
   ];
 
   const coordenadoriasSubmenuMaxHeight = coordenadoriasSubmenuOpen
@@ -173,7 +174,7 @@ export default function MenuDrawer() {
           overflowX: "hidden",
         }}
       >
-        <button 
+        <button
           className="menu-close-button"
           onClick={() => setMenuAberto(false)}
         >

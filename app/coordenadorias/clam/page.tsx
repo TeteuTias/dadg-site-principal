@@ -19,7 +19,7 @@ export default function ClamPage() {
       {/* Imagem de fundo com opacidade */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/CLAM_logo.png" // Certifique-se de que o arquivo esteja em public/
+          src="/coordinators/CLAM_logo.png" // Certifique-se de que o arquivo esteja em public/
           alt="CLAM Logo"
           fill
           className="object-contain opacity-10"

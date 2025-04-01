@@ -16,7 +16,7 @@ const CaepPage: React.FC = () => {
             </h2>
           </div>
           <div className="relative w-48 h-48 rounded-full overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.4)] border-4 border-blue-500 transform transition-all duration-700 hover:scale-105 hover:shadow-[0_0_50px_rgba(0,0,0,0.5)] hover:border-blue-400 animate-float">
-            <img src="/CAEP.png" alt="Ícone" className="w-full h-full object-cover transition-transform duration-700 hover:scale-110" />
+            <img src="/coordinators/CAEP.png" alt="Ícone" className="w-full h-full object-cover transition-transform duration-700 hover:scale-110" />
             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/30"></div>
           </div>
         </div>

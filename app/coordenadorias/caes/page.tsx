@@ -9,7 +9,7 @@ const QuemSomos: React.FC = () => {
         <div className="flex flex-col items-center space-y-6 animate-fade-in">
           {/* Círculo com imagem */}
           <div className="relative w-64 h-64 rounded-full overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.4)] border-4 border-green-500 transform transition-all duration-700 hover:scale-105 hover:shadow-[0_0_50px_rgba(0,0,0,0.5)] hover:border-green-400 animate-float">
-            <img src="/CAES.jpg" alt="Ícone" className="w-full h-full object-cover transition-transform duration-700 hover:scale-110" />
+            <img src="/coordinators/CAES.jpg" alt="Ícone" className="w-full h-full object-cover transition-transform duration-700 hover:scale-110" />
             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/30"></div>
           </div>
 

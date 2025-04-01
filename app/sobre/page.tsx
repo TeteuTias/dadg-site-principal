@@ -13,11 +13,11 @@ export default function Sobre() {
           <div className="sobre-grid">
             <div className="sobre-text-content">
               <p className="sobre-text">
-                O DADG (Diretório Acadêmico Diogo Guimarães) é uma entidade representativa dos estudantes de Medicina do Imepac, 
+                O DADG (Diretório Acadêmico Diogo Guimarães) é uma entidade representativa dos estudantes de Medicina do Imepac,
                 comprometida com a excelência acadêmica e o desenvolvimento profissional de seus membros.
               </p>
               <p className="sobre-text">
-                Nossa missão é promover a integração entre os alunos, fomentar o debate médico e contribuir para a formação 
+                Nossa missão é promover a integração entre os alunos, fomentar o debate médico e contribuir para a formação
                 de profissionais éticos e comprometidos com a saúde da população.
               </p>
             </div>
@@ -35,15 +35,19 @@ export default function Sobre() {
 
         <section className="sobre-section">
           <div className="missao-valores">
-            <div className="missao-card">
+            <div className="missao-card" style={{
+              background: "#09427d"
+            }}>
               <h2 className="missao-title">Nossa Missão</h2>
               <p className="sobre-text">
-                Representar e defender os interesses dos estudantes de Medicina, promovendo atividades acadêmicas, 
+                Representar e defender os interesses dos estudantes de Medicina, promovendo atividades acadêmicas,
                 culturais e sociais que contribuam para a formação integral dos alunos e o fortalecimento da comunidade acadêmica.
               </p>
             </div>
 
-            <div className="valores-card">
+            <div className="valores-card" style={{
+              background: "#09427d"
+            }}>
               <h2 className="valores-title">Nossos Valores</h2>
               <ul className="valores-list">
                 <li className="valores-item">Excelência Acadêmica</li>
