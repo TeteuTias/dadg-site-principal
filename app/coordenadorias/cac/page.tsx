@@ -21,14 +21,14 @@ const CacPage = () => {
         </div>
 
         <div className="header-content fade-and-rise">
-        <h1 className="cac-logo-title deepshadow">CAC</h1>
-  <h2 className="subtitle">
-    Coordenadoria Acadêmica de Certificados e TI.
-  </h2>
-  <p className="description description-animate">
-    O CAC atua trazendo inovação, tecnologia e organização para os processos de Certificados do DADG.
-  </p>
-</div>
+          <h1 className="cac-logo-title deepshadow">CAC</h1>
+          <h2 className="subtitle">
+            Coordenadoria Acadêmica de Certificados e TI.
+          </h2>
+          <p className="description description-animate">
+            O CAC atua trazendo inovação, tecnologia e organização para os processos de Certificados do DADG.
+          </p>
+        </div>
       </div>
 
       <div className="cards-container fade-in">
@@ -47,15 +47,15 @@ const CacPage = () => {
       </div>
       <div className="credit-section fade-in">
         <p className="credit-text">
-          Todo este site é fruto dos esforços do <strong>CAC da gestão 2025</strong>.
+          Nossa coordenadora valoriza cada conquista como um reconhecimento oficial.
         </p>
         <h2 className="credit-title">Equipe CAC 2025</h2>
         <div className="team-container">
           {teamMembers.map((member, index) => (
             <div key={index} className="team-member">
               <div className="photo-frame">
-                <Image 
-                  src={member.photo} 
+                <Image
+                  src={member.photo}
                   alt={member.name}
                   width={150}
                   height={150}
