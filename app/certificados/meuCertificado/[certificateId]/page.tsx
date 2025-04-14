@@ -20,7 +20,7 @@ export default function Home({
   params: Promise<{ certificateId: string }>
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [data, setData] = useState<ICertificateWithEventIdPopulate | null>(null)
+  const [data, setData] = useState<ICertificateWithEventIdPopulate & { templateLink: string } | null>(null)
   const router = useRouter()
   //const [certificateId, setCertificateId] = useState<null | string>(null)
 
@@ -78,10 +78,10 @@ export default function Home({
         return;
       }
 
-      const fetchDataJson: { data: ICertificateWithEventIdPopulate } = await fetchData.json()
-      setData(fetchDataJson.data)
+      const fetchDataJson: { data: ICertificateWithEventIdPopulate, templateLink: string } = await fetchData.json()
+      setData({ ...fetchDataJson.data, templateLink: fetchDataJson.templateLink })
       setIsLoading(false)
-      console.log(fetchDataJson)
+      console.log(fetchDataJson.templateLink)
     }
     fetchData()
 
@@ -105,6 +105,9 @@ export default function Home({
 
   return (
     <main className="relative flex flex-col max-w-screen overflow-hidden">
+      <button onClick={a}>
+        A
+      </button>
       <div className='absolute min-h-svg min-w-full z-[500]'>
         <Fireworks autorun={{
           speed: 1.5,
@@ -136,7 +139,7 @@ export default function Home({
               style={{ width: '2000px', height: '1414px' }}
             >
               <img
-                src={data?.eventId.templatePath}
+                src={data?.templateLink}
                 alt="Certificado"
                 className="w-full h-full object-fill"
               />
@@ -164,7 +167,7 @@ export default function Home({
               style={{ width: '2000px', height: '1414px' }}
             >
               <img
-                src={data?.eventId.templatePath}
+                src={data.templateLink}
                 alt="Certificado"
                 className="w-full h-full object-fill"
               />
