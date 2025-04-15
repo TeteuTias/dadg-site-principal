@@ -20,9 +20,9 @@ export default function Home({
   params: Promise<{ certificateId: string }>
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [data, setData] = useState<ICertificateWithEventIdPopulate & { templateLink: string } | null>(null)
+  const [data, setData] = useState<ICertificateWithEventIdPopulate | null>(null)
   const router = useRouter()
-  //const [certificateId, setCertificateId] = useState<null | string>(null)
+  const [certificateId, setCertificateId] = useState<null | string>(null)
 
   const handleDownload = async () => {
     // Seleciona os elementos de frente e verso
@@ -71,6 +71,7 @@ export default function Home({
   useEffect(() => {
     const fetchData = async () => {
       const { certificateId } = await params
+      setCertificateId(certificateId)
       const fetchData = await fetch(`/api/get/myCertificateById/${certificateId}`)
 
       if (!fetchData.ok) {
@@ -78,10 +79,10 @@ export default function Home({
         return;
       }
 
-      const fetchDataJson: { data: ICertificateWithEventIdPopulate, templateLink: string } = await fetchData.json()
-      setData({ ...fetchDataJson.data, templateLink: fetchDataJson.templateLink })
+      const fetchDataJson: { data: ICertificateWithEventIdPopulate, } = await fetchData.json()
+      setData({ ...fetchDataJson.data, })
       setIsLoading(false)
-      console.log(fetchDataJson.templateLink)
+
     }
     fetchData()
 
@@ -105,9 +106,6 @@ export default function Home({
 
   return (
     <main className="relative flex flex-col max-w-screen overflow-hidden">
-      <button onClick={a}>
-        A
-      </button>
       <div className='absolute min-h-svg min-w-full z-[500]'>
         <Fireworks autorun={{
           speed: 1.5,
@@ -139,7 +137,7 @@ export default function Home({
               style={{ width: '2000px', height: '1414px' }}
             >
               <img
-                src={data?.templateLink}
+                src={`/api/get/templateProxy/${certificateId}`}
                 alt="Certificado"
                 className="w-full h-full object-fill"
               />
@@ -167,7 +165,7 @@ export default function Home({
               style={{ width: '2000px', height: '1414px' }}
             >
               <img
-                src={data.templateLink}
+                src="/api/get/templateProxy/67ad3ef77708bb58cf6d1cbc"
                 alt="Certificado"
                 className="w-full h-full object-fill"
               />
