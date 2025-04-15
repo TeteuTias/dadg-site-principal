@@ -22,7 +22,7 @@ export default function Home({
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [data, setData] = useState<ICertificateWithEventIdPopulate | null>(null)
   const router = useRouter()
-  //const [certificateId, setCertificateId] = useState<null | string>(null)
+  const [certificateId, setCertificateId] = useState<null | string>(null)
 
   const handleDownload = async () => {
     // Seleciona os elementos de frente e verso
@@ -71,6 +71,7 @@ export default function Home({
   useEffect(() => {
     const fetchData = async () => {
       const { certificateId } = await params
+      setCertificateId(certificateId)
       const fetchData = await fetch(`/api/get/myCertificateById/${certificateId}`)
 
       if (!fetchData.ok) {
@@ -78,10 +79,10 @@ export default function Home({
         return;
       }
 
-      const fetchDataJson: { data: ICertificateWithEventIdPopulate } = await fetchData.json()
-      setData(fetchDataJson.data)
+      const fetchDataJson: { data: ICertificateWithEventIdPopulate, } = await fetchData.json()
+      setData({ ...fetchDataJson.data, })
       setIsLoading(false)
-      console.log(fetchDataJson)
+
     }
     fetchData()
 
@@ -136,7 +137,7 @@ export default function Home({
               style={{ width: '2000px', height: '1414px' }}
             >
               <img
-                src={data?.eventId.templatePath}
+                src={`/api/get/templateProxy/${certificateId}`}
                 alt="Certificado"
                 className="w-full h-full object-fill"
               />
@@ -164,7 +165,7 @@ export default function Home({
               style={{ width: '2000px', height: '1414px' }}
             >
               <img
-                src={data?.eventId.templatePath}
+                src="/api/get/templateProxy/67ad3ef77708bb58cf6d1cbc"
                 alt="Certificado"
                 className="w-full h-full object-fill"
               />
