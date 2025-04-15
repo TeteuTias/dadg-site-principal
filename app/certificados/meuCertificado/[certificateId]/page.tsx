@@ -165,7 +165,7 @@ export default function Home({
               style={{ width: '2000px', height: '1414px' }}
             >
               <img
-                src="/api/get/templateProxy/67ad3ef77708bb58cf6d1cbc"
+                src={`/api/get/templateProxy/${certificateId}`}
                 alt="Certificado"
                 className="w-full h-full object-fill"
               />
