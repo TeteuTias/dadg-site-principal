@@ -8,7 +8,7 @@ const CacPage = () => {
     { name: 'Mateus Rosa', role: 'Coordenador', photo: '/mateus.jpg' },
     { name: 'Nicoly Gonzaga', role: 'Coordenadora', photo: '/nicoly.jpeg' },
     { name: 'Gianluca Zambiazi', role: 'Núcleo de Apoio', photo: '/gianluca.jpeg' },
-    { name: 'Rafaela Luiza Gonzaga', role: 'Núcleo de Apoio', photo: '/rafaela.jpg' },
+    { name: 'Rafaela Luiza Gonzaga', role: 'Núcleo de Apoio', photo: '/Rafa.png' },
     { name: 'Lucas Borges', role: 'Núcleo de Apoio', photo: '/lucas.jpg' },
     { name: 'Heloísa Benatt', role: 'Núcleo de Apoio', photo: '/helo.jpeg' }
   ];

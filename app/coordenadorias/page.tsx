@@ -19,7 +19,7 @@ export default function CoordenadoriasPage() {
           </svg>
         </div>
       </div>
-      <div className={styles.container}>
+      <div className={`${styles.container} grid grid-cols-1 md:grid-cols-3 gap-6`}>
         <Link href="/coordenadorias/caep">
           <Card
             dataImage="/CAEP.png"
