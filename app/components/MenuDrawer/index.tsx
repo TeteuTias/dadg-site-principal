@@ -6,6 +6,9 @@ import './style.css';
 const MenuDrawer = ({ children }: { children: React.ReactNode }) => {
   return (
     <div>
+      <button className="menu-close-button">
+        <span className="menu-close-icon"></span>
+      </button>
       <header className="header-container">
         <div>
           {/* Conteúdo da esquerda */}
