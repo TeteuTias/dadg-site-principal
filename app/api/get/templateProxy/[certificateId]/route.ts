@@ -24,7 +24,7 @@ const getSignedUrl = async (bucket: string, key: string): Promise<string | undef
         await s3.headObject(params).promise();
 
         // Gera a URL assinada se o arquivo existir
-        return s3.getSignedUrlPromise("getObject", { ...params, Expires: 60 * 60 });
+        return s3.getSignedUrlPromise("getObject", { ...params, Expires: 60});
     } catch (error) {
         // Verifica se o erro é uma instância de Error
         if (error instanceof Error) {
