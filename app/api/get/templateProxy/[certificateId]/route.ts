@@ -18,13 +18,13 @@ const s3 = new AWS.S3({
 
 const getSignedUrl = async (bucket: string, key: string): Promise<string | undefined> => {
     const params = { Bucket: bucket, Key: key }; // coloca a key aqui dps
-    console.log(key)
+
     try {
         // Verifica se o arquivo existe
         await s3.headObject(params).promise();
 
         // Gera a URL assinada se o arquivo existir
-        return s3.getSignedUrlPromise("getObject", { ...params, Expires: 60});
+        return s3.getSignedUrlPromise("getObject", { ...params, Expires: 60, });
     } catch (error) {
         // Verifica se o erro é uma instância de Error
         if (error instanceof Error) {
@@ -74,7 +74,8 @@ export async function GET(req: NextRequest, {
     if (!templateLink) {
         throw new Error("Erro ao baixar seu Certificado")
     }
-    const arrayBuffer = await getBufferByImageUrl(templateLink)
+
+    const arrayBuffer = await getBufferByImageUrl(`${templateLink.split('?')[0]}?t=${Date.now()}&${templateLink.split('?')[1]}`)
     return new Response(arrayBuffer, {
         headers: {
             'Content-Type': 'image/jpeg', // ou o tipo correto da sua imagem
