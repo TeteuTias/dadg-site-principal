@@ -9,11 +9,13 @@ const QuemSomos: React.FC = () => {
     // Criar partículas
     const particlesContainer = document.querySelector('.particles');
     if (particlesContainer) {
-      for (let i = 0; i < 50; i++) {
+      for (let i = 0; i < 65; i++) {
         const particle = document.createElement('div');
         particle.className = 'particle';
+        // Distribuir as partículas verticalmente
         particle.style.left = `${Math.random() * 100}%`;
-        particle.style.animationDelay = `${Math.random() * 15}s`;
+        particle.style.top = `${Math.random() * 100}%`;
+        particle.style.animationDelay = `${Math.random() * 8}s`;
         particlesContainer.appendChild(particle);
       }
     }
