@@ -74,7 +74,6 @@ export async function GET(req: NextRequest, {
     if (!templateLink) {
         throw new Error("Erro ao baixar seu Certificado")
     }
-    console.log(templateLink)
     const arrayBuffer = await getBufferByImageUrl(templateLink)
     return new Response(arrayBuffer, {
         headers: {

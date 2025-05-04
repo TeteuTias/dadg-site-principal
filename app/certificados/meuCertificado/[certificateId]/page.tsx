@@ -165,7 +165,7 @@ export default function Home({
               style={{ width: '2000px', height: '1414px' }}
             >
               <img
-                src={`/api/get/templateProxy/${certificateId}`}
+                src={`/api/get/templateProxy/${certificateId}?t=${Date.now()}`}
                 alt="Certificado"
                 className="w-full h-full object-fill"
               />
