@@ -94,11 +94,11 @@ export default function Home() {
                 </svg>
               </div>
               <div className="flex-1">
-                <h3 className="text-[#09427d] font-semibold mb-1 text-lg">Certificados</h3>
-                <p className="text-gray-600 text-sm mb-2">Acesse e baixe seus certificados de participação em eventos.</p>
-                <Link href="/certificados" className="inline-flex items-center text-[#09427d] hover:text-[#073366] font-medium text-sm group-hover:translate-x-1 transition-transform">
+                <h3 className="text-[#09427d] font-semibold mb-2 text-xl group-hover:text-[#073366] transition-colors duration-300">Certificados</h3>
+                <p className="text-gray-600 text-sm mb-3 leading-relaxed">Acesse e baixe seus certificados de participação em eventos.</p>
+                <Link href="/certificados" className="inline-flex items-center text-[#09427d] hover:text-[#073366] font-medium text-sm group-hover:translate-x-2 transition-all duration-300">
                   Ver Certificados
-                  <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                   </svg>
                 </Link>
@@ -114,11 +114,11 @@ export default function Home() {
                 </svg>
               </div>
               <div className="flex-1">
-                <h3 className="text-[#09427d] font-semibold mb-1 text-lg">Coordenadorias</h3>
-                <p className="text-gray-600 text-sm mb-2">Conheça nossas coordenadorias e suas atividades acadêmicas.</p>
-                <Link href="/coordenadorias" className="inline-flex items-center text-[#09427d] hover:text-[#073366] font-medium text-sm group-hover:translate-x-1 transition-transform">
+                <h3 className="text-[#09427d] font-semibold mb-2 text-xl group-hover:text-[#073366] transition-colors duration-300">Coordenadorias</h3>
+                <p className="text-gray-600 text-sm mb-3 leading-relaxed">Conheça nossas coordenadorias e suas atividades acadêmicas.</p>
+                <Link href="/coordenadorias" className="inline-flex items-center text-[#09427d] hover:text-[#073366] font-medium text-sm group-hover:translate-x-2 transition-all duration-300">
                   Ver Coordenadorias
-                  <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                   </svg>
                 </Link>
@@ -134,11 +134,11 @@ export default function Home() {
                 </svg>
               </div>
               <div className="flex-1">
-                <h3 className="text-[#09427d] font-semibold mb-1 text-lg">Eventos</h3>
-                <p className="text-gray-600 text-sm mb-2">Acompanhe os próximos eventos e atividades programadas.</p>
-                <Link href="/eventos" className="inline-flex items-center text-[#09427d] hover:text-[#073366] font-medium text-sm group-hover:translate-x-1 transition-transform">
+                <h3 className="text-[#09427d] font-semibold mb-2 text-xl group-hover:text-[#073366] transition-colors duration-300">Eventos</h3>
+                <p className="text-gray-600 text-sm mb-3 leading-relaxed">Acompanhe os próximos eventos e atividades programadas.</p>
+                <Link href="/eventos" className="inline-flex items-center text-[#09427d] hover:text-[#073366] font-medium text-sm group-hover:translate-x-2 transition-all duration-300">
                   Ver Eventos
-                  <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                   </svg>
                 </Link>
