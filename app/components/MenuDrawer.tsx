@@ -177,7 +177,6 @@ export default function MenuDrawer() {
         <button
           className="menu-close-button"
           onClick={() => setMenuAberto(false)}
-          style={{ cursor: "pointer", alignSelf: "flex-end", marginRight: "-10px", marginTop: "-10px" }}
         >
           <span className="menu-close-icon"></span>
         </button>
