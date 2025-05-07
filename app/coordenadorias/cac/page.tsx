@@ -5,12 +5,12 @@ import './style.css';
 
 const CacPage = () => {
   const teamMembers = [
-    { name: 'Mateus Rosa', role: 'Coordenador', photo: '/membersCAC/mateus.jpg' },
-    { name: 'Nicoly Gonzaga', role: 'Coordenadora', photo: '/membersCAC/nicoly.jpeg' },
-    { name: 'Gianluca Zambiazi', role: 'Núcleo de Apoio', photo: '/membersCAC/gianluca.jpeg' },
-    { name: 'Rafaela Luiza Gonzaga', role: 'Núcleo de Apoio', photo: '/membersCAC/rafaela.png' },
-    { name: 'Lucas Borges', role: 'Núcleo de Apoio', photo: '/membersCAC/lucas.jpg' },
-    { name: 'Heloísa Benatt', role: 'Núcleo de Apoio', photo: '/membersCAC/helo.jpeg' }
+    { name: 'Mateus Rosa', role: 'Coordenador', photo: '/mateus.jpg' },
+    { name: 'Nicoly Gonzaga', role: 'Coordenadora', photo: '/nicoly.jpeg' },
+    { name: 'Gianluca Zambiazi', role: 'Núcleo de Apoio', photo: '/gianluca.jpeg' },
+    { name: 'Rafaela Luiza Gonzaga', role: 'Núcleo de Apoio', photo: '/Rafa.png' },
+    { name: 'Lucas Borges', role: 'Núcleo de Apoio', photo: '/lucas.jpg' },
+    { name: 'Heloísa Benatt', role: 'Núcleo de Apoio', photo: '/helo.jpeg' }
   ];
 
   return (

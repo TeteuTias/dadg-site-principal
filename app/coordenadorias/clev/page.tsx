@@ -1,101 +1,154 @@
+ "use client"
 import React from "react";
-import "../../globals.css"; // Mantemos os estilos globais sem afetar o fundo
+import "../../globals.css";
+import "./styles.scss";
 
-const QuemSomos: React.FC = () => {
-    return (
-        <div className="w-full min-h-screen bg-gradient-to-b from-[#6d9aca]/80 to-[#b2d4ee]/90 flex justify-center py-16">
-            <div className="max-w-6xl w-full flex flex-col items-center space-y-16 px-6">
-                {/* Seção do Logo e Título */}
-                <div className="flex flex-col items-center space-y-6 animate-fade-in">
-                    {/* Círculo com imagem */}
-                    <div className="relative w-64 h-64 rounded-full overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.4)] border-4 border-[#526c94] transform transition-all duration-700 hover:scale-105 hover:shadow-[0_0_50px_rgba(0,0,0,0.5)] hover:border-[#6d9bca] animate-float">
-                        <img src="/coordinators/CLEV.jpg" alt="Ícone" className="w-full h-full object-cover transition-transform duration-700 hover:scale-110" />
-                        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/30"></div>
-                    </div>
+const ClevPage: React.FC = () => {
+  return (
+    <div className="min-h-screen bg-[#0f172a] relative overflow-hidden">
+      {/* Elementos de fundo decorativos */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_50%)]"></div>
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f46e5_1px,transparent_1px),linear-gradient(to_bottom,#4f46e5_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-10"></div>
 
-                    {/* Título CLEV */}
-                    <div className="text-center">
-                        <h1 className="text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-200 to-white mb-4 drop-shadow-lg animate-title-glow">
-                            CLEV
-                        </h1>
-                        <h2 className="text-2xl text-white/90 font-medium tracking-wide animate-slide-up">
-                            Coordenadoria Local de Estágios e Vivências
-                        </h2>
-                    </div>
-                </div>
-
-
-                {/* Container de Informações */}
-                <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <div className="bg-white/95 backdrop-blur-sm p-8 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.15)] transform hover:scale-[1.02] transition-all duration-500 hover:shadow-[0_12px_40px_rgba(0,0,0,0.25)] border border-green-100 animate-slide-in-right delay-300">
-                        <h2 className="text-3xl font-semibold text-[#526c94] mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#034d3c] to-[#056653] animate-fade-in">Quem somos?</h2>
-                        <p className="text-lg text-gray-800 leading-relaxed animate-slide-in-right delay-400">
-                            A <span className="font-semibold">Coordenadoria Local de Estágios e Vivências (CLEV)</span> é um núcleo vinculado ao DADG, que por sua vez integra a DENEM - Direção Executiva Nacional dos Estudantes de Medicina, instituição suprapartidária sem fins lucrativos. A CLEV é constituída por estudantes comprometidos a ampliar as oportunidades de aprendizado prático e complementar à formação médica dos estudantes de medicina, ajudando a construir um currículo de qualidade e ampliar as experiências socioculturais, fundamentais para a carreira médica. Atuamos como um elo entre os acadêmicos e as diversas possibilidades de intercâmbio em estágios práticos, clínicos, cirúrgicos e de pesquisa, tanto no Brasil quanto no exterior. Nosso objetivo é proporcionar vivências que agreguem conhecimento, habilidades e uma visão mais ampla da medicina em diferentes contextos.
-                        </p>
-                    </div>
-
-                    <div className="bg-white/95 backdrop-blur-sm p-8 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.15)] transform hover:scale-[1.02] transition-all duration-500 hover:shadow-[0_12px_40px_rgba(0,0,0,0.25)] border border-green-100 animate-scale-in delay-400">
-                        <h2 className="text-3xl font-semibold text-[#526c94] mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#034d3c] to-[#056653] animate-fade-in">Nossos Objetivos</h2>
-                        Nosso principal propósito é incentivar e facilitar a participação dos estudantes em experiências extracurriculares enriquecedoras. Para isso, buscamos:
-                        <ul className="text-lg text-gray-800 space-y-3 animate-scale-in delay-500">
-                            <li className="flex items-center gap-2 group hover:translate-x-2 transition-transform duration-300">
-                                <span className="text-green-600 group-hover:scale-110 transition-transform duration-300">✓</span>
-                                <span className="group-hover:text-[#034d3c] transition-colors duration-300">
-                                    Desenvolver e estimular  intercâmbios acadêmicos em instituições nacionais e internacionais;
-                                </span>
-                            </li>
-                            <li className="flex items-center gap-2 group hover:translate-x-2 transition-transform duration-300">
-                                <span className="text-green-600 group-hover:scale-110 transition-transform duration-300">✓</span>
-                                <span className="group-hover:text-[#034d3c] transition-colors duration-300">
-                                    Ampliar o acesso a estágios práticos em hospitais, clínicas e centros de pesquisa;
-                                </span>
-                            </li>
-                            <li className="flex items-center gap-2 group hover:translate-x-2 transition-transform duration-300">
-                                <span className="text-green-600 group-hover:scale-110 transition-transform duration-300">✓</span>
-                                <span className="group-hover:text-[#034d3c] transition-colors duration-300">
-                                    Estimular vivências em realidades diversas, incluindo a atenção primária, medicina rural e assistência em comunidades vulneráveis;
-                                </span>
-                            </li>
-                            <li className="flex items-center gap-2 group hover:translate-x-2 transition-transform duration-300">
-                                <span className="text-green-600 group-hover:scale-110 transition-transform duration-300">✓</span>
-                                <span className="group-hover:text-[#034d3c] transition-colors duration-300">
-                                    Fortalecer parcerias com organizações estudantis e profissionais, criando novas oportunidades de aprendizado e colaboração;
-                                </span>
-                            </li>
-                            <li className="flex items-center gap-2 group hover:translate-x-2 transition-transform duration-300">
-                                <span className="text-green-600 group-hover:scale-110 transition-transform duration-300">✓</span>
-                                <span className="group-hover:text-[#034d3c] transition-colors duration-300">
-                                    Apoiar os estudantes em questões burocráticas e logísticas, facilitando a participação em programas de estágio e pesquisa.
-                                </span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                {/* Missão */}
-                <div className="bg-[#526c94]/95 backdrop-blur-md text-white p-12 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.2)] w-full text-center transform hover:scale-[1.02] transition-all duration-500 hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)] border border-white/30 animate-slide-in-left delay-500">
-                    <h2 className="text-4xl font-semibold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-green-200 animate-fade-in">Nossa Perspectiva de Gestão</h2>
-                    <p className="text-lg leading-relaxed animate-slide-in-left delay-600">
-                        Nossa gestão é baseada em princípios de transparência, acessibilidade, parceria e compromisso com a formação acadêmica de qualidade. Buscamos sempre atuar de forma democrática, ouvindo as demandas dos estudantes e promovendo iniciativas alinhadas às suas necessidades e interesses. Além disso, trabalhamos continuamente para expandir nossas parcerias e consolidar a CLEV como um espaço de apoio e oportunidades no ensino médico.
-                    </p>
-                </div>
+      {/* Conteúdo Principal */}
+      <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+        {/* Header com Logo e Título */}
+        <section className="mb-16 sm:mb-24">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
+            <div className="w-full lg:w-1/2 text-center lg:text-left">
+              <h1 className="text-6xl sm:text-8xl font-bold gradient-text mb-6">
+                CLEV
+              </h1>
+              <h2 className="text-2xl sm:text-3xl text-white/90 font-light tracking-wide mb-6">
+                Coordenadoria Local de Estágios e Vivências
+              </h2>
+              <p className="text-lg sm:text-xl text-blue-100/80 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                Transformando experiências acadêmicas em oportunidades de crescimento profissional.
+              </p>
             </div>
-        </div>
-    );
+            <div className="w-full lg:w-1/2 flex justify-center">
+              <div className="relative w-64 sm:w-72 h-64 sm:h-72">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-700 rounded-full blur-3xl opacity-30 animate-pulse"></div>
+                <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-blue-500/50 shadow-2xl bg-gradient-to-br from-blue-600 to-blue-800">
+                  <img 
+                    src="/CLEV.jpg" 
+                    alt="Logo CLEV" 
+                    className="w-full h-full object-cover object-[center_30%]"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Grid de Cards */}
+        <section className="mb-16 sm:mb-24">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {/* Card 1 - Quem Somos */}
+            <div className="group relative bg-gradient-to-br from-blue-900/50 to-blue-800/50 p-6 sm:p-8 rounded-2xl backdrop-blur-sm border border-blue-500/20 hover:border-blue-400/50 transition-all duration-500">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="relative z-10">
+                <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">Quem Somos</h3>
+                <p className="text-blue-100/80 leading-relaxed">
+                  Somos a Coordenadoria Local de Estágios e Vivências, responsável por gerenciar e organizar as experiências práticas dos estudantes de medicina.
+                </p>
+              </div>
+            </div>
+
+            {/* Card 2 - O que buscamos */}
+            <div className="group relative bg-gradient-to-br from-blue-900/50 to-blue-800/50 p-6 sm:p-8 rounded-2xl backdrop-blur-sm border border-blue-500/20 hover:border-blue-400/50 transition-all duration-500">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="relative z-10">
+                <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">O que buscamos</h3>
+                <p className="text-blue-100/80 leading-relaxed">
+                  Buscamos proporcionar experiências práticas de qualidade, garantindo que os estudantes tenham acesso a estágios e vivências que complementem sua formação acadêmica.
+                </p>
+              </div>
+            </div>
+
+            {/* Card 3 - Nossa missão */}
+            <div className="group relative bg-gradient-to-br from-blue-900/50 to-blue-800/50 p-6 sm:p-8 rounded-2xl backdrop-blur-sm border border-blue-500/20 hover:border-blue-400/50 transition-all duration-500">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="relative z-10">
+                <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">Nossa missão</h3>
+                <p className="text-blue-100/80 leading-relaxed">
+                  Garantir que cada estudante tenha acesso a experiências práticas de qualidade, contribuindo para uma formação médica completa e excelente.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Seção de Valores */}
+        <section className="bg-gradient-to-r from-blue-900/30 to-blue-800/30 rounded-3xl p-8 sm:p-12 backdrop-blur-sm border border-blue-500/20 mb-16 sm:mb-24">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-8 text-center">Nossos Valores</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                title: "Excelência",
+                description: "Na formação prática"
+              },
+              {
+                title: "Organização",
+                description: "E eficiência"
+              },
+              {
+                title: "Compromisso",
+                description: "Com a qualidade"
+              },
+              {
+                title: "Inovação",
+                description: "Nos processos"
+              }
+            ].map((valor, index) => (
+              <div key={index} className="group bg-blue-900/20 p-6 rounded-xl border border-blue-500/20 hover:border-blue-400/50 transition-all duration-500">
+                <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center mb-4 group-hover:bg-blue-500/30 transition-colors duration-500">
+                  <svg 
+                    className="w-6 h-6 text-blue-400 check-icon" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round" 
+                      strokeWidth={2} 
+                      d="M5 13l4 4L19 7" 
+                    />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-2">{valor.title}</h3>
+                <p className="text-blue-100/70">{valor.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Seção do QR Code WhatsApp */}
+        <section className="mb-16 sm:mb-24">
+          <div className="bg-gradient-to-r from-blue-900/30 to-blue-800/30 rounded-3xl p-8 sm:p-12 backdrop-blur-sm border border-blue-500/20">
+            <div className="flex flex-col items-center text-center">
+              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">Entre no nosso grupo do WhatsApp</h2>
+              <p className="text-blue-100/80 mb-8 max-w-2xl">
+                Faça parte do nosso grupo do WhatsApp para receber todas as informaçõs sobre os eventos da CLEV.
+              </p>
+              <div className="relative w-64 h-64 bg-white rounded-2xl p-4 shadow-xl transform hover:scale-105 transition-transform duration-300">
+                <img 
+                  src="/QRCLEV.png" 
+                  alt="QR Code WhatsApp CLEV" 
+                  className="w-full h-full object-contain"
+                />
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent rounded-2xl"></div>
+              </div>
+              <p className="text-blue-100/70 mt-6 text-sm">
+                Escaneie o QR Code para entrar no grupo
+              </p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  );
 };
 
-export default QuemSomos;
-/*
-
-🌐 Quem somos?
-
-
-🎯 Nossos objetivos
-
-
-📄 Nossa perspectiva de gestão
-
-
-*Se você deseja conhecer mais sobre nossos programas ou participar de alguma de nossas iniciativas, entre em contato conosco!*
-
-*/
+export default ClevPage;
