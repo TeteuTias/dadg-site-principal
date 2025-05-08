@@ -32,7 +32,7 @@ const ClevPage: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-700 rounded-full blur-3xl opacity-30 animate-pulse"></div>
                 <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-blue-500/50 shadow-2xl bg-gradient-to-br from-blue-600 to-blue-800">
                   <img 
-                    src="coordinators/CLEV.jpg" 
+                    src="/coordinators/CLEV.jpg" 
                     alt="Logo CLEV" 
                     className="w-full h-full object-cover object-[center_30%]"
                   />
