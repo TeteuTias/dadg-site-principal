@@ -119,4 +119,23 @@
   .header-center a {
     min-width: 60px;
   }
+}
+
+/* Estilos para o scrollbar do submenu */
+.drawer-submenu-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.drawer-submenu-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.drawer-submenu-content::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.drawer-submenu-content {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
 } 

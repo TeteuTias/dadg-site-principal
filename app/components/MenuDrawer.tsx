@@ -3,6 +3,20 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { 
+  BookOpen, 
+  HeartHandshake, 
+  Users, 
+  Plane, 
+  BadgeCheck,
+  Home,
+  FileText,
+  LayoutGrid,
+  Calendar,
+  Mail,
+  HelpCircle,
+  ChevronDown
+} from "lucide-react";
 
 export default function MenuDrawer() {
   const [menuAberto, setMenuAberto] = useState(false);
@@ -51,15 +65,35 @@ export default function MenuDrawer() {
   const toggleCoordenadoriasSubmenu = () => setCoordenadoriasSubmenuOpen((prev) => !prev);
 
   const coordenadoriasSubmenuItems = [
-    { label: "CAC", href: "/coordenadorias/cac" },
-    { label: "CAEP", href: "/coordenadorias/caep" },
-    { label: "CAES", href: "/coordenadorias/caes" },
-    { label: "CLAM", href: "/coordenadorias/clam" },
-    { label: "CLEV", href: "/coordenadorias/clev" },
+    { 
+      label: "CAEP", 
+      href: "/coordenadorias/caep",
+      icon: <BookOpen size={16} />
+    },
+    { 
+      label: "CAES", 
+      href: "/coordenadorias/caes",
+      icon: <HeartHandshake size={16} />
+    },
+    { 
+      label: "CLAM", 
+      href: "/coordenadorias/clam",
+      icon: <Users size={16} />
+    },
+    { 
+      label: "CLEV", 
+      href: "/coordenadorias/clev",
+      icon: <Plane size={16} />
+    },
+    { 
+      label: "CAC", 
+      href: "/coordenadorias/cac",
+      icon: <BadgeCheck size={16} />
+    }
   ];
 
   const coordenadoriasSubmenuMaxHeight = coordenadoriasSubmenuOpen
-    ? `${coordenadoriasSubmenuItems.length * 30}px`
+    ? `${coordenadoriasSubmenuItems.length * 40}px`
     : "0px";
 
   // Verifica se é tela pequena (mobile)
@@ -167,7 +201,7 @@ export default function MenuDrawer() {
           flexDirection: "column",
           gap: "15px",
           zIndex: 1100,
-          boxShadow: "2px 0 10px rgba(0, 0, 0, 0.5)",
+          boxShadow: "2px 0 20px rgba(0, 0, 0, 0.3)",
           transform: menuAberto ? "translateX(0)" : "translateX(-100%)",
           transition: "transform 0.3s ease, background-color 0.5s ease-in-out",
           overflowY: "auto",
@@ -177,47 +211,180 @@ export default function MenuDrawer() {
         <button
           className="menu-close-button"
           onClick={() => setMenuAberto(false)}
+          style={{ 
+            cursor: "pointer", 
+            alignSelf: "flex-end", 
+            marginRight: "-10px", 
+            marginTop: "-10px",
+            background: "rgba(255, 255, 255, 0.1)",
+            border: "none",
+            borderRadius: "50%",
+            width: "40px",
+            height: "40px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            transition: "all 0.3s ease"
+          }}
         >
-          <span className="menu-close-icon"></span>
+          <svg 
+            width="24" 
+            height="24" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            style={{ transition: "transform 0.3s ease" }}
+          >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
         </button>
 
-        <Link href="/" style={{ color: "white", textDecoration: "none" }} onClick={() => setMenuAberto(false)}>
-          🏠 Início
-        </Link>
-        <Link href="/certificados" style={{ color: "white", textDecoration: "none" }} onClick={() => setMenuAberto(false)}>
-          📃 Certificados
-        </Link>
-        <Link href="/mural" style={{ color: "white", textDecoration: "none" }} onClick={() => setMenuAberto(false)}>
-          📬 Mural
-        </Link>
-        <Link href="/eventos" style={{ color: "white", textDecoration: "none" }} onClick={() => setMenuAberto(false)}>
-          📅 Eventos
-        </Link>
-        <Link href="/contato" style={{ color: "white", textDecoration: "none" }} onClick={() => setMenuAberto(false)}>
-          📧 Contato
-        </Link>
-        <Link href="/sobre" style={{ color: "white", textDecoration: "none" }} onClick={() => setMenuAberto(false)}>
-          ℹ️ Sobre Nós
-        </Link>
+        <div className="menu-items" style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+          <Link 
+            href="/" 
+            style={{ 
+              color: "white", 
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              padding: "12px 16px",
+              borderRadius: "12px",
+              transition: "all 0.3s ease",
+              background: pathname === "/" ? "rgba(255, 255, 255, 0.1)" : "transparent"
+            }} 
+            onClick={() => setMenuAberto(false)}
+          >
+            <Home size={24} />
+            Início
+          </Link>
+
+          <Link 
+            href="/certificados" 
+            style={{ 
+              color: "white", 
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              padding: "12px 16px",
+              borderRadius: "12px",
+              transition: "all 0.3s ease",
+              background: pathname === "/certificados" ? "rgba(255, 255, 255, 0.1)" : "transparent"
+            }} 
+            onClick={() => setMenuAberto(false)}
+          >
+            <FileText size={24} />
+            Certificados
+          </Link>
+
+          <Link 
+            href="/mural" 
+            style={{ 
+              color: "white", 
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              padding: "12px 16px",
+              borderRadius: "12px",
+              transition: "all 0.3s ease",
+              background: pathname === "/mural" ? "rgba(255, 255, 255, 0.1)" : "transparent"
+            }} 
+            onClick={() => setMenuAberto(false)}
+          >
+            <LayoutGrid size={24} />
+            Mural
+          </Link>
+
+          <Link 
+            href="/eventos" 
+            style={{ 
+              color: "white", 
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              padding: "12px 16px",
+              borderRadius: "12px",
+              transition: "all 0.3s ease",
+              background: pathname === "/eventos" ? "rgba(255, 255, 255, 0.1)" : "transparent"
+            }} 
+            onClick={() => setMenuAberto(false)}
+          >
+            <Calendar size={24} />
+            Eventos
+          </Link>
+
+          <Link 
+            href="/contato" 
+            style={{ 
+              color: "white", 
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              padding: "12px 16px",
+              borderRadius: "12px",
+              transition: "all 0.3s ease",
+              background: pathname === "/contato" ? "rgba(255, 255, 255, 0.1)" : "transparent"
+            }} 
+            onClick={() => setMenuAberto(false)}
+          >
+            <Mail size={24} />
+            Contato
+          </Link>
+
+          <Link 
+            href="/sobre" 
+            style={{ 
+              color: "white", 
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              padding: "12px 16px",
+              borderRadius: "12px",
+              transition: "all 0.3s ease",
+              background: pathname === "/sobre" ? "rgba(255, 255, 255, 0.1)" : "transparent"
+            }} 
+            onClick={() => setMenuAberto(false)}
+          >
+            <HelpCircle size={24} />
+            Sobre Nós
+          </Link>
+        </div>
 
         {/* Submenu para Coordenadorias */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <Link href="/coordenadorias" style={{ color: "white", textDecoration: "none" }} onClick={() => setMenuAberto(false)}>
-              ⚕️ Coordenadorias
-            </Link>
-            <button
-              onClick={toggleCoordenadoriasSubmenu}
-              style={{
-                background: "none",
-                border: "none",
-                color: "white",
-                cursor: "pointer",
-                fontSize: "16px",
+        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+          <div 
+            style={{ 
+              display: "flex", 
+              alignItems: "center", 
+              justifyContent: "space-between",
+              padding: "12px 16px",
+              borderRadius: "12px",
+              cursor: "pointer",
+              transition: "all 0.3s ease",
+              background: coordenadoriasSubmenuOpen ? "rgba(255, 255, 255, 0.1)" : "transparent"
+            }}
+            onClick={toggleCoordenadoriasSubmenu}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <Users size={24} />
+              <span>Coordenadorias</span>
+            </div>
+            <ChevronDown 
+              size={20}
+              style={{ 
+                transform: coordenadoriasSubmenuOpen ? "rotate(180deg)" : "rotate(0deg)",
+                transition: "transform 0.3s ease"
               }}
-            >
-              {coordenadoriasSubmenuOpen ? "−" : "+"}
-            </button>
+            />
           </div>
           <div
             style={{
@@ -227,7 +394,14 @@ export default function MenuDrawer() {
               maxHeight: coordenadoriasSubmenuMaxHeight,
             }}
           >
-            <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+            <div style={{ 
+              display: "flex", 
+              flexDirection: "column", 
+              gap: "5px",
+              maxHeight: "200px",
+              overflowY: "auto",
+              paddingRight: "8px"
+            }} className="drawer-submenu-content">
               {coordenadoriasSubmenuItems.map((item) => (
                 <Link
                   key={item.label}
@@ -235,9 +409,18 @@ export default function MenuDrawer() {
                   style={{
                     color: "white",
                     textDecoration: "none",
-                    fontWeight: pathname === item.href ? "normal" : "normal",
+                    padding: "10px 16px",
+                    borderRadius: "8px",
+                    transition: "all 0.3s ease",
+                    background: pathname === item.href ? "rgba(255, 255, 255, 0.1)" : "transparent",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    minHeight: "40px"
                   }}
+                  onClick={() => setMenuAberto(false)}
                 >
+                  {item.icon}
                   {item.label}
                 </Link>
               ))}
