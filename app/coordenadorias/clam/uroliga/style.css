@@ -1,0 +1,84 @@
+.uroliga-container {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #01a283 0%, #00838f 60%, #0fd6b1 100%), radial-gradient(circle at 70% 20%, rgba(1,162,131,0.18) 0%, transparent 70%);
+  background-blend-mode: screen, normal;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 0;
+}
+
+.uroliga-title {
+  font-size: 3rem;
+  font-weight: bold;
+  background: linear-gradient(90deg, #01a283 0%, #00cba9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 2rem;
+  text-align: center;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 0 #fff;
+}
+
+.uroliga-content {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.uroliga-card {
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  padding: 2.5rem 2rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.uroliga-card:hover {
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.22), 0 0 20px rgba(1, 162, 131, 0.10);
+  border-color: rgba(1, 162, 131, 0.25);
+}
+
+.uroliga-section-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 0.8rem;
+  text-align: left;
+  letter-spacing: 0.5px;
+}
+
+.uroliga-text {
+  color: #f3f3f3;
+  font-size: 1.15rem;
+  line-height: 1.7;
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 700px) {
+  .uroliga-content {
+    padding: 0 0.5rem;
+  }
+  .uroliga-card {
+    padding: 1.2rem 0.7rem;
+  }
+  .uroliga-title {
+    font-size: 2.1rem;
+  }
+  .uroliga-section-title {
+    font-size: 1.3rem;
+  }
+} 

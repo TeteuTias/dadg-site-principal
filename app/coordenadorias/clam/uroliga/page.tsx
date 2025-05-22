@@ -1,4 +1,5 @@
 'use client'
+import './style.css';
 import React from 'react';
 import { Poppins } from 'next/font/google';
 const poppins = Poppins({
@@ -9,10 +10,7 @@ const poppins = Poppins({
 
 export default function LacohpPage() {
   return (
-    <main
-      className="relative min-h-screen w-full flex flex-col items-center overflow-hidden p-8 bg-gradient-to-br from-green-100 via-white to-green-50"
-      style={poppins.style}
-    >
+    <main className="uroliga-container" style={poppins.style}>
       {/* Onda superior (design novo) */}
       <div className="absolute top-0 left-0 w-full -z-10">
         <svg
@@ -43,8 +41,7 @@ export default function LacohpPage() {
         </svg>
       </div>
 
-      {/* Conteúdo Principal */}
-      <div className="w-full max-w-4xl flex flex-col items-center">
+      <div className="uroliga-content">
         {/* Espaço para a logo da liga (placeholder) */}
         <header className="mb-8">
           <div className="relative w-32 h-32 bg-white rounded-full flex items-center justify-center shadow-md">
@@ -52,39 +49,39 @@ export default function LacohpPage() {
           </div>
         </header>
 
-        {/* Título da Liga */}
-        <section className="w-full text-center mb-10">
-          <h1 className="text-4xl font-bold text-green-700 uppercase mb-4">
-            LACOHP
-          </h1>
-          <p className="text-lg text-gray-700">
+        {/* Título da Liga destacado */}
+        <h1 className="uroliga-title">LACOHP</h1>
+
+        {/* Descrição da Liga */}
+        <div className="uroliga-card" style={{marginBottom: '2rem'}}>
+          <p className="uroliga-text">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Slogan ou breve descrição da liga LACOHP.
           </p>
-        </section>
+        </div>
 
         {/* Seção "Quem Somos" */}
-        <section className="w-full max-w-4xl mb-8">
-          <h2 className="text-3xl font-semibold text-green-700 mb-3">Quem Somos</h2>
-          <p className="text-gray-700 text-lg leading-relaxed">
+        <div className="uroliga-card">
+          <h2 className="uroliga-section-title">Quem Somos</h2>
+          <p className="uroliga-text">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra lacus in magna elementum, vitae elementum libero malesuada. Donec sit amet semper magna. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Suspendisse potenti.
           </p>
-        </section>
+        </div>
 
         {/* Seção "O Que Buscamos" */}
-        <section className="w-full max-w-4xl mb-8">
-          <h2 className="text-3xl font-semibold text-green-700 mb-3">O Que Buscamos</h2>
-          <p className="text-gray-700 text-lg leading-relaxed">
+        <div className="uroliga-card">
+          <h2 className="uroliga-section-title">O Que Buscamos</h2>
+          <p className="uroliga-text">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer malesuada, nisl vel fermentum porta, lectus libero convallis justo, non posuere ex urna ut mauris. Nulla facilisi. Fusce tincidunt, magna non efficitur pharetra, orci justo volutpat neque, at tincidunt ex nulla ac mi.
           </p>
-        </section>
+        </div>
 
         {/* Seção "O Que Acreditamos" */}
-        <section className="w-full max-w-4xl mb-8">
-          <h2 className="text-3xl font-semibold text-green-700 mb-3">O Que Acreditamos</h2>
-          <p className="text-gray-700 text-lg leading-relaxed">
+        <div className="uroliga-card">
+          <h2 className="uroliga-section-title">O Que Acreditamos</h2>
+          <p className="uroliga-text">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ac felis sit amet lacus tincidunt consequat. Vivamus a diam ac dolor hendrerit interdum. Nulla facilisi. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
           </p>
-        </section>
+        </div>
       </div>
     </main>
   );
