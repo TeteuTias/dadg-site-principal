@@ -6,26 +6,52 @@ export async function GET(request: Request) {
     const end = searchParams.get('end');
 
     if (!start || !end) {
+        console.log('Parâmetros de data ausentes');
         return NextResponse.json({ items: [] });
     }
+
     const calendarId = process.env.GOOGLE_CALENDAR_ID;
     const apiKey = process.env.GOOGLE_API_KEY;
 
+    console.log('Configurações:', {
+        calendarId: calendarId ? 'Configurado' : 'Não configurado',
+        apiKey: apiKey ? 'Configurado' : 'Não configurado',
+        start,
+        end
+    });
+
+    if (!calendarId || !apiKey) {
+        console.error('Variáveis de ambiente não configuradas:', { 
+            calendarId: calendarId ? 'Configurado' : 'Não configurado',
+            apiKey: apiKey ? 'Configurado' : 'Não configurado'
+        });
+        return NextResponse.json({ items: [] });
+    }
+
     try {
-        const res = await fetch(
-            `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(
-                calendarId as string
-            )}/events?key=${apiKey}&timeMin=${start}&timeMax=${end}&singleEvents=true&orderBy=startTime`
-        );
+        const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(
+            calendarId
+        )}/events?key=${apiKey}&timeMin=${start}&timeMax=${end}&singleEvents=true&orderBy=startTime`;
+
+        console.log('Fazendo requisição para:', url);
+
+        const res = await fetch(url);
 
         if (!res.ok) {
-            throw new Error('Erro ao buscar eventos');
+            const errorData = await res.text();
+            console.error('Erro na resposta da API:', {
+                status: res.status,
+                statusText: res.statusText,
+                error: errorData
+            });
+            return NextResponse.json({ items: [] });
         }
 
         const data = await res.json();
+        console.log('Eventos encontrados:', data.items?.length || 0);
         return NextResponse.json(data);
     } catch (error) {
-        console.error(error);
+        console.error('Erro ao buscar eventos:', error);
         return NextResponse.json({ items: [] });
     }
 }

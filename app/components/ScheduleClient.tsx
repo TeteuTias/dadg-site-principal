@@ -13,6 +13,7 @@ import {
   subMonths
 } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import './ScheduleClient.css';
 
 interface Event {
   id: string;
@@ -27,12 +28,13 @@ export default function ScheduleClient() {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // Busca os eventos para o mês atual via API
   const fetchEvents = async (month: Date) => {
     setLoading(true);
     try {
       const startMonth = startOfMonth(month).toISOString();
       const endMonth = endOfMonth(month).toISOString();
+      console.log('Buscando eventos:', { startMonth, endMonth });
+      
       const res = await fetch(
         `/api/get/eventsByDate?start=${startMonth}&end=${endMonth}`
       );
@@ -40,20 +42,19 @@ export default function ScheduleClient() {
         throw new Error('Erro ao buscar eventos');
       }
       const data = await res.json();
-      setEvents(data.items);
+      console.log('Eventos recebidos:', data);
+      setEvents(data.items || []);
     } catch (error) {
-      console.error(error);
+      console.error('Erro ao buscar eventos:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  // Busca os eventos ao carregar o componente e quando o mês atual mudar
   useEffect(() => {
     fetchEvents(currentMonth);
   }, [currentMonth]);
 
-  // Renderiza as células do calendário com o ponto verde para dias com eventos
   const renderCells = () => {
     const monthStart = startOfMonth(currentMonth);
     const monthEnd = endOfMonth(monthStart);
@@ -82,21 +83,19 @@ export default function ScheduleClient() {
         days.push(
           <div
             key={day.toString()}
-            className={`p-2 border border-gray-200 text-center cursor-pointer ${
-              !isSameMonth(day, monthStart) ? 'text-gray-400' : ''
-            } ${isSameDay(day, selectedDate) ? 'bg-blue-300' : ''}`}
+            className={`calendar-day ${
+              !isSameMonth(day, monthStart) ? 'other-month' : ''
+            } ${isSameDay(day, selectedDate) ? 'selected' : ''}`}
             onClick={() => setSelectedDate(cloneDay)}
           >
             {format(day, 'd')}
-            {hasEvent && (
-              <span className="block w-2 h-2 bg-green-500 rounded-full mx-auto mt-1"></span>
-            )}
+            {hasEvent && <span className="event-indicator"></span>}
           </div>
         );
         day = addDays(day, 1);
       }
       rows.push(
-        <div key={day.toString()} className="grid grid-cols-7">
+        <div key={day.toString()} className="calendar-grid">
           {days}
         </div>
       );
@@ -105,7 +104,6 @@ export default function ScheduleClient() {
     return <div>{rows}</div>;
   };
 
-  // Filtra os eventos para o dia selecionado
   const eventsForSelectedDate = events.filter((event) => {
     let eventDate: Date;
     if (event.start.dateTime) {
@@ -119,28 +117,28 @@ export default function ScheduleClient() {
   });
 
   return (
-    <div className="max-w-4xl mx-auto bg-white shadow p-4">
-      <div className="flex justify-between items-center mb-4">
+    <div className="calendar-wrapper">
+      <div className="calendar-header">
         <button
           onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
-          className="p-2 bg-blue-500 text-white rounded"
+          className="calendar-nav-button"
         >
           Anterior
         </button>
-        <h2 className="text-xl font-semibold">
+        <h2 className="calendar-title">
           {format(currentMonth, 'MMMM yyyy', { locale: ptBR })}
         </h2>
         <button
           onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
-          className="p-2 bg-blue-500 text-white rounded"
+          className="calendar-nav-button"
         >
           Próximo
         </button>
       </div>
 
-      <div className="grid grid-cols-7 gap-1 mb-2">
+      <div className="calendar-weekdays">
         {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map((day) => (
-          <div key={day} className="font-bold text-center">
+          <div key={day} className="weekday">
             {day}
           </div>
         ))}
@@ -148,27 +146,24 @@ export default function ScheduleClient() {
 
       {renderCells()}
 
-      <div className="mt-6">
-        <h3 className="text-2xl font-semibold mb-2">
+      <div className="events-list">
+        <h3 className="events-title">
           Eventos em {format(selectedDate, 'dd/MM/yyyy')}
         </h3>
         {loading ? (
-          <p>Carregando eventos...</p>
+          <p className="loading-message">Carregando eventos...</p>
         ) : eventsForSelectedDate.length > 0 ? (
           eventsForSelectedDate.map((event) => (
-            <div
-              key={event.id}
-              className="p-4 mb-2 bg-gray-50 border border-gray-200 rounded"
-            >
-              <h4 className="text-lg font-bold">{event.summary}</h4>
-              <p className="text-gray-600">
+            <div key={event.id} className="event-card">
+              <h4 className="event-name">{event.summary}</h4>
+              <p className="event-time">
                 <span className="font-bold">Início:</span>{' '}
                 {event.start.dateTime
                   ? new Date(event.start.dateTime).toLocaleString()
                   : event.start.date}
               </p>
               {event.end && (
-                <p className="text-gray-600">
+                <p className="event-time">
                   <span className="font-bold">Fim:</span>{' '}
                   {event.end.dateTime
                     ? new Date(event.end.dateTime).toLocaleString()
@@ -178,7 +173,7 @@ export default function ScheduleClient() {
             </div>
           ))
         ) : (
-          <p>Nenhum evento para este dia.</p>
+          <p className="no-events-message">Nenhum evento para este dia.</p>
         )}
       </div>
     </div>
