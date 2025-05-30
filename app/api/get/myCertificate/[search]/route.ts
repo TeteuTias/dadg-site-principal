@@ -26,6 +26,7 @@ export async function GET(req: NextRequest, {
         searchCriteria = { _id: new mongoose.Types.ObjectId(searchValue) };
     } else {
         searchCriteria = {
+            isReady: true, // Certificados prontos,
             $or: [
                 { ownerName: { $regex: searchValue, $options: "i" } }, // Case insensitive
                 { ownerCpf: { $regex: searchValue, $options: "i" } },

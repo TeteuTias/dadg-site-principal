@@ -12,6 +12,7 @@ export interface ICertificate {
     ownerEmail: string;
     frontTopperText?: string;
     frontBottomText?: string;
+    isReady?: boolean;
     certificateHours: string;
     eventId: ObjectId;
 }
@@ -31,6 +32,7 @@ const CertificateSchema: Schema<ICertificate> = new Schema(
         frontTopperText: { type: String },
         frontBottomText: { type: String },
         certificateHours: { type: String, required: true },
+        isReady: { type: Boolean, required: false },
         eventId: { type: Schema.Types.ObjectId, required: true, ref: "EventCertificate" },
 
     },
