@@ -13,6 +13,13 @@ export interface ICertificate {
     frontTopperText?: string;
     frontBottomText?: string;
     isReady?: boolean;
+    verse: {
+        showVerse: boolean;
+        topperText?: string;
+        bottomText?: string;
+        headers?: string[];
+        rows?: [string[]];
+    };
     certificateHours: string;
     eventId: ObjectId;
 }
@@ -34,6 +41,13 @@ const CertificateSchema: Schema<ICertificate> = new Schema(
         certificateHours: { type: String, required: true },
         isReady: { type: Boolean, required: false },
         eventId: { type: Schema.Types.ObjectId, required: true, ref: "EventCertificate" },
+        verse: {
+            showVerse: { type: Boolean, default: false },
+            topperText: { type: String, required: false },
+            bottomText: { type: String, required: false },
+            headers: { type: [String], required: false },
+            rows: { type: [[String]], required: false }
+        }
 
     },
     { timestamps: true, collection: "certificates.datails" }

@@ -211,6 +211,57 @@ export default function Home({
           </article>
       }
 
+      {
+        data?.verse?.showVerse == true &&
+        <article className="relative max-w-screen overflow-auto">
+          <a onClick={() => console.log(data)}>aaa</a>
+          {/* Verso do Certificado */}
+          <div
+            id="frontCert"
+            className="relative w-full"
+            style={{ width: '2000px', height: '1414px' }}
+          >
+            <img
+              src={`/api/get/templateProxy/${certificateId}?t=${Date.now()}`} /* Date.now() é para resolver o problema do Cache. */
+              alt="Certificado"
+              className="w-full h-full object-fill"
+            />
+            <div className="absolute flex flex-col items-center justify-center top-0 font-bold w-full h-full">
+              <table style={{ ...data.eventId.styleContainerVerse?.containerStyle, ...data.eventId.styleContainerVerse?.headerStyle }}>
+                <thead  className=''>
+                  <tr>
+                    {
+                      data?.verse?.headers?.map((header, index) => (
+                        <th key={index} className="text-center text-lg font-bold" style={{ ...data?.eventId.styleContainerVerse?.headerStyle }}>
+                          {header}
+                        </th>
+                      ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    data?.verse?.rows?.map((row, index) => (
+                      <tr key={index}>
+                        {
+                          row.map((cell, cellIndex) => (
+                            <td key={cellIndex} className="text-center" style={{ ...libSourceSerif4.style, ...data?.eventId.styleContainerVerse.rowsStyle }}>
+                              {cell}
+                            </td>
+                          ))
+                        }
+                      </tr>
+                    ))
+                  }
+                </tbody>
+              </table>
+              <div className=' w-[70%]'>
+              </div>
+
+
+            </div>
+          </div>
+        </article>
+      }
     </main >
   );
 }
