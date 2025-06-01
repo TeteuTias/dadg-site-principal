@@ -229,7 +229,6 @@ export default function Home({
       {
         data?.verse?.showVerse == true &&
         <article className="relative max-w-screen overflow-auto">
-          <a onClick={() => console.log(data)}>aaa</a>
           {/* Verso do Certificado */}
           <div
             id="verseCert"
