@@ -23,28 +23,23 @@ export default function Home({
   const [data, setData] = useState<ICertificateWithEventIdPopulate | null>(null)
   const router = useRouter()
   const [certificateId, setCertificateId] = useState<null | string>(null)
-
   const handleDownload = async () => {
-    // Seleciona os elementos de frente e verso
+    // Seleciona o elemento da frente
     const frontElement = document.getElementById('frontCert');
-    // const backElement = document.getElementById('backCert');
-    if (!frontElement /* || !backElement*/) return;
+    if (!frontElement) return;
 
-    // Captura os dois elementos de forma concorrente
-    const [frontCanvas, /*backCanvas*/] = await Promise.all([
-      html2canvas(frontElement,),
-      //html2canvas(backElement, { scale }),
-    ]);
-    const imgUrl = frontCanvas.toDataURL(`image/png`)
-    const response = await fetch(imgUrl)
-    const blob = await response.blob()
+    // Renderiza o front
+    const frontCanvas = await html2canvas(frontElement);
+    const imgUrl = frontCanvas.toDataURL('image/png');
+    const response = await fetch(imgUrl);
+    const blob = await response.blob();
 
     const pdfDoc = await PDFDocument.create();
-    // Embute a imagem PNG no PDF
     const arrayBuffer = await blob.arrayBuffer();
     const pngImage = await pdfDoc.embedPng(arrayBuffer);
     const { width, height } = pngImage.scale(1);
-    // Adiciona uma página com as dimensões da imagem
+
+    // Adiciona a página da frente
     const page = pdfDoc.addPage([width, height]);
     page.drawImage(pngImage, {
       x: 0,
@@ -52,6 +47,26 @@ export default function Home({
       width,
       height,
     });
+
+    // Se houver verso, renderiza e adiciona ao PDF
+    if (data?.verse?.showVerse === true) {
+      const backElement = document.getElementById('verseCert');
+      if (backElement) {
+        const backCanvas = await html2canvas(backElement);
+        const imgUrlVerse = backCanvas.toDataURL('image/png');
+        const responseBack = await fetch(imgUrlVerse);
+        const blobVerse = await responseBack.blob();
+        const arrayBufferVerse = await blobVerse.arrayBuffer();
+        const pngImageVerse = await pdfDoc.embedPng(arrayBufferVerse);
+
+        pdfDoc.addPage([width, height]).drawImage(pngImageVerse, {
+          x: 0,
+          y: 0,
+          width,
+          height,
+        });
+      }
+    }
 
     // Gera os bytes do PDF
     const pdfBytes = await pdfDoc.save();
@@ -217,7 +232,7 @@ export default function Home({
           <a onClick={() => console.log(data)}>aaa</a>
           {/* Verso do Certificado */}
           <div
-            id="frontCert"
+            id="verseCert"
             className="relative w-full"
             style={{ width: '2000px', height: '1414px' }}
           >
@@ -227,12 +242,12 @@ export default function Home({
               className="w-full h-full object-fill"
             />
             <div className="absolute flex flex-col items-center justify-center top-0 font-bold w-full h-full">
-              <table style={{ ...data.eventId.styleContainerVerse?.containerStyle, ...data.eventId.styleContainerVerse?.headerStyle }}>
-                <thead  className=''>
+              <table style={{ ...data?.eventId?.styleContainerVerse?.containerStyle, ...data?.eventId?.styleContainerVerse?.headerStyle }}>
+                <thead className=''>
                   <tr>
                     {
                       data?.verse?.headers?.map((header, index) => (
-                        <th key={index} className="text-center text-lg font-bold" style={{ ...data?.eventId.styleContainerVerse?.headerStyle }}>
+                        <th key={index} className="text-center text-lg font-bold" style={{ ...data?.eventId?.styleContainerVerse?.headerStyle }}>
                           {header}
                         </th>
                       ))}
@@ -244,7 +259,7 @@ export default function Home({
                       <tr key={index}>
                         {
                           row.map((cell, cellIndex) => (
-                            <td key={cellIndex} className="text-center" style={{ ...libSourceSerif4.style, ...data?.eventId.styleContainerVerse.rowsStyle }}>
+                            <td key={cellIndex} className="text-center" style={{ ...libSourceSerif4.style, ...data?.eventId?.styleContainerVerse?.rowsStyle }}>
                               {cell}
                             </td>
                           ))
