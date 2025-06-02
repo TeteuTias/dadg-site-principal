@@ -152,7 +152,7 @@ export default function Home({
               style={{ width: '2000px', height: '1414px' }}
             >
               <img
-                src={`/api/get/templateProxy/${certificateId}?t=${Date.now()}`} /* Date.now() é para resolver o problema do Cache. */
+                src={`/api/get/templateProxy/${certificateId}|front?t=${Date.now()}`} /* Date.now() é para resolver o problema do Cache. */
                 alt="Certificado"
                 className="w-full h-full object-fill"
               />
@@ -180,7 +180,7 @@ export default function Home({
               style={{ width: '2000px', height: '1414px' }}
             >
               <img
-                src={`/api/get/templateProxy/${certificateId}?t=${Date.now()}`}
+                src={`/api/get/templateProxy/${certificateId}|front?t=${Date.now()}`}
                 alt="Certificado"
                 className="w-full h-full object-fill"
               />
@@ -236,7 +236,7 @@ export default function Home({
             style={{ width: '2000px', height: '1414px' }}
           >
             <img
-              src={`/api/get/templateProxy/${certificateId}?t=${Date.now()}`} /* Date.now() é para resolver o problema do Cache. */
+              src={`/api/get/templateProxy/${certificateId}|verse?t=${Date.now()}`} /* Date.now() é para resolver o problema do Cache. */
               alt="Certificado"
               className="w-full h-full object-fill"
             />

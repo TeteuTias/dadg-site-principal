@@ -49,6 +49,7 @@ const getBufferByImageUrl = async (url: string): Promise<ArrayBuffer> => {
     return buffer
 };
 
+// CertificateId => certificadoId|type; onde type é front ou verse, para determinar qual template o usuário quer baixar!
 
 export async function GET(req: NextRequest, {
     params,
@@ -58,19 +59,29 @@ export async function GET(req: NextRequest, {
 
     await connectToDatabase()
     const { certificateId } = await params
-    const searchValue = certificateId
-    if (!searchValue || !mongoose.Types.ObjectId.isValid(searchValue)) {
+    const typeTemplate = certificateId.split("|")[1]; // Pega o segundo valor após o pipe
+    const searchValueId = certificateId.split("|")[0]; // Pega o primeiro valor antes do pipe
+
+    if (!typeTemplate || (typeTemplate !== "front" && typeTemplate !== "verse")) {
+        return Response.json({ message: "O parâmetro 'certificateId' deve conter um tipo válido (front ou verse)." }, { status: 500 });
+    }
+    if (!searchValueId || !mongoose.Types.ObjectId.isValid(searchValueId)) {
         return Response.json({ message: "O parâmetro 'certificateId' é obrigatório." }, { status: 500 });
     }
 
 
     const owners = await CertificateModel.findOne({
-        _id: certificateId
+        _id: searchValueId
     }).populate<{ eventId: IEventCertificate }>("eventId");
     if (!owners) {
         return Response.json({ message: "Seu Certificado não foi encontrado. Entre em contato com o Suporte." }, { status: 500 });
     }
-    const templateLink = await getSignedUrl(process.env.R2_BUCKET_NAME ?? "", owners?.eventId.templatePath)
+
+    if (typeTemplate === "verse" && (!owners.verse.showVerse || !owners.eventId.templateVersePath)) {
+        return Response.json({ message: "Seu Certificado não possui Verso. Entre em contato com o Suporte." }, { status: 500 });
+    }
+
+    const templateLink = await getSignedUrl(process.env.R2_BUCKET_NAME ?? "", typeTemplate === "front" ? owners?.eventId.templatePath : owners?.eventId.templateVersePath || "")
     if (!templateLink) {
         throw new Error("Erro ao baixar seu Certificado")
     }
