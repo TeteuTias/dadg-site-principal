@@ -119,6 +119,39 @@ export default function Home({
     )
   }
 
+  if (data?.onlyImage === true) {
+    return (
+      <main className="relative flex flex-col max-w-screen overflow-hidden">
+        <div className='absolute min-h-svg min-w-full z-[500]'>
+          <Fireworks autorun={{
+            speed: 1.5,
+            duration: 1500,
+            delay: 0
+          }} />
+        </div>
+        {/* Cabeçalho fixo com o botão de download */}
+        <div className="flex justify-center items-center p-5 bg-blue-900 w-full z-50 flex flex-col">
+          <button
+            onClick={handleDownload}
+            className="w-fit px-4 py-2 bg-blue-600 text-white rounded bg-[#09427D] font-bold border-2 border-white hover:text-[#09427D] hover:border-[#09427D] hover:bg-white duration-300 ease-in"
+          >
+            BAIXAR CERTIFICADO
+          </button>
+          <div>
+            <h1 className='text-white font-medium '>Clique em baixar para ver o certificado completo</h1>
+          </div>
+        </div>
+        <div
+          id="frontCert"
+          className="relative w-full">
+          <img
+            src={`/api/get/templateProxy/${certificateId}|front?t=${Date.now()}`} /* Date.now() é para resolver o problema do Cache. */
+          />
+        </div>
+      </main>
+    )
+  }
+
   return (
     <main className="relative flex flex-col max-w-screen overflow-hidden">
       <div className='absolute min-h-svg min-w-full z-[500]'>

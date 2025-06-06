@@ -13,6 +13,7 @@ export interface ICertificate {
     frontTopperText?: string;
     frontBottomText?: string;
     isReady?: boolean;
+    onlyImage?: boolean;
     verse: {
         showVerse: boolean;
         topperText?: string;
@@ -39,7 +40,8 @@ const CertificateSchema: Schema<ICertificate> = new Schema(
         frontTopperText: { type: String },
         frontBottomText: { type: String },
         certificateHours: { type: String, required: true },
-        isReady: { type: Boolean, required: false },
+        onlyImage: { type: Boolean, required: false, default: false },
+        isReady: { type: Boolean, required: false, default: false },
         eventId: { type: Schema.Types.ObjectId, required: true, ref: "EventCertificate" },
         verse: {
             showVerse: { type: Boolean, default: false },
