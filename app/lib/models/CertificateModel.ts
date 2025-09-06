@@ -10,6 +10,7 @@ export interface ICertificate {
     ownerCpf: string;
     eventName: string;
     ownerEmail: string;
+    certificatePath?: string;
     frontTopperText?: string;
     frontBottomText?: string;
     isReady?: boolean;

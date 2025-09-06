@@ -3,7 +3,7 @@
 import React from 'react';
 import html2canvas from 'html2canvas';
 import { PDFDocument } from 'pdf-lib';
-
+import { ObjectId } from 'bson';
 import Kindred from '@/public/fonts/lib/libFontKindred';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -115,6 +115,33 @@ export default function Home({
           </div>
         </div>
 
+      </main>
+    )
+  }
+  if (data?.certificatePath && ObjectId.isValid(String(data?.certificatePath))) {
+    return (
+      <main className="relative flex flex-col max-w-screen overflow-hidden">
+        <div className='absolute min-h-svg min-w-full z-[500]'>
+          <Fireworks autorun={{
+            speed: 1.5,
+            duration: 1500,
+            delay: 0
+          }} />
+        </div>
+        {/* Cabeçalho fixo com o botão de download */}
+        <div className="flex justify-center items-center p-5 bg-blue-900 w-full z-50 flex flex-col">
+          <div>
+            <h1 className='text-white font-medium '>Clique em baixar para ver o certificado completo</h1>
+          </div>
+        </div>
+        <div
+          id="frontCert"
+          className="relative w-full">
+          <iframe
+          className='w-full h-screen'
+            src={`/api/get/templateScanProxy/${data.certificatePath}|front?t=${Date.now()}`} /* Date.now() é para resolver o problema do Cache. */
+          />
+        </div>
       </main>
     )
   }
