@@ -73,8 +73,8 @@ export async function GET(req: NextRequest, {
 }: {
     params: Promise<{ certificateId: string }>
 }) {
+    try {
 
-    await connectToDatabase()
     const { certificateId } = await params
     const typeTemplate = certificateId.split("|")[1]; // Pega o segundo valor após o pipe
     const searchValueId = certificateId.split("|")[0]; // Pega o primeiro valor antes do pipe
@@ -85,6 +85,7 @@ export async function GET(req: NextRequest, {
         if (!template) {
             return Response.json({ message: "Template não encontrado." }, { status: 404 });
         }
+        await connectToDatabase()
         const templateLink = await getSignedUrl(process.env.R2_BUCKET_NAME ?? "", `${process.env.R2_SUBFOLDER}/${template._id}.${template.templateExtension}`);
         if (!templateLink) {
             throw new Error("Erro ao baixar seu Certificado")
@@ -132,4 +133,7 @@ export async function GET(req: NextRequest, {
             'Cache-Control': 'public, max-age=86400' // cache de 1 dia
         }
     })
+    } catch (err) {
+        return Response.json({"message":err instanceof Error ? err.message : "ERROR"},{status:500})
+    }
 }
