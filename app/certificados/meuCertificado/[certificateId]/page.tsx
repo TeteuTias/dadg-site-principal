@@ -71,6 +71,7 @@ export default function Home({
     // Gera os bytes do PDF
     const pdfBytes = await pdfDoc.save();
     // Cria um Blob para o PDF
+    // @ts-expect-error: Erro de tipificação
     const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
     // Cria uma URL para o Blob e força o download
     const blobUrl = URL.createObjectURL(pdfBlob);
