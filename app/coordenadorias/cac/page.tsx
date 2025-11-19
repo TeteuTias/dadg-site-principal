@@ -5,30 +5,30 @@ import './style.css';
 
 const CacPage = () => {
   const teamMembers = [
-    { name: 'Mateus Rosa', role: 'Coordenador', photo: '/mateus.jpg' },
-    { name: 'Nicoly Gonzaga', role: 'Coordenadora', photo: '/nicoly.jpeg' },
-    { name: 'Gianluca Zambiazi', role: 'Núcleo de Apoio', photo: '/gianluca.jpeg' },
-    { name: 'Rafaela Luiza Gonzaga', role: 'Núcleo de Apoio', photo: '/Rafa.png' },
-    { name: 'Lucas Borges', role: 'Núcleo de Apoio', photo: '/lucas.jpg' },
-    { name: 'Heloísa Benatt', role: 'Núcleo de Apoio', photo: '/helo.jpeg' }
+    { name: 'Mateus Rosa', role: 'Coordenador', photo: '/membersCAC/mateus.jpg' },
+    { name: 'Nicoly Gonzaga', role: 'Coordenadora', photo: '/membersCAC/nicoly.jpeg' },
+    { name: 'Gianluca Zambiazi', role: 'Núcleo de Apoio', photo: '/membersCAC/gianluca.jpeg' },
+    { name: 'Rafaela Luiza Gonzaga', role: 'Núcleo de Apoio', photo: '/membersCAC/rafaela.png' },
+    { name: 'Lucas Borges', role: 'Núcleo de Apoio', photo: '/membersCAC/lucas.jpg' },
+    { name: 'Heloísa Benatt', role: 'Núcleo de Apoio', photo: '/membersCAC/helo.jpeg' }
   ];
 
   return (
     <div className="cac-page">
       <div className="main-container">
         <div className="logo-section slide-in-left">
-          <Image src="/CAC.jpeg" alt="Logo CAC" width={200} height={200} className="cac-logo" />
+          <Image src="/coordinators/CAC.jpeg" alt="Logo CAC" width={200} height={200} className="cac-logo" />
         </div>
 
         <div className="header-content fade-and-rise">
-        <h1 className="cac-logo-title deepshadow">CAC</h1>
-  <h2 className="subtitle">
-    Coordenadoria Acadêmica de Certificados e TI.
-  </h2>
-  <p className="description description-animate">
-    O CAC atua trazendo inovação, tecnologia e organização para os processos de Certificados do DADG.
-  </p>
-</div>
+          <h1 className="cac-logo-title deepshadow">CAC</h1>
+          <h2 className="subtitle">
+            Coordenadoria Acadêmica de Certificados e TI.
+          </h2>
+          <p className="description description-animate">
+            O CAC atua trazendo inovação, tecnologia e organização para os processos de Certificados do DADG.
+          </p>
+        </div>
       </div>
 
       <div className="cards-container fade-in">
@@ -47,15 +47,15 @@ const CacPage = () => {
       </div>
       <div className="credit-section fade-in">
         <p className="credit-text">
-          Todo este site é fruto dos esforços do <strong>CAC da gestão 2025</strong>.
+          Nossa coordenadora valoriza cada conquista como um reconhecimento oficial.
         </p>
         <h2 className="credit-title">Equipe CAC 2025</h2>
         <div className="team-container">
           {teamMembers.map((member, index) => (
             <div key={index} className="team-member">
               <div className="photo-frame">
-                <Image 
-                  src={member.photo} 
+                <Image
+                  src={member.photo}
                   alt={member.name}
                   width={150}
                   height={150}

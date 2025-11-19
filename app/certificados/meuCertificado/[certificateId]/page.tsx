@@ -1,8 +1,9 @@
 
 "use client"
 import React from 'react';
-import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { PDFDocument } from 'pdf-lib';
+import { ObjectId } from 'bson';
 import Kindred from '@/public/fonts/lib/libFontKindred';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -21,48 +22,71 @@ export default function Home({
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [data, setData] = useState<ICertificateWithEventIdPopulate | null>(null)
   const router = useRouter()
-  //const [certificateId, setCertificateId] = useState<null | string>(null)
-
+  const [certificateId, setCertificateId] = useState<null | string>(null)
   const handleDownload = async () => {
-    // Detecta se é dispositivo móvel (ajuste o valor conforme sua necessidade)
-    const isMobile = window.innerWidth < 768;
-    // Se mobile, reduz o scale para diminuir a carga de processamento (ex.: 0.8 em vez de 1)
-    const scale = isMobile ? 0.8 : 1;
-
-    // Seleciona os elementos de frente e verso
+    // Seleciona o elemento da frente
     const frontElement = document.getElementById('frontCert');
-    if (!frontElement /* || !backElement*/) return;
+    if (!frontElement) return;
 
-    // Captura os elementos de forma concorrente, verificando se backElement existe
-const frontCanvas = await html2canvas(frontElement, { scale });
+    // Renderiza o front
+    const frontCanvas = await html2canvas(frontElement);
+    const imgUrl = frontCanvas.toDataURL('image/png');
+    const response = await fetch(imgUrl);
+    const blob = await response.blob();
 
+    const pdfDoc = await PDFDocument.create();
+    const arrayBuffer = await blob.arrayBuffer();
+    const pngImage = await pdfDoc.embedPng(arrayBuffer);
+    const { width, height } = pngImage.scale(1);
 
-
-
-    const frontImgData = frontCanvas.toDataURL('/certificates/templates/template02.png');
-    //const backImgData = backCanvas.toDataURL('image/png');
-
-    // Cria o PDF usando as dimensões do canvas da frente
-    const pdf = new jsPDF({
-      orientation: 'landscape',
-      unit: 'px',
-      format: [frontCanvas.width, frontCanvas.height],
+    // Adiciona a página da frente
+    const page = pdfDoc.addPage([width, height]);
+    page.drawImage(pngImage, {
+      x: 0,
+      y: 0,
+      width,
+      height,
     });
 
-    // Adiciona a primeira página com a imagem da frente
-    pdf.addImage(frontImgData, 'PNG', 0, 0, frontCanvas.width, frontCanvas.height);
+    // Se houver verso, renderiza e adiciona ao PDF
+    if (data?.verse?.showVerse === true) {
+      const backElement = document.getElementById('verseCert');
+      if (backElement) {
+        const backCanvas = await html2canvas(backElement);
+        const imgUrlVerse = backCanvas.toDataURL('image/png');
+        const responseBack = await fetch(imgUrlVerse);
+        const blobVerse = await responseBack.blob();
+        const arrayBufferVerse = await blobVerse.arrayBuffer();
+        const pngImageVerse = await pdfDoc.embedPng(arrayBufferVerse);
 
-    // Adiciona uma nova página para a imagem do verso
-    //pdf.addPage([backCanvas.width, backCanvas.height], 'landscape');
-    //pdf.addImage(backImgData, 'PNG', 0, 0, backCanvas.width, backCanvas.height);
+        pdfDoc.addPage([width, height]).drawImage(pngImageVerse, {
+          x: 0,
+          y: 0,
+          width,
+          height,
+        });
+      }
+    }
 
-    pdf.save('certificado.pdf');
+    // Gera os bytes do PDF
+    const pdfBytes = await pdfDoc.save();
+    // Cria um Blob para o PDF
+    const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
+    // Cria uma URL para o Blob e força o download
+    const blobUrl = URL.createObjectURL(pdfBlob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = `${data?.eventName} - ${data?.ownerName}.pdf`;
+    link.click();
+    // Revoga a URL criada
+    URL.revokeObjectURL(blobUrl);
   };
 
 
   useEffect(() => {
     const fetchData = async () => {
       const { certificateId } = await params
+      setCertificateId(certificateId)
       const fetchData = await fetch(`/api/get/myCertificateById/${certificateId}`)
 
       if (!fetchData.ok) {
@@ -70,10 +94,10 @@ const frontCanvas = await html2canvas(frontElement, { scale });
         return;
       }
 
-      const fetchDataJson: { data: ICertificateWithEventIdPopulate } = await fetchData.json()
-      setData(fetchDataJson.data)
+      const fetchDataJson: { data: ICertificateWithEventIdPopulate, } = await fetchData.json()
+      setData({ ...fetchDataJson.data, })
       setIsLoading(false)
-      console.log(fetchDataJson)
+
     }
     fetchData()
 
@@ -91,6 +115,66 @@ const frontCanvas = await html2canvas(frontElement, { scale });
           </div>
         </div>
 
+      </main>
+    )
+  }
+  if (data?.certificatePath && ObjectId.isValid(String(data?.certificatePath))) {
+    return (
+      <main className="relative flex flex-col max-w-screen overflow-hidden">
+        <div className='absolute min-h-svg min-w-full z-[500]'>
+          <Fireworks autorun={{
+            speed: 1.5,
+            duration: 1500,
+            delay: 0
+          }} />
+        </div>
+        {/* Cabeçalho fixo com o botão de download */}
+        <div className="flex justify-center items-center p-5 bg-blue-900 w-full z-50 flex flex-col">
+          <div>
+            <h1 className='text-white font-medium '>Clique em baixar para ver o certificado completo</h1>
+          </div>
+        </div>
+        <div
+          id="frontCert"
+          className="relative w-full">
+          <iframe
+          className='w-full h-screen'
+            src={`/api/get/templateScanProxy/${data.certificatePath}|front?t=${Date.now()}`} /* Date.now() é para resolver o problema do Cache. */
+          />
+        </div>
+      </main>
+    )
+  }
+
+  if (data?.onlyImage === true) {
+    return (
+      <main className="relative flex flex-col max-w-screen overflow-hidden">
+        <div className='absolute min-h-svg min-w-full z-[500]'>
+          <Fireworks autorun={{
+            speed: 1.5,
+            duration: 1500,
+            delay: 0
+          }} />
+        </div>
+        {/* Cabeçalho fixo com o botão de download */}
+        <div className="flex justify-center items-center p-5 bg-blue-900 w-full z-50 flex flex-col">
+          <button
+            onClick={handleDownload}
+            className="w-fit px-4 py-2 bg-blue-600 text-white rounded bg-[#09427D] font-bold border-2 border-white hover:text-[#09427D] hover:border-[#09427D] hover:bg-white duration-300 ease-in"
+          >
+            BAIXAR CERTIFICADO
+          </button>
+          <div>
+            <h1 className='text-white font-medium '>Clique em baixar para ver o certificado completo</h1>
+          </div>
+        </div>
+        <div
+          id="frontCert"
+          className="relative w-full">
+          <img
+            src={`/api/get/templateProxy/${certificateId}|front?t=${Date.now()}`} /* Date.now() é para resolver o problema do Cache. */
+          />
+        </div>
       </main>
     )
   }
@@ -128,7 +212,7 @@ const frontCanvas = await html2canvas(frontElement, { scale });
               style={{ width: '2000px', height: '1414px' }}
             >
               <img
-                src={data?.eventId.templatePath}
+                src={`/api/get/templateProxy/${certificateId}|front?t=${Date.now()}`} /* Date.now() é para resolver o problema do Cache. */
                 alt="Certificado"
                 className="w-full h-full object-fill"
               />
@@ -156,7 +240,7 @@ const frontCanvas = await html2canvas(frontElement, { scale });
               style={{ width: '2000px', height: '1414px' }}
             >
               <img
-                src={data?.eventId.templatePath}
+                src={`/api/get/templateProxy/${certificateId}|front?t=${Date.now()}`}
                 alt="Certificado"
                 className="w-full h-full object-fill"
               />
@@ -202,6 +286,56 @@ const frontCanvas = await html2canvas(frontElement, { scale });
           </article>
       }
 
+      {
+        data?.verse?.showVerse == true &&
+        <article className="relative max-w-screen overflow-auto">
+          {/* Verso do Certificado */}
+          <div
+            id="verseCert"
+            className="relative w-full"
+            style={{ width: '2000px', height: '1414px' }}
+          >
+            <img
+              src={`/api/get/templateProxy/${certificateId}|verse?t=${Date.now()}`} /* Date.now() é para resolver o problema do Cache. */
+              alt="Certificado"
+              className="w-full h-full object-fill"
+            />
+            <div className="absolute flex flex-col items-center justify-center top-0 font-bold w-full h-full">
+              <table style={{ ...data?.eventId?.styleContainerVerse?.containerStyle, ...data?.eventId?.styleContainerVerse?.headerStyle }}>
+                <thead className=''>
+                  <tr>
+                    {
+                      data?.verse?.headers?.map((header, index) => (
+                        <th key={index} className="text-center text-lg font-bold" style={{ ...data?.eventId?.styleContainerVerse?.headerStyle }}>
+                          {header}
+                        </th>
+                      ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    data?.verse?.rows?.map((row, index) => (
+                      <tr key={index}>
+                        {
+                          row.map((cell, cellIndex) => (
+                            <td key={cellIndex} className="text-center" style={{ ...libSourceSerif4.style, ...data?.eventId?.styleContainerVerse?.rowsStyle }}>
+                              {cell}
+                            </td>
+                          ))
+                        }
+                      </tr>
+                    ))
+                  }
+                </tbody>
+              </table>
+              <div className=' w-[70%]'>
+              </div>
+
+
+            </div>
+          </div>
+        </article>
+      }
     </main >
   );
 }

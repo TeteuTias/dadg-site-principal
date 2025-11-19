@@ -23,9 +23,15 @@ export async function GET(req: NextRequest, {
     // Verifica se a entrada é um ObjectId válido
     let searchCriteria = {};
     if (mongoose.Types.ObjectId.isValid(searchValue)) {
-        searchCriteria = { _id: new mongoose.Types.ObjectId(searchValue) };
+        searchCriteria = {
+                $or: [
+                    { _id: new mongoose.Types.ObjectId(searchValue) },
+                    { eventId: new mongoose.Types.ObjectId(searchValue) }
+                ]
+    };
     } else {
         searchCriteria = {
+            isReady: true, // Certificados prontos,
             $or: [
                 { ownerName: { $regex: searchValue, $options: "i" } }, // Case insensitive
                 { ownerCpf: { $regex: searchValue, $options: "i" } },

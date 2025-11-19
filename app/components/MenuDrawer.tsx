@@ -30,14 +30,14 @@ export default function MenuDrawer() {
     pathname.startsWith("/coordenadorias/clam")
       ? "#0A7A1A"
       : pathname.startsWith("/coordenadorias/caes")
-      ? "#056653"
-      : pathname.startsWith("/coordenadorias/caep")
-      ? "#000066"
-      : pathname.startsWith("/coordenadorias/cac")
-      ? "#050a4a"
-      : pathname.startsWith("/coordenadorias/clev")
-      ? "#09427d"
-      : "#09427d";
+        ? "#056653"
+        : pathname.startsWith("/coordenadorias/caep")
+          ? "#000066"
+          : pathname.startsWith("/coordenadorias/cac")
+            ? "#050a4a"
+            : pathname.startsWith("/coordenadorias/clev")
+              ? "#526c94"
+              : "#09427d";
   const drawerBackgroundColor = headerBackgroundColor;
 
   useEffect(() => {
@@ -208,7 +208,7 @@ export default function MenuDrawer() {
           overflowX: "hidden",
         }}
       >
-        <button 
+        <button
           className="menu-close-button"
           onClick={() => setMenuAberto(false)}
           style={{ 
@@ -404,7 +404,7 @@ export default function MenuDrawer() {
             }} className="drawer-submenu-content">
               {coordenadoriasSubmenuItems.map((item) => (
                 <Link
-                  key={item.href}
+                  key={item.label}
                   href={item.href}
                   style={{
                     color: "white",

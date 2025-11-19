@@ -10,8 +10,18 @@ export interface ICertificate {
     ownerCpf: string;
     eventName: string;
     ownerEmail: string;
+    certificatePath?: string;
     frontTopperText?: string;
     frontBottomText?: string;
+    isReady?: boolean;
+    onlyImage?: boolean;
+    verse: {
+        showVerse: boolean;
+        topperText?: string;
+        bottomText?: string;
+        headers?: string[];
+        rows?: [string[]];
+    };
     certificateHours: string;
     eventId: ObjectId;
 }
@@ -31,7 +41,16 @@ const CertificateSchema: Schema<ICertificate> = new Schema(
         frontTopperText: { type: String },
         frontBottomText: { type: String },
         certificateHours: { type: String, required: true },
+        onlyImage: { type: Boolean, required: false, default: false },
+        isReady: { type: Boolean, required: false, default: false },
         eventId: { type: Schema.Types.ObjectId, required: true, ref: "EventCertificate" },
+        verse: {
+            showVerse: { type: Boolean, default: false },
+            topperText: { type: String, required: false },
+            bottomText: { type: String, required: false },
+            headers: { type: [String], required: false },
+            rows: { type: [[String]], required: false }
+        }
 
     },
     { timestamps: true, collection: "certificates.datails" }

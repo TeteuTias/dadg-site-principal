@@ -25,18 +25,18 @@ const QuemSomos: React.FC = () => {
     <div className="caes-container min-h-screen">
       <div className="caes-background"></div>
       <div className="particles"></div>
-      
+
       <div className="caes-content max-w-7xl mx-auto px-6 py-16">
         {/* Seção do Logo e Título */}
         <div className="logo-container flex flex-col items-center space-y-12 mb-24">
           <div className="logo-circle w-80 h-80 rounded-full overflow-hidden border-4 border-green-500 shadow-2xl animate-float">
-            <img 
-              src="/CAES.jpg" 
-              alt="Logo CAES" 
-              className="logo-image w-full h-full object-cover"
+            <img
+              src="/coordinators/CAES.jpg"
+              alt="Logo CAES"
+              className="logo-image w-full h-full object-cover rounded-full"
             />
           </div>
-          
+
           <div className="title-container text-center space-y-6">
             <h1 className="title-glow text-9xl font-bold animate-glow">
               CAES

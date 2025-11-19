@@ -40,7 +40,7 @@ function GradientBackground() {
 
     let step = 0;
     // Índices das cores: [atual esquerda, próxima esquerda, atual direita, próxima direita]
-    let colorIndices = [0, 1, 2, 3];
+    const colorIndices = [0, 1, 2, 3];
     const gradientSpeed = 0.002;
 
     function updateGradient() {
@@ -124,7 +124,7 @@ function SearchInput() {
       } else {
         setData(result.data);
       }
-    } catch (error) {
+    } catch {
       setNoResults(true);
     } finally {
       setIsLoading(false);
@@ -155,7 +155,7 @@ function SearchInput() {
         </div>
       )}
       {!noResults && data.length > 0 && (
-        <div className="w-full max-h-64 overflow-auto space-y-4 mt-4">
+        <div className="w-full max-h-64 overflow-auto space-x-2 mt-4">
           {data.map((certificate) => (
             <Link
               key={String(certificate._id)}
