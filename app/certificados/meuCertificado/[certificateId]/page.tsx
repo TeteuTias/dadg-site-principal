@@ -3,7 +3,7 @@
 import React from 'react';
 import html2canvas from 'html2canvas';
 import { PDFDocument } from 'pdf-lib';
-
+import { ObjectId } from 'bson';
 import Kindred from '@/public/fonts/lib/libFontKindred';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -23,28 +23,23 @@ export default function Home({
   const [data, setData] = useState<ICertificateWithEventIdPopulate | null>(null)
   const router = useRouter()
   const [certificateId, setCertificateId] = useState<null | string>(null)
-
   const handleDownload = async () => {
-    // Seleciona os elementos de frente e verso
+    // Seleciona o elemento da frente
     const frontElement = document.getElementById('frontCert');
-    // const backElement = document.getElementById('backCert');
-    if (!frontElement /* || !backElement*/) return;
+    if (!frontElement) return;
 
-    // Captura os dois elementos de forma concorrente
-    const [frontCanvas, /*backCanvas*/] = await Promise.all([
-      html2canvas(frontElement,),
-      //html2canvas(backElement, { scale }),
-    ]);
-    const imgUrl = frontCanvas.toDataURL(`image/png`)
-    const response = await fetch(imgUrl)
-    const blob = await response.blob()
+    // Renderiza o front
+    const frontCanvas = await html2canvas(frontElement);
+    const imgUrl = frontCanvas.toDataURL('image/png');
+    const response = await fetch(imgUrl);
+    const blob = await response.blob();
 
     const pdfDoc = await PDFDocument.create();
-    // Embute a imagem PNG no PDF
     const arrayBuffer = await blob.arrayBuffer();
     const pngImage = await pdfDoc.embedPng(arrayBuffer);
     const { width, height } = pngImage.scale(1);
-    // Adiciona uma página com as dimensões da imagem
+
+    // Adiciona a página da frente
     const page = pdfDoc.addPage([width, height]);
     page.drawImage(pngImage, {
       x: 0,
@@ -53,9 +48,30 @@ export default function Home({
       height,
     });
 
+    // Se houver verso, renderiza e adiciona ao PDF
+    if (data?.verse?.showVerse === true) {
+      const backElement = document.getElementById('verseCert');
+      if (backElement) {
+        const backCanvas = await html2canvas(backElement);
+        const imgUrlVerse = backCanvas.toDataURL('image/png');
+        const responseBack = await fetch(imgUrlVerse);
+        const blobVerse = await responseBack.blob();
+        const arrayBufferVerse = await blobVerse.arrayBuffer();
+        const pngImageVerse = await pdfDoc.embedPng(arrayBufferVerse);
+
+        pdfDoc.addPage([width, height]).drawImage(pngImageVerse, {
+          x: 0,
+          y: 0,
+          width,
+          height,
+        });
+      }
+    }
+
     // Gera os bytes do PDF
     const pdfBytes = await pdfDoc.save();
     // Cria um Blob para o PDF
+    // @ts-expect-error: Erro de tipificação
     const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
     // Cria uma URL para o Blob e força o download
     const blobUrl = URL.createObjectURL(pdfBlob);
@@ -103,6 +119,66 @@ export default function Home({
       </main>
     )
   }
+  if (data?.certificatePath && ObjectId.isValid(String(data?.certificatePath))) {
+    return (
+      <main className="relative flex flex-col max-w-screen overflow-hidden">
+        <div className='absolute min-h-svg min-w-full z-[500]'>
+          <Fireworks autorun={{
+            speed: 1.5,
+            duration: 1500,
+            delay: 0
+          }} />
+        </div>
+        {/* Cabeçalho fixo com o botão de download */}
+        <div className="flex justify-center items-center p-5 bg-blue-900 w-full z-50 flex flex-col">
+          <div>
+            <h1 className='text-white font-medium '>Clique em baixar para ver o certificado completo</h1>
+          </div>
+        </div>
+        <div
+          id="frontCert"
+          className="relative w-full">
+          <iframe
+          className='w-full h-screen'
+            src={`/api/get/templateScanProxy/${data.certificatePath}|front?t=${Date.now()}`} /* Date.now() é para resolver o problema do Cache. */
+          />
+        </div>
+      </main>
+    )
+  }
+
+  if (data?.onlyImage === true) {
+    return (
+      <main className="relative flex flex-col max-w-screen overflow-hidden">
+        <div className='absolute min-h-svg min-w-full z-[500]'>
+          <Fireworks autorun={{
+            speed: 1.5,
+            duration: 1500,
+            delay: 0
+          }} />
+        </div>
+        {/* Cabeçalho fixo com o botão de download */}
+        <div className="flex justify-center items-center p-5 bg-blue-900 w-full z-50 flex flex-col">
+          <button
+            onClick={handleDownload}
+            className="w-fit px-4 py-2 bg-blue-600 text-white rounded bg-[#09427D] font-bold border-2 border-white hover:text-[#09427D] hover:border-[#09427D] hover:bg-white duration-300 ease-in"
+          >
+            BAIXAR CERTIFICADO
+          </button>
+          <div>
+            <h1 className='text-white font-medium '>Clique em baixar para ver o certificado completo</h1>
+          </div>
+        </div>
+        <div
+          id="frontCert"
+          className="relative w-full">
+          <img
+            src={`/api/get/templateProxy/${certificateId}|front?t=${Date.now()}`} /* Date.now() é para resolver o problema do Cache. */
+          />
+        </div>
+      </main>
+    )
+  }
 
   return (
     <main className="relative flex flex-col max-w-screen overflow-hidden">
@@ -137,7 +213,7 @@ export default function Home({
               style={{ width: '2000px', height: '1414px' }}
             >
               <img
-                src={`/api/get/templateProxy/${certificateId}?t=${Date.now()}`} /* Date.now() é para resolver o problema do Cache. */
+                src={`/api/get/templateProxy/${certificateId}|front?t=${Date.now()}`} /* Date.now() é para resolver o problema do Cache. */
                 alt="Certificado"
                 className="w-full h-full object-fill"
               />
@@ -165,7 +241,7 @@ export default function Home({
               style={{ width: '2000px', height: '1414px' }}
             >
               <img
-                src={`/api/get/templateProxy/${certificateId}?t=${Date.now()}`}
+                src={`/api/get/templateProxy/${certificateId}|front?t=${Date.now()}`}
                 alt="Certificado"
                 className="w-full h-full object-fill"
               />
@@ -211,6 +287,56 @@ export default function Home({
           </article>
       }
 
+      {
+        data?.verse?.showVerse == true &&
+        <article className="relative max-w-screen overflow-auto">
+          {/* Verso do Certificado */}
+          <div
+            id="verseCert"
+            className="relative w-full"
+            style={{ width: '2000px', height: '1414px' }}
+          >
+            <img
+              src={`/api/get/templateProxy/${certificateId}|verse?t=${Date.now()}`} /* Date.now() é para resolver o problema do Cache. */
+              alt="Certificado"
+              className="w-full h-full object-fill"
+            />
+            <div className="absolute flex flex-col items-center justify-center top-0 font-bold w-full h-full">
+              <table style={{ ...data?.eventId?.styleContainerVerse?.containerStyle, ...data?.eventId?.styleContainerVerse?.headerStyle }}>
+                <thead className=''>
+                  <tr>
+                    {
+                      data?.verse?.headers?.map((header, index) => (
+                        <th key={index} className="text-center text-lg font-bold" style={{ ...data?.eventId?.styleContainerVerse?.headerStyle }}>
+                          {header}
+                        </th>
+                      ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    data?.verse?.rows?.map((row, index) => (
+                      <tr key={index}>
+                        {
+                          row.map((cell, cellIndex) => (
+                            <td key={cellIndex} className="text-center" style={{ ...libSourceSerif4.style, ...data?.eventId?.styleContainerVerse?.rowsStyle }}>
+                              {cell}
+                            </td>
+                          ))
+                        }
+                      </tr>
+                    ))
+                  }
+                </tbody>
+              </table>
+              <div className=' w-[70%]'>
+              </div>
+
+
+            </div>
+          </div>
+        </article>
+      }
     </main >
   );
 }

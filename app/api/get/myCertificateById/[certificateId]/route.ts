@@ -31,7 +31,8 @@ export async function GET(req: NextRequest, {
 
 
     const owners = await CertificateModel.findOne({
-        _id: certificateId
+        _id: certificateId,
+        isReady: true, // Certificados prontos,
     }).populate<{ eventId: IEventCertificate }>("eventId");
     if (!owners) {
         return Response.json({ message: "Seu Certificado não foi encontrado. Entre em contato com o Suporte." }, { status: 500 });

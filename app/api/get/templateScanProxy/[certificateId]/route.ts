@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { ObjectId } from "bson";
+import ScanTemplateModel from "@/app/lib/models/ScanTemplate";
 import mongoose from "mongoose";
 import { connectToDatabase } from "@/app/lib/mongodb";
 import CertificateModel from "@/app/lib/models/CertificateModel";
@@ -15,6 +17,21 @@ const s3 = new AWS.S3({
     secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
     signatureVersion: 'v4',
 });
+
+const getMimeType = (extension: string): string => {
+    switch (extension.toLowerCase()) {
+        case "jpg":
+        case "jpeg":
+            return "image/jpeg";
+        case "png":
+            return "image/png";
+        case "pdf":
+            return "application/pdf";
+        default:
+            return "application/octet-stream";
+    }
+};
+
 
 const getSignedUrl = async (bucket: string, key: string): Promise<string | undefined> => {
     const params = { Bucket: bucket, Key: key }; // coloca a key aqui dps
@@ -56,11 +73,31 @@ export async function GET(req: NextRequest, {
 }: {
     params: Promise<{ certificateId: string }>
 }) {
+    try {
 
-    await connectToDatabase()
     const { certificateId } = await params
     const typeTemplate = certificateId.split("|")[1]; // Pega o segundo valor após o pipe
     const searchValueId = certificateId.split("|")[0]; // Pega o primeiro valor antes do pipe
+
+    if (ObjectId.isValid(searchValueId)) {
+        // procurando o template
+        const template = await ScanTemplateModel.findOne({ _id: new ObjectId(searchValueId) }).lean();
+        if (!template) {
+            return Response.json({ message: "Template não encontrado." }, { status: 404 });
+        }
+        await connectToDatabase()
+        const templateLink = await getSignedUrl(process.env.R2_BUCKET_NAME ?? "", `${process.env.R2_SUBFOLDER}/${template._id}.${template.templateExtension}`);
+        if (!templateLink) {
+            throw new Error("Erro ao baixar seu Certificado")
+        }
+        const arrayBuffer = await getBufferByImageUrl(templateLink)
+        return new Response(arrayBuffer, {
+            headers: {
+                'Content-Type': getMimeType(template.templateExtension),
+                'Cache-Control': 'public, max-age=86400' // cache de 1 dia
+            }
+        })
+    }
 
     if (!typeTemplate || (typeTemplate !== "front" && typeTemplate !== "verse")) {
         return Response.json({ message: "O parâmetro 'certificateId' deve conter um tipo válido (front ou verse)." }, { status: 500 });
@@ -68,6 +105,10 @@ export async function GET(req: NextRequest, {
     if (!searchValueId || !mongoose.Types.ObjectId.isValid(searchValueId)) {
         return Response.json({ message: "O parâmetro 'certificateId' é obrigatório." }, { status: 500 });
     }
+    //
+
+
+    //
 
 
     const owners = await CertificateModel.findOne({
@@ -92,4 +133,7 @@ export async function GET(req: NextRequest, {
             'Cache-Control': 'public, max-age=86400' // cache de 1 dia
         }
     })
+    } catch (err) {
+        return Response.json({"message":err instanceof Error ? err.message : "ERROR"},{status:500})
+    }
 }
