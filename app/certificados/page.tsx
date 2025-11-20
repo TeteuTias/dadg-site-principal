@@ -109,6 +109,7 @@ function SearchInput() {
   const [isLoading, setIsLoading] = useState(false);
   const [noResults, setNoResults] = useState(false);
   const [data, setData] = useState<ICertificate[]>([]);
+  const [pageNumber, setPageNumber] = useState<number>(0)
 
   const handleSearch = async () => {
     setData([]);
@@ -116,7 +117,12 @@ function SearchInput() {
     setNoResults(false);
 
     try {
-      const response = await fetch(`/api/get/myCertificate/${inputValue}`);
+      const params = {
+        search: inputValue,
+        pageNumber: pageNumber.toString()
+        // Adicione quantos pares chave:valor você precisar
+      };
+      const response = await fetch(`/api/get/myCertificate/${new URLSearchParams(params).toString()}`);
       const result: { data: ICertificate[] } = await response.json();
 
       if (!response.ok) {
@@ -155,31 +161,34 @@ function SearchInput() {
         </div>
       )}
       {!noResults && data.length > 0 && (
-        <div className="w-full max-h-64 overflow-auto space-x-2 mt-4">
-          {data.map((certificate) => (
-            <Link
-              key={String(certificate._id)}
-              prefetch={true}
-              href={`/certificados/meuCertificado/${String(certificate._id)}`}
-            >
-              <div className="border border-gray-200 rounded-xl p-4 bg-gray-50 transition duration-300 ease-in-out hover:bg-blue-50 hover:shadow-lg">
-                <h1 className="font-extrabold text-lg text-blue-900">
-                  {certificate.eventName}
-                </h1>
-                <div className="flex flex-col sm:flex-row justify-between text-sm text-gray-700 mt-2">
-                  <div>
-                    <p className="uppercase tracking-wide text-xs">Titular</p>
-                    <p className="font-medium">{certificate.ownerName}</p>
-                  </div>
-                  <div>
-                    <p className="uppercase tracking-wide text-xs">Código Verificador</p>
-                    <p className="font-medium">{String(certificate._id)}</p>
+        <>
+          <div className="w-full max-h-64 overflow-auto space-x-2 mt-4">
+            {data.map((certificate) => (
+              <Link
+                key={String(certificate._id)}
+                prefetch={true}
+                href={`/certificados/meuCertificado/${String(certificate._id)}`}
+              >
+                <div className="border border-gray-200 rounded-xl p-4 bg-gray-50 transition duration-300 ease-in-out hover:bg-blue-50 hover:shadow-lg">
+                  <h1 className="font-extrabold text-lg text-blue-900">
+                    {certificate.eventName}
+                  </h1>
+                  <div className="flex flex-col sm:flex-row justify-between text-sm text-gray-700 mt-2">
+                    <div>
+                      <p className="uppercase tracking-wide text-xs">Titular</p>
+                      <p className="font-medium">{certificate.ownerName}</p>
+                    </div>
+                    <div>
+                      <p className="uppercase tracking-wide text-xs">Código Verificador</p>
+                      <p className="font-medium">{String(certificate._id)}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+              </Link>
+            ))}
+          </div>
+          <button>MAIS</button>
+        </>
       )}
     </div>
   );
