@@ -209,7 +209,7 @@ export default function Home() {
                 {`Validação de Certificados`.toLocaleUpperCase()}
               </h1>
               <h2 className="font-medium text-gray-600 text-sm sm:text-base">
-                Pesquise usando: Nome, CPF, Email, Evento ou Código Verificador
+                Pesquise usando: Nome
               </h2>
             </div>
           </article>
