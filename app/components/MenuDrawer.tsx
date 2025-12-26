@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -96,11 +96,9 @@ export default function MenuDrawer() {
     ? `${coordenadoriasSubmenuItems.length * 40}px`
     : "0px";
 
-  // Verifica se é tela pequena (mobile)
   const isMobile = windowWidth < 768;
-  // Define altura, tamanho da fonte e espaçamento responsivos
   const headerHeight = isMobile ? (scrolled ? "30px" : "35px") : (scrolled ? "35px" : "45px");
-  const headerFontSize = isMobile ? (scrolled ? "10px" : "12px") : (scrolled ? "14px" : "16px");
+  const headerFontSize = isMobile ? (scrolled ? "11px" : "12px") : (scrolled ? "14px" : "16px");
   const headerGap = isMobile ? "8px" : "16px";
 
   return (
@@ -155,18 +153,18 @@ export default function MenuDrawer() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            gap: headerGap,
+            gap: isMobile ? "6px" : headerGap,
             textTransform: "uppercase",
             textAlign: "center",
           }}
         >
-          <Link href="/coordenadorias" style={{ color: "white", textDecoration: "none" }}>
+          <Link href="/coordenadorias" style={{ color: "white", textDecoration: "none", fontSize: headerFontSize }}>
             Coordenadorias
           </Link>
-          <Link href="/" style={{ color: "white", textDecoration: "none" }}>
+          <Link href="/" style={{ color: "white", textDecoration: "none", fontSize: headerFontSize }}>
             Início
           </Link>
-          <Link href="/certificados" style={{ color: "white", textDecoration: "none" }}>
+          <Link href="/certificados" style={{ color: "white", textDecoration: "none", fontSize: headerFontSize }}>
             Certificados
           </Link>
         </div>
@@ -176,8 +174,8 @@ export default function MenuDrawer() {
           <Image
             src="/dadg_sem_fundo.png"
             alt="Logo DADG"
-            width={30}
-            height={30}
+            width={isMobile ? 24 : 30}
+            height={isMobile ? 24 : 30}
             className="object-contain"
           />
         </div>
@@ -194,12 +192,12 @@ export default function MenuDrawer() {
           height: "100vh",
           backgroundColor: drawerBackgroundColor,
           color: "white",
-          padding: "20px",
-          paddingTop: "80px",
+          padding: isMobile ? "16px" : "20px",
+          paddingTop: isMobile ? "60px" : "80px",
           boxSizing: "border-box",
           display: "flex",
           flexDirection: "column",
-          gap: "15px",
+          gap: isMobile ? "12px" : "15px",
           zIndex: 1100,
           boxShadow: "2px 0 20px rgba(0, 0, 0, 0.3)",
           transform: menuAberto ? "translateX(0)" : "translateX(-100%)",
@@ -214,13 +212,13 @@ export default function MenuDrawer() {
           style={{ 
             cursor: "pointer", 
             alignSelf: "flex-end", 
-            marginRight: "-10px", 
-            marginTop: "-10px",
+            marginRight: isMobile ? "-5px" : "-10px", 
+            marginTop: isMobile ? "-5px" : "-10px",
             background: "rgba(255, 255, 255, 0.1)",
             border: "none",
             borderRadius: "50%",
-            width: "40px",
-            height: "40px",
+            width: isMobile ? "36px" : "40px",
+            height: isMobile ? "36px" : "40px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -251,15 +249,16 @@ export default function MenuDrawer() {
               textDecoration: "none",
               display: "flex",
               alignItems: "center",
-              gap: "12px",
-              padding: "12px 16px",
+              gap: isMobile ? "10px" : "12px",
+              padding: isMobile ? "10px 14px" : "12px 16px",
               borderRadius: "12px",
               transition: "all 0.3s ease",
-              background: pathname === "/" ? "rgba(255, 255, 255, 0.1)" : "transparent"
+              background: pathname === "/" ? "rgba(255, 255, 255, 0.1)" : "transparent",
+              fontSize: isMobile ? "14px" : "16px"
             }} 
             onClick={() => setMenuAberto(false)}
           >
-            <Home size={24} />
+            <Home size={isMobile ? 20 : 24} />
             Início
           </Link>
 
@@ -270,15 +269,16 @@ export default function MenuDrawer() {
               textDecoration: "none",
               display: "flex",
               alignItems: "center",
-              gap: "12px",
-              padding: "12px 16px",
+              gap: isMobile ? "10px" : "12px",
+              padding: isMobile ? "10px 14px" : "12px 16px",
               borderRadius: "12px",
               transition: "all 0.3s ease",
-              background: pathname === "/certificados" ? "rgba(255, 255, 255, 0.1)" : "transparent"
+              background: pathname === "/certificados" ? "rgba(255, 255, 255, 0.1)" : "transparent",
+              fontSize: isMobile ? "14px" : "16px"
             }} 
             onClick={() => setMenuAberto(false)}
           >
-            <FileText size={24} />
+            <FileText size={isMobile ? 20 : 24} />
             Certificados
           </Link>
 
@@ -289,15 +289,16 @@ export default function MenuDrawer() {
               textDecoration: "none",
               display: "flex",
               alignItems: "center",
-              gap: "12px",
-              padding: "12px 16px",
+              gap: isMobile ? "10px" : "12px",
+              padding: isMobile ? "10px 14px" : "12px 16px",
               borderRadius: "12px",
               transition: "all 0.3s ease",
-              background: pathname === "/mural" ? "rgba(255, 255, 255, 0.1)" : "transparent"
+              background: pathname === "/mural" ? "rgba(255, 255, 255, 0.1)" : "transparent",
+              fontSize: isMobile ? "14px" : "16px"
             }} 
             onClick={() => setMenuAberto(false)}
           >
-            <LayoutGrid size={24} />
+            <LayoutGrid size={isMobile ? 20 : 24} />
             Mural
           </Link>
 
@@ -308,15 +309,16 @@ export default function MenuDrawer() {
               textDecoration: "none",
               display: "flex",
               alignItems: "center",
-              gap: "12px",
-              padding: "12px 16px",
+              gap: isMobile ? "10px" : "12px",
+              padding: isMobile ? "10px 14px" : "12px 16px",
               borderRadius: "12px",
               transition: "all 0.3s ease",
-              background: pathname === "/eventos" ? "rgba(255, 255, 255, 0.1)" : "transparent"
+              background: pathname === "/eventos" ? "rgba(255, 255, 255, 0.1)" : "transparent",
+              fontSize: isMobile ? "14px" : "16px"
             }} 
             onClick={() => setMenuAberto(false)}
           >
-            <Calendar size={24} />
+            <Calendar size={isMobile ? 20 : 24} />
             Eventos
           </Link>
 
@@ -327,15 +329,16 @@ export default function MenuDrawer() {
               textDecoration: "none",
               display: "flex",
               alignItems: "center",
-              gap: "12px",
-              padding: "12px 16px",
+              gap: isMobile ? "10px" : "12px",
+              padding: isMobile ? "10px 14px" : "12px 16px",
               borderRadius: "12px",
               transition: "all 0.3s ease",
-              background: pathname === "/contato" ? "rgba(255, 255, 255, 0.1)" : "transparent"
+              background: pathname === "/contato" ? "rgba(255, 255, 255, 0.1)" : "transparent",
+              fontSize: isMobile ? "14px" : "16px"
             }} 
             onClick={() => setMenuAberto(false)}
           >
-            <Mail size={24} />
+            <Mail size={isMobile ? 20 : 24} />
             Contato
           </Link>
 
@@ -346,15 +349,16 @@ export default function MenuDrawer() {
               textDecoration: "none",
               display: "flex",
               alignItems: "center",
-              gap: "12px",
-              padding: "12px 16px",
+              gap: isMobile ? "10px" : "12px",
+              padding: isMobile ? "10px 14px" : "12px 16px",
               borderRadius: "12px",
               transition: "all 0.3s ease",
-              background: pathname === "/sobre" ? "rgba(255, 255, 255, 0.1)" : "transparent"
+              background: pathname === "/sobre" ? "rgba(255, 255, 255, 0.1)" : "transparent",
+              fontSize: isMobile ? "14px" : "16px"
             }} 
             onClick={() => setMenuAberto(false)}
           >
-            <HelpCircle size={24} />
+            <HelpCircle size={isMobile ? 20 : 24} />
             Sobre Nós
           </Link>
         </div>
@@ -366,20 +370,21 @@ export default function MenuDrawer() {
               display: "flex", 
               alignItems: "center", 
               justifyContent: "space-between",
-              padding: "12px 16px",
+              padding: isMobile ? "10px 14px" : "12px 16px",
               borderRadius: "12px",
               cursor: "pointer",
               transition: "all 0.3s ease",
-              background: coordenadoriasSubmenuOpen ? "rgba(255, 255, 255, 0.1)" : "transparent"
+              background: coordenadoriasSubmenuOpen ? "rgba(255, 255, 255, 0.1)" : "transparent",
+              fontSize: isMobile ? "14px" : "16px"
             }}
             onClick={toggleCoordenadoriasSubmenu}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-              <Users size={24} />
+            <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "10px" : "12px" }}>
+              <Users size={isMobile ? 20 : 24} />
               <span>Coordenadorias</span>
             </div>
             <ChevronDown 
-              size={20}
+              size={isMobile ? 18 : 20}
               style={{ 
                 transform: coordenadoriasSubmenuOpen ? "rotate(180deg)" : "rotate(0deg)",
                 transition: "transform 0.3s ease"
@@ -409,18 +414,19 @@ export default function MenuDrawer() {
                   style={{
                     color: "white",
                     textDecoration: "none",
-                    padding: "10px 16px",
+                    padding: isMobile ? "8px 14px" : "10px 16px",
                     borderRadius: "8px",
                     transition: "all 0.3s ease",
                     background: pathname === item.href ? "rgba(255, 255, 255, 0.1)" : "transparent",
                     display: "flex",
                     alignItems: "center",
-                    gap: "8px",
-                    minHeight: "40px"
+                    gap: isMobile ? "8px" : "8px",
+                    minHeight: isMobile ? "36px" : "40px",
+                    fontSize: isMobile ? "13px" : "14px"
                   }}
                   onClick={() => setMenuAberto(false)}
                 >
-                  {item.icon}
+                  {React.cloneElement(item.icon, { size: isMobile ? 16 : 16 })}
                   {item.label}
                 </Link>
               ))}

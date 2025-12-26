@@ -45,43 +45,43 @@ const instagramAccounts = [
 
 export default function ContatoPage() {
   return (
-    <main className="relative min-h-screen w-full overflow-hidden pb-40" style={{ ...poppins.style, backgroundColor: "#ffffff" }}>
-      <div className="relative flex flex-col items-center justify-center p-8">
-        <header className="mb-12 text-center">
-          <h1 className="text-4xl font-bold text-[#09427d] uppercase mb-4">Contato</h1>
-          <p className="text-lg text-[#09427d]">
+    <main className="relative min-h-screen w-full overflow-hidden pb-20 sm:pb-40" style={{ ...poppins.style, backgroundColor: "#ffffff" }}>
+      <div className="relative flex flex-col items-center justify-center p-4 sm:p-8">
+        <header className="mb-8 sm:mb-12 text-center px-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#09427d] uppercase mb-3 sm:mb-4">Contato</h1>
+          <p className="text-sm sm:text-base md:text-lg text-[#09427d]">
             Siga-nos no Instagram para ficar por dentro das novidades
           </p>
         </header>
 
-        <section className="w-full max-w-4xl grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+        <section className="w-full max-w-4xl grid gap-4 sm:gap-6 md:gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 px-4">
           {instagramAccounts.map((account) => (
             <Link
               key={account.handle}
               href={account.url}
               target="_blank"
-              className="instagram-hover flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-md transition-transform duration-300 hover:scale-105 cursor-pointer"
+              className="instagram-hover flex flex-col items-center justify-center p-4 sm:p-6 bg-white rounded-xl shadow-md transition-transform duration-300 hover:scale-105 cursor-pointer"
             >
-              <div className="mb-4">
-                <FaInstagram className="w-12 h-12 text-[#09427d]" />
+              <div className="mb-3 sm:mb-4">
+                <FaInstagram className="w-10 h-10 sm:w-12 sm:h-12 text-[#09427d]" />
               </div>
               <div className="text-center">
-                <h2 className="text-xl font-bold text-[#09427d] uppercase">
+                <h2 className="text-base sm:text-lg md:text-xl font-bold text-[#09427d] uppercase break-words">
                   {account.name}
                 </h2>
-                <p className="text-lg text-gray-600">{account.handle}</p>
+                <p className="text-sm sm:text-base md:text-lg text-gray-600 break-words">{account.handle}</p>
               </div>
             </Link>
           ))}
         </section>
 
-        <section className="mt-12 w-full max-w-4xl mx-auto">
+        <section className="mt-8 sm:mt-12 w-full max-w-4xl mx-auto px-4">
           <div className="email-shadow-wrapper mx-auto">
-            <div className="p-6 bg-white rounded-xl email-hover text-center transition-transform duration-300 hover:scale-105">
-              <h2 className="text-2xl font-bold text-[#09427d] uppercase mb-2">Email</h2>
+            <div className="p-4 sm:p-6 bg-white rounded-xl email-hover text-center transition-transform duration-300 hover:scale-105">
+              <h2 className="text-xl sm:text-2xl font-bold text-[#09427d] uppercase mb-2">Email</h2>
               <a
                 href="mailto:dadg.imepac@gmail.com"
-                className="text-lg text-gray-600 hover:text-[#09427d] transition-colors duration-300"
+                className="text-sm sm:text-base md:text-lg text-gray-600 hover:text-[#09427d] transition-colors duration-300 break-all"
               >
                 dadg.imepac@gmail.com
               </a>

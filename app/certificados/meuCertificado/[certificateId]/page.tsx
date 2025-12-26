@@ -4,7 +4,6 @@ import React from 'react';
 import html2canvas from 'html2canvas';
 import { PDFDocument } from 'pdf-lib';
 import { ObjectId } from 'bson';
-import Kindred from '@/public/fonts/lib/libFontKindred';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ICertificateWithEventIdPopulate } from '@/app/lib/models/CertificateModel';
@@ -23,6 +22,11 @@ export default function Home({
   const [data, setData] = useState<ICertificateWithEventIdPopulate | null>(null)
   const router = useRouter()
   const [certificateId, setCertificateId] = useState<null | string>(null)
+
+  const handleBack = () => {
+    // Restaura o estado salvo e volta para a página de certificados
+    router.push('/certificados');
+  }
   const handleDownload = async () => {
     // Seleciona o elemento da frente
     const frontElement = document.getElementById('frontCert');
@@ -106,16 +110,24 @@ export default function Home({
 
   if (isLoading) {
     return (
-      <main className="relative flex flex-col max-w-screen overflow-hidden">
-        <div className="fixed inset-0 flex items-center justify-center bg-[#09427D] bg-opacity-50">
-          <div className="bg-white p-6 rounded-md shadow-md">
-            <p className="text-lg" onClick={() => {
-              // isso daqui so serve para eu colocar as fontes que uso, e conseguir contornar o ESlint rules.
-              console.log(Kindred)
-            }}>C A R R E G A N D O</p>
+      <main className="relative flex flex-col max-w-screen overflow-hidden min-h-screen">
+        <div className="fixed inset-0 flex items-center justify-center bg-[#09427D] bg-opacity-90 backdrop-blur-sm z-50">
+          <div className="bg-white p-8 sm:p-10 rounded-2xl shadow-2xl max-w-sm w-full mx-4">
+            <div className="flex flex-col items-center space-y-6">
+              <div className="relative w-16 h-16 sm:w-20 sm:h-20">
+                <div className="absolute inset-0 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+                <div className="absolute inset-2 border-4 border-transparent border-t-blue-400 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '0.8s' }}></div>
+              </div>
+              <div className="text-center">
+                <p className="text-lg sm:text-xl font-semibold text-gray-800 mb-2">Carregando Certificado</p>
+                <p className="text-sm text-gray-600">Aguarde um momento...</p>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                <div className="bg-blue-600 h-2 rounded-full animate-pulse" style={{ width: '60%', animation: 'pulse 1.5s ease-in-out infinite' }}></div>
+              </div>
+            </div>
           </div>
         </div>
-
       </main>
     )
   }
@@ -129,18 +141,36 @@ export default function Home({
             delay: 0
           }} />
         </div>
-        {/* Cabeçalho fixo com o botão de download */}
-        <div className="flex justify-center items-center p-5 bg-blue-900 w-full z-50 flex flex-col">
-          <div>
-            <h1 className='text-white font-medium '>Clique em baixar para ver o certificado completo</h1>
+        {/* Cabeçalho fixo com botão de voltar */}
+        <div className="flex justify-between items-center p-3 sm:p-5 bg-blue-900 w-full z-50">
+          <button
+            onClick={handleBack}
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors duration-200 text-sm sm:text-base"
+          >
+            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Voltar
+          </button>
+          <div className="text-center px-2 flex-1">
+            <h1 className='text-white font-medium text-xs sm:text-sm md:text-base'>Clique em baixar para ver o certificado completo</h1>
           </div>
+          <div className="w-20 sm:w-24"></div>
         </div>
         <div
           id="frontCert"
-          className="relative w-full">
+          className="relative w-full"
+          style={{ 
+            width: '100%', 
+            maxWidth: '2000px',
+            aspectRatio: '2000 / 1414',
+            margin: '0 auto'
+          }}
+        >
           <iframe
-          className='w-full h-screen'
-            src={`/api/get/templateScanProxy/${data.certificatePath}|front?t=${Date.now()}`} /* Date.now() é para resolver o problema do Cache. */
+            className='w-full h-full'
+            src={`/api/get/templateScanProxy/${data.certificatePath}|front?t=${Date.now()}`}
+            title="Certificado"
           />
         </div>
       </main>
@@ -158,22 +188,41 @@ export default function Home({
           }} />
         </div>
         {/* Cabeçalho fixo com o botão de download */}
-        <div className="flex justify-center items-center p-5 bg-blue-900 w-full z-50 flex flex-col">
+        <div className="flex justify-between items-center p-3 sm:p-5 bg-blue-900 w-full z-50 gap-2">
           <button
-            onClick={handleDownload}
-            className="w-fit px-4 py-2 bg-blue-600 text-white rounded bg-[#09427D] font-bold border-2 border-white hover:text-[#09427D] hover:border-[#09427D] hover:bg-white duration-300 ease-in"
+            onClick={handleBack}
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors duration-200 text-sm sm:text-base flex-shrink-0"
           >
-            BAIXAR CERTIFICADO
+            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Voltar
           </button>
-          <div>
-            <h1 className='text-white font-medium '>Clique em baixar para ver o certificado completo</h1>
+          <div className="flex flex-col items-center gap-2 flex-1">
+            <button
+              onClick={handleDownload}
+              className="w-full sm:w-fit px-4 py-2 bg-blue-600 text-white rounded bg-[#09427D] font-bold border-2 border-white hover:text-[#09427D] hover:border-[#09427D] hover:bg-white duration-300 ease-in text-sm sm:text-base"
+            >
+              BAIXAR CERTIFICADO
+            </button>
+            <h1 className='text-white font-medium text-xs sm:text-sm md:text-base text-center'>Clique em baixar para ver o certificado completo</h1>
           </div>
+          <div className="w-20 sm:w-24 flex-shrink-0"></div>
         </div>
         <div
           id="frontCert"
-          className="relative w-full">
+          className="relative w-full"
+          style={{ 
+            width: '100%', 
+            maxWidth: '2000px',
+            aspectRatio: '2000 / 1414',
+            margin: '0 auto'
+          }}
+        >
           <img
-            src={`/api/get/templateProxy/${certificateId}|front?t=${Date.now()}`} /* Date.now() é para resolver o problema do Cache. */
+            src={`/api/get/templateProxy/${certificateId}|front?t=${Date.now()}`}
+            alt="Certificado"
+            className="w-full h-full object-contain"
           />
         </div>
       </main>
@@ -190,16 +239,26 @@ export default function Home({
         }} />
       </div>
       {/* Cabeçalho fixo com o botão de download */}
-      <div className="flex justify-center items-center p-5 bg-blue-900 w-full z-50 flex flex-col">
+      <div className="flex justify-between items-center p-3 sm:p-5 bg-blue-900 w-full z-50 gap-2">
         <button
-          onClick={handleDownload}
-          className="w-fit px-4 py-2 bg-blue-600 text-white rounded bg-[#09427D] font-bold border-2 border-white hover:text-[#09427D] hover:border-[#09427D] hover:bg-white duration-300 ease-in"
+          onClick={handleBack}
+          className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors duration-200 text-sm sm:text-base flex-shrink-0"
         >
-          BAIXAR CERTIFICADO
+          <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Voltar
         </button>
-        <div>
-          <h1 className='text-white font-medium '>Clique em baixar para ver o certificado completo</h1>
+        <div className="flex flex-col items-center gap-2 flex-1">
+          <button
+            onClick={handleDownload}
+            className="w-full sm:w-fit px-4 py-2 bg-blue-600 text-white rounded bg-[#09427D] font-bold border-2 border-white hover:text-[#09427D] hover:border-[#09427D] hover:bg-white duration-300 ease-in text-sm sm:text-base"
+          >
+            BAIXAR CERTIFICADO
+          </button>
+          <h1 className='text-white font-medium text-xs sm:text-sm md:text-base text-center'>Clique em baixar para ver o certificado completo</h1>
         </div>
+        <div className="w-20 sm:w-24 flex-shrink-0"></div>
       </div>
 
       {/* Área de exibição dos certificados */}
@@ -210,25 +269,27 @@ export default function Home({
             <div
               id="frontCert"
               className="relative w-full"
-              style={{ width: '2000px', height: '1414px' }}
+              style={{ 
+                width: '100%', 
+                maxWidth: '2000px',
+                aspectRatio: '2000 / 1414',
+                margin: '0 auto'
+              }}
             >
               <img
-                src={`/api/get/templateProxy/${certificateId}|front?t=${Date.now()}`} /* Date.now() é para resolver o problema do Cache. */
+                src={`/api/get/templateProxy/${certificateId}|front?t=${Date.now()}`}
                 alt="Certificado"
-                className="w-full h-full object-fill"
+                className="w-full h-full object-contain"
               />
-              <div className="absolute flex flex-col items-center justify-center top-0 font-bold w-full h-full">
-                <div className=' w-[70%]'>
-                  <div className="relative flex flex-col space-y-5 items-center content-center justify-center mb-[115px] w-full ">
-                    <p className="" style={{ ...libSourceSerif4.style, fontWeight: "400" }}>{data?.ownerName}</p>
-                    <br />
-                    <p className='font-thin'>
+              <div className="absolute flex flex-col items-center justify-center top-0 font-bold w-full h-full px-4">
+                <div className='w-full max-w-[70%]'>
+                  <div className="relative flex flex-col space-y-3 sm:space-y-5 items-center content-center justify-center mb-[8%] sm:mb-[115px] w-full">
+                    <p className="text-sm sm:text-base md:text-lg lg:text-xl text-center" style={{ ...libSourceSerif4.style, fontWeight: "400" }}>{data?.ownerName}</p>
+                    <p className='font-thin text-xs sm:text-sm md:text-base text-center'>
                       Código de Verificação: {String(data?._id)}
                     </p>
                   </div>
                 </div>
-
-
               </div>
             </div>
           </article>
@@ -237,22 +298,26 @@ export default function Home({
             {/* Frente do Certificado */}
             <div
               id="frontCert"
-              className="relative"
-              style={{ width: '2000px', height: '1414px' }}
+              className="relative w-full"
+              style={{ 
+                width: '100%', 
+                maxWidth: '2000px',
+                aspectRatio: '2000 / 1414',
+                margin: '0 auto'
+              }}
             >
               <img
                 src={`/api/get/templateProxy/${certificateId}|front?t=${Date.now()}`}
                 alt="Certificado"
-                className="w-full h-full object-fill"
+                className="w-full h-full object-contain"
               />
-              <div className="absolute top-[350px] -left-[125px] flex items-center justify-center content-center">
+              <div className="absolute top-[20%] sm:top-[350px] left-0 sm:-left-[125px] flex items-center justify-center content-center w-full sm:w-auto px-4 sm:px-0">
 
-                <div className='w-[85%]'>
-                  <div className="flex flex-col items-center justify-center font-bold space-y-5">
-                    <div className="relative flex flex-col space-y-5 items-center content-center justify-center  w-full " style={{ ...data?.eventId.styleContainer, }}>
+                <div className='w-full sm:w-[85%]'>
+                  <div className="flex flex-col items-center justify-center font-bold space-y-3 sm:space-y-5">
+                    <div className="relative flex flex-col space-y-3 sm:space-y-5 items-center content-center justify-center w-full" style={{ ...data?.eventId.styleContainer }}>
 
-
-                      <p style={{ ...libSourceSerif4.style, ...data?.eventId.styleFrontTopperText }}>
+                      <p className="text-xs sm:text-sm md:text-base lg:text-lg text-center" style={{ ...libSourceSerif4.style, ...data?.eventId.styleFrontTopperText }}>
                         {
                           !data?.frontTopperText ?
                             ""
@@ -260,13 +325,13 @@ export default function Home({
                         }
                       </p>
 
-                      <p style={{ ...libSourceSerif4.style, ...data?.eventId.styleNameText }}>{data?.ownerName.toUpperCase()}</p>
-                      {/* " font-thin  leading-[1]" */}
-                      <p className='font-thin' onClick={() => console.log(data)}>
+                      <p className="text-sm sm:text-base md:text-lg lg:text-xl text-center" style={{ ...libSourceSerif4.style, ...data?.eventId.styleNameText }}>{data?.ownerName.toUpperCase()}</p>
+                      
+                      <p className='font-thin text-xs sm:text-sm md:text-base text-center' onClick={() => console.log(data)}>
                         Código de Verificação: {String(data?._id)}
                       </p>
 
-                      <p className='whitespace-pre-line' style={{ ...libSourceSerif4.style, ...data?.eventId.styleFrontBottomText, whiteSpace: 'pre-wrap', }}>
+                      <p className='whitespace-pre-line text-xs sm:text-sm md:text-base lg:text-lg text-center' style={{ ...libSourceSerif4.style, ...data?.eventId.styleFrontBottomText, whiteSpace: 'pre-wrap' }}>
                         {
                           !data?.frontBottomText ?
                             "" :
@@ -294,45 +359,48 @@ export default function Home({
           <div
             id="verseCert"
             className="relative w-full"
-            style={{ width: '2000px', height: '1414px' }}
+            style={{ 
+              width: '100%', 
+              maxWidth: '2000px',
+              aspectRatio: '2000 / 1414',
+              margin: '0 auto'
+            }}
           >
             <img
-              src={`/api/get/templateProxy/${certificateId}|verse?t=${Date.now()}`} /* Date.now() é para resolver o problema do Cache. */
+              src={`/api/get/templateProxy/${certificateId}|verse?t=${Date.now()}`}
               alt="Certificado"
-              className="w-full h-full object-fill"
+              className="w-full h-full object-contain"
             />
-            <div className="absolute flex flex-col items-center justify-center top-0 font-bold w-full h-full">
-              <table style={{ ...data?.eventId?.styleContainerVerse?.containerStyle, ...data?.eventId?.styleContainerVerse?.headerStyle }}>
-                <thead className=''>
-                  <tr>
+            <div className="absolute flex flex-col items-center justify-center top-0 font-bold w-full h-full px-4 overflow-auto">
+              <div className="w-full max-w-[90%] sm:max-w-[80%] overflow-x-auto">
+                <table className="w-full" style={{ ...data?.eventId?.styleContainerVerse?.containerStyle, ...data?.eventId?.styleContainerVerse?.headerStyle }}>
+                  <thead>
+                    <tr>
+                      {
+                        data?.verse?.headers?.map((header, index) => (
+                          <th key={index} className="text-center text-xs sm:text-sm md:text-base lg:text-lg font-bold px-2" style={{ ...data?.eventId?.styleContainerVerse?.headerStyle }}>
+                            {header}
+                          </th>
+                        ))}
+                    </tr>
+                  </thead>
+                  <tbody>
                     {
-                      data?.verse?.headers?.map((header, index) => (
-                        <th key={index} className="text-center text-lg font-bold" style={{ ...data?.eventId?.styleContainerVerse?.headerStyle }}>
-                          {header}
-                        </th>
-                      ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {
-                    data?.verse?.rows?.map((row, index) => (
-                      <tr key={index}>
-                        {
-                          row.map((cell, cellIndex) => (
-                            <td key={cellIndex} className="text-center" style={{ ...libSourceSerif4.style, ...data?.eventId?.styleContainerVerse?.rowsStyle }}>
-                              {cell}
-                            </td>
-                          ))
-                        }
-                      </tr>
-                    ))
-                  }
-                </tbody>
-              </table>
-              <div className=' w-[70%]'>
+                      data?.verse?.rows?.map((row, index) => (
+                        <tr key={index}>
+                          {
+                            row.map((cell, cellIndex) => (
+                              <td key={cellIndex} className="text-center text-xs sm:text-sm md:text-base px-2" style={{ ...libSourceSerif4.style, ...data?.eventId?.styleContainerVerse?.rowsStyle }}>
+                                {cell}
+                              </td>
+                            ))
+                          }
+                        </tr>
+                      ))
+                    }
+                  </tbody>
+                </table>
               </div>
-
-
             </div>
           </div>
         </article>
