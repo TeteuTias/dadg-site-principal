@@ -64,52 +64,17 @@ export async function GET(req: NextRequest, {
             return Response.json({ message: "Certificado não encontrado." }, { status: 404 });
         }
 
-        let frontImageBuffer: ArrayBuffer;
-        let verseImageBuffer: ArrayBuffer | null = null;
+        // Busca a imagem da frente
+        const frontTemplateLink = await getSignedUrl(
+            process.env.R2_BUCKET_NAME ?? "",
+            certificate.eventId.templatePath
+        );
 
-        // Verifica se é certificado com certificatePath (scan template)
-        if (certificate.certificatePath && ObjectId.isValid(String(certificate.certificatePath))) {
-            // Usa templateScanProxy
-            const template = await ScanTemplateModel.findOne({ _id: new ObjectId(String(certificate.certificatePath)) }).lean();
-            if (!template) {
-                return Response.json({ message: "Template não encontrado." }, { status: 404 });
-            }
-            
-            const templateLink = await getSignedUrl(
-                process.env.R2_BUCKET_NAME ?? "",
-                `${process.env.R2_SUBFOLDER}/${template._id}.${template.templateExtension}`
-            );
-            
-            if (!templateLink) {
-                return Response.json({ message: "Erro ao acessar template do certificado." }, { status: 500 });
-            }
-            
-            frontImageBuffer = await getBufferByImageUrl(templateLink);
-        } else {
-            // Certificado normal com templatePath
-            const frontTemplateLink = await getSignedUrl(
-                process.env.R2_BUCKET_NAME ?? "",
-                certificate.eventId.templatePath
-            );
-
-            if (!frontTemplateLink) {
-                return Response.json({ message: "Erro ao acessar template do certificado." }, { status: 500 });
-            }
-
-            frontImageBuffer = await getBufferByImageUrl(frontTemplateLink);
-
-            // Se houver verso, busca a imagem
-            if (certificate.verse?.showVerse && certificate.eventId.templateVersePath) {
-                const verseTemplateLink = await getSignedUrl(
-                    process.env.R2_BUCKET_NAME ?? "",
-                    certificate.eventId.templateVersePath
-                );
-
-                if (verseTemplateLink) {
-                    verseImageBuffer = await getBufferByImageUrl(verseTemplateLink);
-                }
-            }
+        if (!frontTemplateLink) {
+            return Response.json({ message: "Erro ao acessar template do certificado." }, { status: 500 });
         }
+
+        const frontImageBuffer = await getBufferByImageUrl(frontTemplateLink);
 
         // Cria o PDF
         const pdfDoc = await PDFDocument.create();
@@ -141,20 +106,28 @@ export async function GET(req: NextRequest, {
         });
 
         // Se houver verso, adiciona ao PDF
-        if (verseImageBuffer) {
-            let verseImage;
-            try {
-                verseImage = await pdfDoc.embedJpg(verseImageBuffer);
-            } catch {
-                verseImage = await pdfDoc.embedPng(verseImageBuffer);
+        if (certificate.verse?.showVerse && certificate.eventId.templateVersePath) {
+            const verseTemplateLink = await getSignedUrl(
+                process.env.R2_BUCKET_NAME ?? "",
+                certificate.eventId.templateVersePath
+            );
+
+            if (verseTemplateLink) {
+                const verseImageBuffer = await getBufferByImageUrl(verseTemplateLink);
+                let verseImage;
+                try {
+                    verseImage = await pdfDoc.embedJpg(verseImageBuffer);
+                } catch {
+                    verseImage = await pdfDoc.embedPng(verseImageBuffer);
+                }
+                const versePage = pdfDoc.addPage([width, height]);
+                versePage.drawImage(verseImage, {
+                    x: 0,
+                    y: 0,
+                    width,
+                    height,
+                });
             }
-            const versePage = pdfDoc.addPage([width, height]);
-            versePage.drawImage(verseImage, {
-                x: 0,
-                y: 0,
-                width,
-                height,
-            });
         }
 
         const pdfBytes = await pdfDoc.save();
