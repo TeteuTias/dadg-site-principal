@@ -44,7 +44,7 @@ const getBufferByImageUrl = async (url: string): Promise<ArrayBuffer> => {
 };
 
 // Converte cor CSS (hex ou rgb) para RGB do pdf-lib
-const parseColor = (color?: string): { r: number; g: number; b: number } => {
+const parseColor = (color?: string): ReturnType<typeof rgb> => {
     if (!color) return rgb(0, 0, 0); // Preto por padrão
     
     // Remove espaços
@@ -72,7 +72,7 @@ const parseColor = (color?: string): { r: number; g: number; b: number } => {
     }
     
     // Nome de cor comum
-    const colorMap: { [key: string]: { r: number; g: number; b: number } } = {
+    const colorMap: { [key: string]: ReturnType<typeof rgb> } = {
         black: rgb(0, 0, 0),
         white: rgb(1, 1, 1),
         red: rgb(1, 0, 0),
@@ -393,7 +393,7 @@ export async function GET(req: NextRequest, {
         const pdfBytes = await pdfDoc.save();
         const fileName = `${certificate.eventName} - ${certificate.ownerName}.pdf`.replace(/[^a-z0-9]/gi, '_');
 
-        return new Response(pdfBytes, {
+        return new Response(Buffer.from(pdfBytes), {
             headers: {
                 'Content-Type': 'application/pdf',
                 'Content-Disposition': `attachment; filename="${fileName}"`,
