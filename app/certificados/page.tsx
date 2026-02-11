@@ -137,7 +137,7 @@ function SearchInput() {
             resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
         }, 100);
-      } catch (e) {
+      } catch  {
         // Ignora erro de parsing
       }
     }
