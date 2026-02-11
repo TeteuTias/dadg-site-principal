@@ -160,8 +160,8 @@ export default function Home({
         <div
           id="frontCert"
           className="relative w-full"
-          style={{ 
-            width: '100%', 
+          style={{
+            width: '100%',
             maxWidth: '2000px',
             aspectRatio: '2000 / 1414',
             margin: '0 auto'
@@ -212,8 +212,8 @@ export default function Home({
         <div
           id="frontCert"
           className="relative w-full"
-          style={{ 
-            width: '100%', 
+          style={{
+            width: '100%',
             maxWidth: '2000px',
             aspectRatio: '2000 / 1414',
             margin: '0 auto'
@@ -269,8 +269,8 @@ export default function Home({
             <div
               id="frontCert"
               className="relative w-full"
-              style={{ 
-                width: '100%', 
+              style={{
+                width: '100%',
                 maxWidth: '2000px',
                 aspectRatio: '2000 / 1414',
                 margin: '0 auto'
@@ -299,8 +299,8 @@ export default function Home({
             <div
               id="frontCert"
               className="relative w-full"
-              style={{ 
-                width: '100%', 
+              style={{
+                width: '100%',
                 maxWidth: '2000px',
                 aspectRatio: '2000 / 1414',
                 margin: '0 auto'
@@ -311,10 +311,11 @@ export default function Home({
                 alt="Certificado"
                 className="w-full h-full object-contain"
               />
-              <div className="absolute top-[20%] sm:top-[350px] left-0 sm:-left-[125px] flex items-center justify-center content-center w-full sm:w-auto px-4 sm:px-0">
+              <div className="absolute top-[20%] sm:top-[350px] left-0 sm:-left-[125px] flex items-center justify-center content-center w-full sm:w-auto px-4 sm:px-0 bg-yellow-900"
+              >
 
                 <div className='w-full sm:w-[85%]'>
-                  <div className="flex flex-col items-center justify-center font-bold space-y-3 sm:space-y-5">
+                  <div className="flex flex-col items-center justify-center font-bold space-y-3 sm:space-y-5 bg-yellow-100">
                     <div className="relative flex flex-col space-y-3 sm:space-y-5 items-center content-center justify-center w-full" style={{ ...data?.eventId.styleContainer }}>
 
                       <p className="text-xs sm:text-sm md:text-base lg:text-lg text-center" style={{ ...libSourceSerif4.style, ...data?.eventId.styleFrontTopperText }}>
@@ -326,7 +327,7 @@ export default function Home({
                       </p>
 
                       <p className="text-sm sm:text-base md:text-lg lg:text-xl text-center" style={{ ...libSourceSerif4.style, ...data?.eventId.styleNameText }}>{data?.ownerName.toUpperCase()}</p>
-                      
+
                       <p className='font-thin text-xs sm:text-sm md:text-base text-center' onClick={() => console.log(data)}>
                         Código de Verificação: {String(data?._id)}
                       </p>
@@ -359,8 +360,8 @@ export default function Home({
           <div
             id="verseCert"
             className="relative w-full"
-            style={{ 
-              width: '100%', 
+            style={{
+              width: '100%',
               maxWidth: '2000px',
               aspectRatio: '2000 / 1414',
               margin: '0 auto'
