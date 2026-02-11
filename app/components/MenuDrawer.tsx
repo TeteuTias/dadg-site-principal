@@ -3,11 +3,11 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { 
-  BookOpen, 
-  HeartHandshake, 
-  Users, 
-  Plane, 
+import {
+  BookOpen,
+  HeartHandshake,
+  Users,
+  Plane,
   BadgeCheck,
   Home,
   FileText,
@@ -65,28 +65,28 @@ export default function MenuDrawer() {
   const toggleCoordenadoriasSubmenu = () => setCoordenadoriasSubmenuOpen((prev) => !prev);
 
   const coordenadoriasSubmenuItems = [
-    { 
-      label: "CAEP", 
+    {
+      label: "CAEP",
       href: "/coordenadorias/caep",
       icon: <BookOpen size={16} />
     },
-    { 
-      label: "CAES", 
+    {
+      label: "CAES",
       href: "/coordenadorias/caes",
       icon: <HeartHandshake size={16} />
     },
-    { 
-      label: "CLAM", 
+    {
+      label: "CLAM",
       href: "/coordenadorias/clam",
       icon: <Users size={16} />
     },
-    { 
-      label: "CLEV", 
+    {
+      label: "CLEV",
       href: "/coordenadorias/clev",
       icon: <Plane size={16} />
     },
-    { 
-      label: "CAC", 
+    {
+      label: "CAC",
       href: "/coordenadorias/cac",
       icon: <BadgeCheck size={16} />
     }
@@ -167,6 +167,10 @@ export default function MenuDrawer() {
           <Link href="/certificados" style={{ color: "white", textDecoration: "none", fontSize: headerFontSize }}>
             Certificados
           </Link>
+          {/* SEMPRE SEMPRE SEMRPE SEMPRE SEMPRE DEIXE O PREFETCH DO Link DESATIVADO!!!! */}
+          <Link href="/panel/" prefetch={false} style={{ color: "white", textDecoration: "none", fontSize: headerFontSize }}>
+            Minha Conta
+          </Link>
         </div>
 
         {/* Ícone à direita */}
@@ -179,7 +183,9 @@ export default function MenuDrawer() {
             className="object-contain"
           />
         </div>
+
       </header>
+
 
       {/* DrawerMenu */}
       <div
@@ -209,10 +215,10 @@ export default function MenuDrawer() {
         <button
           className="menu-close-button"
           onClick={() => setMenuAberto(false)}
-          style={{ 
-            cursor: "pointer", 
-            alignSelf: "flex-end", 
-            marginRight: isMobile ? "-5px" : "-10px", 
+          style={{
+            cursor: "pointer",
+            alignSelf: "flex-end",
+            marginRight: isMobile ? "-5px" : "-10px",
             marginTop: isMobile ? "-5px" : "-10px",
             background: "rgba(255, 255, 255, 0.1)",
             border: "none",
@@ -225,14 +231,14 @@ export default function MenuDrawer() {
             transition: "all 0.3s ease"
           }}
         >
-          <svg 
-            width="24" 
-            height="24" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="2" 
-            strokeLinecap="round" 
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
             strokeLinejoin="round"
             style={{ transition: "transform 0.3s ease" }}
           >
@@ -242,10 +248,10 @@ export default function MenuDrawer() {
         </button>
 
         <div className="menu-items" style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-          <Link 
-            href="/" 
-            style={{ 
-              color: "white", 
+          <Link
+            href="/"
+            style={{
+              color: "white",
               textDecoration: "none",
               display: "flex",
               alignItems: "center",
@@ -255,17 +261,17 @@ export default function MenuDrawer() {
               transition: "all 0.3s ease",
               background: pathname === "/" ? "rgba(255, 255, 255, 0.1)" : "transparent",
               fontSize: isMobile ? "14px" : "16px"
-            }} 
+            }}
             onClick={() => setMenuAberto(false)}
           >
             <Home size={isMobile ? 20 : 24} />
             Início
           </Link>
 
-          <Link 
-            href="/certificados" 
-            style={{ 
-              color: "white", 
+          <Link
+            href="/certificados"
+            style={{
+              color: "white",
               textDecoration: "none",
               display: "flex",
               alignItems: "center",
@@ -275,17 +281,17 @@ export default function MenuDrawer() {
               transition: "all 0.3s ease",
               background: pathname === "/certificados" ? "rgba(255, 255, 255, 0.1)" : "transparent",
               fontSize: isMobile ? "14px" : "16px"
-            }} 
+            }}
             onClick={() => setMenuAberto(false)}
           >
             <FileText size={isMobile ? 20 : 24} />
             Certificados
           </Link>
 
-          <Link 
-            href="/mural" 
-            style={{ 
-              color: "white", 
+          <Link
+            href="/mural"
+            style={{
+              color: "white",
               textDecoration: "none",
               display: "flex",
               alignItems: "center",
@@ -295,17 +301,17 @@ export default function MenuDrawer() {
               transition: "all 0.3s ease",
               background: pathname === "/mural" ? "rgba(255, 255, 255, 0.1)" : "transparent",
               fontSize: isMobile ? "14px" : "16px"
-            }} 
+            }}
             onClick={() => setMenuAberto(false)}
           >
             <LayoutGrid size={isMobile ? 20 : 24} />
             Mural
           </Link>
 
-          <Link 
-            href="/eventos" 
-            style={{ 
-              color: "white", 
+          <Link
+            href="/eventos"
+            style={{
+              color: "white",
               textDecoration: "none",
               display: "flex",
               alignItems: "center",
@@ -315,17 +321,17 @@ export default function MenuDrawer() {
               transition: "all 0.3s ease",
               background: pathname === "/eventos" ? "rgba(255, 255, 255, 0.1)" : "transparent",
               fontSize: isMobile ? "14px" : "16px"
-            }} 
+            }}
             onClick={() => setMenuAberto(false)}
           >
             <Calendar size={isMobile ? 20 : 24} />
             Eventos
           </Link>
 
-          <Link 
-            href="/contato" 
-            style={{ 
-              color: "white", 
+          <Link
+            href="/contato"
+            style={{
+              color: "white",
               textDecoration: "none",
               display: "flex",
               alignItems: "center",
@@ -335,17 +341,17 @@ export default function MenuDrawer() {
               transition: "all 0.3s ease",
               background: pathname === "/contato" ? "rgba(255, 255, 255, 0.1)" : "transparent",
               fontSize: isMobile ? "14px" : "16px"
-            }} 
+            }}
             onClick={() => setMenuAberto(false)}
           >
             <Mail size={isMobile ? 20 : 24} />
             Contato
           </Link>
 
-          <Link 
-            href="/sobre" 
-            style={{ 
-              color: "white", 
+          <Link
+            href="/sobre"
+            style={{
+              color: "white",
               textDecoration: "none",
               display: "flex",
               alignItems: "center",
@@ -355,7 +361,7 @@ export default function MenuDrawer() {
               transition: "all 0.3s ease",
               background: pathname === "/sobre" ? "rgba(255, 255, 255, 0.1)" : "transparent",
               fontSize: isMobile ? "14px" : "16px"
-            }} 
+            }}
             onClick={() => setMenuAberto(false)}
           >
             <HelpCircle size={isMobile ? 20 : 24} />
@@ -365,10 +371,10 @@ export default function MenuDrawer() {
 
         {/* Submenu para Coordenadorias */}
         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-          <div 
-            style={{ 
-              display: "flex", 
-              alignItems: "center", 
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
               justifyContent: "space-between",
               padding: isMobile ? "10px 14px" : "12px 16px",
               borderRadius: "12px",
@@ -383,9 +389,9 @@ export default function MenuDrawer() {
               <Users size={isMobile ? 20 : 24} />
               <span>Coordenadorias</span>
             </div>
-            <ChevronDown 
+            <ChevronDown
               size={isMobile ? 18 : 20}
-              style={{ 
+              style={{
                 transform: coordenadoriasSubmenuOpen ? "rotate(180deg)" : "rotate(0deg)",
                 transition: "transform 0.3s ease"
               }}
@@ -399,9 +405,9 @@ export default function MenuDrawer() {
               maxHeight: coordenadoriasSubmenuMaxHeight,
             }}
           >
-            <div style={{ 
-              display: "flex", 
-              flexDirection: "column", 
+            <div style={{
+              display: "flex",
+              flexDirection: "column",
               gap: "5px",
               maxHeight: "200px",
               overflowY: "auto",
