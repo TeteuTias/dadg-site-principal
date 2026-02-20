@@ -15,6 +15,7 @@ import {
   Calendar,
   Mail,
   HelpCircle,
+  MessageCircle,
   ChevronDown
 } from "lucide-react";
 
@@ -27,17 +28,19 @@ export default function MenuDrawer() {
   const pathname = usePathname() || '/';
 
   const headerBackgroundColor =
-    pathname.startsWith("/coordenadorias/clam")
-      ? "#0A7A1A"
-      : pathname.startsWith("/coordenadorias/caes")
-        ? "#056653"
-        : pathname.startsWith("/coordenadorias/caep")
-          ? "#000066"
-          : pathname.startsWith("/coordenadorias/cac")
-            ? "#050a4a"
-            : pathname.startsWith("/coordenadorias/clev")
-              ? "#526c94"
-              : "#09427d";
+    pathname.startsWith("/ouvidoria")
+      ? "#09427d"
+      : pathname.startsWith("/coordenadorias/clam")
+        ? "#0A7A1A"
+        : pathname.startsWith("/coordenadorias/caes")
+          ? "#056653"
+          : pathname.startsWith("/coordenadorias/caep")
+            ? "#000066"
+            : pathname.startsWith("/coordenadorias/cac")
+              ? "#050a4a"
+              : pathname.startsWith("/coordenadorias/clev")
+                ? "#526c94"
+                : "#09427d";
   const drawerBackgroundColor = headerBackgroundColor;
 
   useEffect(() => {
@@ -163,6 +166,9 @@ export default function MenuDrawer() {
           </Link>
           <Link href="/" style={{ color: "white", textDecoration: "none", fontSize: headerFontSize }}>
             Início
+          </Link>
+          <Link href="/ouvidoria" style={{ color: "white", textDecoration: "none", fontSize: headerFontSize }}>
+            Ouvidoria
           </Link>
           <Link href="/certificados" style={{ color: "white", textDecoration: "none", fontSize: headerFontSize }}>
             Certificados
@@ -320,6 +326,26 @@ export default function MenuDrawer() {
           >
             <Calendar size={isMobile ? 20 : 24} />
             Eventos
+          </Link>
+
+          <Link 
+            href="/ouvidoria" 
+            style={{ 
+              color: "white", 
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: isMobile ? "10px" : "12px",
+              padding: isMobile ? "10px 14px" : "12px 16px",
+              borderRadius: "12px",
+              transition: "all 0.3s ease",
+              background: pathname === "/ouvidoria" ? "rgba(255, 255, 255, 0.1)" : "transparent",
+              fontSize: isMobile ? "14px" : "16px"
+            }} 
+            onClick={() => setMenuAberto(false)}
+          >
+            <MessageCircle size={isMobile ? 20 : 24} />
+            Ouvidoria
           </Link>
 
           <Link 

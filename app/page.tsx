@@ -145,6 +145,26 @@ export default function Home() {
               </div>
             </div>
           </div>
+
+          <div className="home-card group relative p-3 sm:p-4 rounded-xl overflow-hidden">
+            <div className="relative z-10 flex items-start gap-3 sm:gap-4">
+              <div className="home-card-icon h-8 w-8 sm:h-10 sm:w-10 rounded-lg flex items-center justify-center flex-shrink-0">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[#09427d]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+                </svg>
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="text-[#09427d] font-semibold mb-1 sm:mb-2 text-base sm:text-lg md:text-xl group-hover:text-[#073366] transition-colors duration-300">Ouvidoria</h3>
+                <p className="text-gray-600 text-xs sm:text-sm mb-2 sm:mb-3 leading-relaxed">Envie sugestões, reclamações ou dúvidas. Sua voz é importante para o DADG.</p>
+                <Link href="/ouvidoria" className="inline-flex items-center text-[#09427d] hover:text-[#073366] font-medium text-xs sm:text-sm group-hover:translate-x-2 transition-all duration-300">
+                  Enviar manifestação
+                  <svg className="w-3 h-3 sm:w-4 sm:h-4 ml-1 sm:ml-2 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
