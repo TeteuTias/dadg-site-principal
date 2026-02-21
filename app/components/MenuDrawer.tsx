@@ -28,9 +28,7 @@ export default function MenuDrawer() {
   const pathname = usePathname() || '/';
 
   const headerBackgroundColor =
-    pathname.startsWith("/ouvidoria")
-      ? "#09427d"
-      : pathname.startsWith("/coordenadorias/clam")
+    pathname.startsWith("/coordenadorias/clam")
         ? "#0A7A1A"
         : pathname.startsWith("/coordenadorias/caes")
           ? "#056653"
@@ -166,9 +164,6 @@ export default function MenuDrawer() {
           </Link>
           <Link href="/" style={{ color: "white", textDecoration: "none", fontSize: headerFontSize }}>
             Início
-          </Link>
-          <Link href="/ouvidoria" style={{ color: "white", textDecoration: "none", fontSize: headerFontSize }}>
-            Ouvidoria
           </Link>
           <Link href="/certificados" style={{ color: "white", textDecoration: "none", fontSize: headerFontSize }}>
             Certificados

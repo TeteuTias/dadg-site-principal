@@ -39,7 +39,6 @@ export default function AgendaPage() {
 
   return (
     <div className="events-container" style={stylePoppins.style}>
-      <div className="events-background"></div>
       <div className="particles"></div>
       
       <div className="events-content">

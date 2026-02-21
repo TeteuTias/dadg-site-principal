@@ -5,9 +5,22 @@ import "./style.css";
 
 const MIN_LENGTH = 20;
 const MAX_LENGTH = 2000;
+const MAX_NAME_LENGTH = 80;
+
+const MIN_TURMA = 1;
+const MAX_TURMA = 999;
+
+const TOPIC_OPTIONS = [
+  { value: "infraestrutura", label: "Infraestrutura" },
+  { value: "problemas da turma", label: "Problemas da turma" },
+  { value: "problemas com a coordenação", label: "Problemas com a coordenação" },
+  { value: "problemas com os professores", label: "Problemas com os professores" },
+] as const;
 
 export default function OuvidoriaPage() {
   const [topic, setTopic] = useState("");
+  const [classNumber, setClassNumber] = useState(""); // NOVO: turma
+  const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
   const [error, setError] = useState("");
@@ -18,10 +31,24 @@ export default function OuvidoriaPage() {
     setStatus("sending");
     setError("");
 
+    // Validação leve no front (o server valida de novo)
+    if (name.trim().length > MAX_NAME_LENGTH) {
+      setStatus("error");
+      setError(`Nome muito longo (máx ${MAX_NAME_LENGTH} caracteres).`);
+      return;
+    }
+
+    const turmaNum = parseInt(classNumber, 10);
+    if (!Number.isFinite(turmaNum) || turmaNum < MIN_TURMA || turmaNum > MAX_TURMA) {
+      setStatus("error");
+      setError(`Turma inválida (use um número entre ${MIN_TURMA} e ${MAX_TURMA}).`);
+      return;
+    }
+
     const r = await fetch("/api/ouvidoria", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ topic, message, website }),
+      body: JSON.stringify({ topic, classNumber: turmaNum, name, message, website }),
     });
 
     const data = await r.json().catch(() => ({}));
@@ -34,6 +61,8 @@ export default function OuvidoriaPage() {
 
     setStatus("ok");
     setTopic("");
+    setClassNumber("");
+    setName("");
     setMessage("");
     setWebsite("");
   }
@@ -79,21 +108,117 @@ export default function OuvidoriaPage() {
             </div>
 
             <div className="ouvidoria-field">
-              <label htmlFor="ouvidoria-topic">Tópico</label>
-              <select
-                id="ouvidoria-topic"
-                value={topic}
-                onChange={(e) => setTopic(e.target.value)}
-                required
+              <span className="ouvidoria-field-label" id="ouvidoria-topic-label">
+                Tópico
+              </span>
+              <div
+                className="ouvidoria-topic-grid"
+                role="group"
+                aria-labelledby="ouvidoria-topic-label"
               >
-                <option value="" disabled>
-                  Selecione...
-                </option>
-                <option value="infraestrutura">Infraestrutura</option>
-                <option value="problemas da turma">Problemas da turma</option>
-                <option value="problemas com a coordenação">Problemas com a coordenação</option>
-                <option value="problemas com os professores">Problemas com os professores</option>
-              </select>
+                {TOPIC_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    className={`ouvidoria-topic-option ${topic === opt.value ? "selected" : ""}`}
+                    onClick={() => setTopic(opt.value)}
+                    aria-pressed={topic === opt.value}
+                  >
+                    <span className="ouvidoria-topic-option-text">{opt.label}</span>
+                    {topic === opt.value && (
+                      <span className="ouvidoria-topic-option-check" aria-hidden>
+                        <svg
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+              {!topic && <span className="ouvidoria-topic-hint">Escolha um tópico acima</span>}
+              <input
+                type="text"
+                name="topic"
+                value={topic}
+                readOnly
+                required
+                tabIndex={-1}
+                aria-hidden
+                className="ouvidoria-topic-hidden"
+              />
+            </div>
+
+            <div className="ouvidoria-field">
+              <label htmlFor="ouvidoria-class">Turma</label>
+              <div className="ouvidoria-input-wrap ouvidoria-class-wrap">
+                <span className="ouvidoria-input-icon" aria-hidden>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                  </svg>
+                </span>
+                <input
+                  id="ouvidoria-class"
+                  type="number"
+                  inputMode="numeric"
+                  className="ouvidoria-input"
+                  value={classNumber}
+                  onChange={(e) => setClassNumber(e.target.value)}
+                  min={MIN_TURMA}
+                  max={MAX_TURMA}
+                  required
+                  placeholder="Ex.: 39"
+                  aria-describedby="ouvidoria-class-hint"
+                />
+              </div>
+              <span id="ouvidoria-class-hint" className="ouvidoria-turma-hint">
+                {classNumber ? `Turma ${classNumber}` : ``}
+              </span>
+            </div>
+
+            <div className="ouvidoria-field">
+              <label htmlFor="ouvidoria-name">Nome (opcional)</label>
+              <div className="ouvidoria-input-wrap ouvidoria-name-wrap">
+                <span className="ouvidoria-input-icon" aria-hidden>
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                </span>
+                <input
+                  id="ouvidoria-name"
+                  type="text"
+                  className="ouvidoria-input"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  maxLength={MAX_NAME_LENGTH}
+                  placeholder="Se quiser se identificar..."
+                  autoComplete="name"
+                />
+              </div>
+              <span className="ouvidoria-char-count">
+                {name.trim().length} / {MAX_NAME_LENGTH} caracteres
+              </span>
             </div>
 
             <div className="ouvidoria-field">
