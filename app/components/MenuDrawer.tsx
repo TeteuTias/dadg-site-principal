@@ -168,9 +168,11 @@ export default function MenuDrawer() {
             Certificados
           </Link>
           {/* SEMPRE SEMPRE SEMRPE SEMPRE SEMPRE DEIXE O PREFETCH DO Link DESATIVADO!!!! */}
+          {/*
           <Link href="/panel/" prefetch={false} style={{ color: "white", textDecoration: "none", fontSize: headerFontSize }}>
             Minha Conta
           </Link>
+          */}
         </div>
 
         {/* Ícone à direita */}
