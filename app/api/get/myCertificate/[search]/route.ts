@@ -13,7 +13,6 @@ export async function GET(req: NextRequest, {
     params: Promise<{ search: string }>
 }) {
 
-    await connectToDatabase()
     const { search } = await params
     const searchValue = search
     if (!searchValue) {
@@ -24,11 +23,11 @@ export async function GET(req: NextRequest, {
     let searchCriteria = {};
     if (mongoose.Types.ObjectId.isValid(searchValue)) {
         searchCriteria = {
-                $or: [
-                    { _id: new mongoose.Types.ObjectId(searchValue) },
-                    { eventId: new mongoose.Types.ObjectId(searchValue) }
-                ]
-    };
+            $or: [
+                { _id: new mongoose.Types.ObjectId(searchValue) },
+                { eventId: new mongoose.Types.ObjectId(searchValue) }
+            ]
+        };
     } else {
         searchCriteria = {
             isReady: true, // Certificados prontos,
@@ -42,6 +41,7 @@ export async function GET(req: NextRequest, {
     }
 
     // Executa a consulta no banco de dados
+    await connectToDatabase()
     const owners = await CertificateModel.find(searchCriteria);
 
     if (owners.length == 0) {

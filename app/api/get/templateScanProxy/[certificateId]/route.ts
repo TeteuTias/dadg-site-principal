@@ -1,11 +1,11 @@
 /* eslint-disable */
 import { NextRequest } from "next/server";
-import { ObjectId } from "bson";
 import ScanTemplateModel from "@/app/lib/models/ScanTemplate";
 import mongoose from "mongoose";
 import { connectToDatabase } from "@/app/lib/mongodb";
 import CertificateModel from "@/app/lib/models/CertificateModel";
 import AWS from "aws-sdk";
+import { ObjectId } from "bson"
 import { IEventCertificate } from "@/app/lib/models/EventCertificateModel";
 //  export async function GET(req: NextRequest, { params }: { params: { certificateId: string } }) {
 
@@ -76,13 +76,18 @@ export async function GET(req: NextRequest, {
 }) {
     try {
 
+
         const { certificateId } = await params
         const typeTemplate = certificateId.split("|")[1]; // Pega o segundo valor após o pipe
         const searchValueId = certificateId.split("|")[0]; // Pega o primeiro valor antes do pipe
 
         if (ObjectId.isValid(searchValueId)) {
             // procurando o template
-            const template = await ScanTemplateModel.findOne({ _id: new ObjectId(searchValueId) }).lean();
+
+            console.warn(`>>>>>>> CHEGUEI!! <<<<<<<< ${searchValueId}`)
+            await connectToDatabase();
+            const template = await ScanTemplateModel.findOne({ _id: new ObjectId(searchValueId) })
+            console.log("adafsdfasdfs")
             if (!template) {
                 return Response.json({ message: "Template não encontrado." }, { status: 404 });
             }
@@ -99,7 +104,6 @@ export async function GET(req: NextRequest, {
                 }
             })
         }
-
         if (!typeTemplate || (typeTemplate !== "front" && typeTemplate !== "verse")) {
             return Response.json({ message: "O parâmetro 'certificateId' deve conter um tipo válido (front ou verse)." }, { status: 500 });
         }
@@ -110,8 +114,6 @@ export async function GET(req: NextRequest, {
 
 
         //
-
-
         const owners = await CertificateModel.findOne({
             _id: searchValueId
         }).populate<{ eventId: IEventCertificate }>("eventId");
