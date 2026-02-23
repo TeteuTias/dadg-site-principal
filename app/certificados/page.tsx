@@ -1,15 +1,12 @@
 'use client'
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import Image from "next/image";
 import Link from "next/link";
 import { Poppins } from "next/font/google";
-import html2canvas from "html2canvas";
-import { PDFDocument } from "pdf-lib";
 import "../globals.css";
 
-import { ICertificate, ICertificateWithEventIdPopulate } from "../lib/models/CertificateModel";
-import { libSourceSerif4 } from "@/public/fonts/lib/libSourceSerif4";
+import { ICertificate } from "../lib/models/CertificateModel";
 
 const stylePoppins = Poppins({
   subsets: ["latin", "latin-ext"],
@@ -110,11 +107,9 @@ function Loader() {
 function SearchInput() {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [noResults, setNoResults] = useState(false);
+ const [noResults, setNoResults] = useState(false);
   const [data, setData] = useState<ICertificate[]>([]);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
-  const [renderCertificate, setRenderCertificate] = useState<ICertificateWithEventIdPopulate | null>(null);
-  const certificateRef = useRef<HTMLDivElement>(null);
 
   // Restaura estado salvo ao montar o componente
   useEffect(() => {
@@ -177,90 +172,21 @@ function SearchInput() {
     
     setDownloadingId(certificateId);
     try {
-      // 1. Buscar dados completos do certificado (igual à página do certificado)
-      const response = await fetch(`/api/get/myCertificateById/${certificateId}`);
+      const response = await fetch(`/api/get/downloadCertificate/${certificateId}`);
       
       if (!response.ok) {
-        alert('Erro ao buscar certificado. Tente novamente.');
+        const errData = await response.json().catch(() => ({}));
+        alert(errData.message || 'Erro ao baixar certificado. Tente novamente.');
         return;
       }
 
-      const result: { data: ICertificateWithEventIdPopulate } = await response.json();
-      const certData = result.data;
-      
-      // 2. Renderizar o certificado
-      setRenderCertificate(certData);
-      
-      // 3. Aguardar o DOM atualizar e a imagem carregar
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      // 4. Capturar com html2canvas (igual à página do certificado)
-      const frontElement = document.getElementById('hiddenFrontCert');
-      if (!frontElement) {
-        alert('Erro ao renderizar certificado.');
-        return;
-      }
-
-      const frontCanvas = await html2canvas(frontElement, {
-        useCORS: true,
-        allowTaint: true,
-        scale: 2
-      });
-      const imgUrl = frontCanvas.toDataURL('image/png');
-      const imgResponse = await fetch(imgUrl);
-      const blob = await imgResponse.blob();
-
-      const pdfDoc = await PDFDocument.create();
-      const arrayBuffer = await blob.arrayBuffer();
-      const pngImage = await pdfDoc.embedPng(arrayBuffer);
-      const { width, height } = pngImage.scale(1);
-
-      // Adiciona a página da frente
-      const page = pdfDoc.addPage([width, height]);
-      page.drawImage(pngImage, {
-        x: 0,
-        y: 0,
-        width,
-        height,
-      });
-
-      // Se houver verso, renderiza e adiciona ao PDF
-      if (certData?.verse?.showVerse === true) {
-        const backElement = document.getElementById('hiddenVerseCert');
-        if (backElement) {
-          const backCanvas = await html2canvas(backElement, {
-            useCORS: true,
-            allowTaint: true,
-            scale: 2
-          });
-          const imgUrlVerse = backCanvas.toDataURL('image/png');
-          const responseBack = await fetch(imgUrlVerse);
-          const blobVerse = await responseBack.blob();
-          const arrayBufferVerse = await blobVerse.arrayBuffer();
-          const pngImageVerse = await pdfDoc.embedPng(arrayBufferVerse);
-
-          pdfDoc.addPage([width, height]).drawImage(pngImageVerse, {
-            x: 0,
-            y: 0,
-            width,
-            height,
-          });
-        }
-      }
-
-      // Gera os bytes do PDF
-      const pdfBytes = await pdfDoc.save();
-      // @ts-expect-error: Erro de tipificação
-      const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
-      const blobUrl = URL.createObjectURL(pdfBlob);
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = blobUrl;
       link.download = `${eventName} - ${ownerName}.pdf`;
       link.click();
       URL.revokeObjectURL(blobUrl);
-      
-      // Limpar o certificado renderizado
-      setRenderCertificate(null);
     } catch (error) {
       console.error('Erro ao baixar:', error);
       alert('Erro ao baixar certificado. Tente novamente.');
@@ -337,126 +263,6 @@ function SearchInput() {
               </button>
             </div>
           ))}
-        </div>
-      )}
-      
-      {/* Certificado renderizado de forma oculta para captura com html2canvas */}
-      {renderCertificate && (
-        <div 
-          ref={certificateRef}
-          style={{ 
-            position: 'fixed', 
-            left: '-9999px', 
-            top: 0,
-            width: '2000px',
-            backgroundColor: 'white'
-          }}
-        >
-          {/* Frente do Certificado - MESMA ESTRUTURA EXATA da página do certificado */}
-          {!renderCertificate.frontBottomText || !renderCertificate.frontTopperText ? (
-            // Certificado SIMPLES (sem frontBottomText ou frontTopperText)
-            <div
-              id="hiddenFrontCert"
-              className="relative"
-              style={{ 
-                width: '2000px',
-                height: '1414px'
-              }}
-            >
-              <img
-                src={`/api/get/templateProxy/${String(renderCertificate._id)}|front?t=${Date.now()}`}
-                alt="Certificado"
-                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                crossOrigin="anonymous"
-              />
-              {/* Igual à página original: absolute flex flex-col items-center justify-center top-0 font-bold w-full h-full */}
-              <div className="absolute flex flex-col items-center justify-center top-0 font-bold w-full h-full px-4">
-                <div className="w-full" style={{ maxWidth: '70%' }}>
-                  {/* Igual à página original: relative flex flex-col space-y-5 items-center content-center justify-center mb-[115px] w-full */}
-                  <div className="relative flex flex-col items-center content-center justify-center w-full" style={{ gap: '20px', marginBottom: '115px' }}>
-                    <p className="text-center" style={{ ...libSourceSerif4.style, fontWeight: '400', fontSize: '48px' }}>
-                      {renderCertificate.ownerName}
-                    </p>
-                    <p className="font-thin text-center" style={{ fontSize: '24px' }}>
-                      Código de Verificação: {String(renderCertificate._id)}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            // Certificado COMPLETO (com frontBottomText e frontTopperText)
-            <div
-              id="hiddenFrontCert"
-              className="relative"
-              style={{ 
-                width: '2000px',
-                height: '1414px'
-              }}
-            >
-              <img
-                src={`/api/get/templateProxy/${String(renderCertificate._id)}|front?t=${Date.now()}`}
-                alt="Certificado"
-                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                crossOrigin="anonymous"
-              />
-              {/* Igual à página original: absolute top-[350px] -left-[125px] flex items-center justify-center content-center w-auto */}
-              <div className="absolute flex items-center justify-center content-center" style={{ top: '350px', left: '-125px' }}>
-                <div style={{ width: '85%' }}>
-                  {/* Igual à página original: flex flex-col items-center justify-center font-bold space-y-5 */}
-                  <div className="flex flex-col items-center justify-center font-bold" style={{ gap: '20px' }}>
-                    {/* Igual à página original: relative flex flex-col space-y-5 items-center content-center justify-center w-full + styleContainer */}
-                    <div className="relative flex flex-col items-center content-center justify-center w-full" style={{ gap: '20px', ...renderCertificate.eventId?.styleContainer }}>
-                      
-                      {renderCertificate.frontTopperText && (
-                        <p className="text-center" style={{ ...libSourceSerif4.style, fontSize: '36px', ...renderCertificate.eventId?.styleFrontTopperText }}>
-                          {renderCertificate.frontTopperText}
-                        </p>
-                      )}
-
-                      <p className="text-center" style={{ ...libSourceSerif4.style, fontSize: '48px', ...renderCertificate.eventId?.styleNameText }}>
-                        {renderCertificate.ownerName.toUpperCase()}
-                      </p>
-                      
-                      <p className="font-thin text-center" style={{ fontSize: '24px' }}>
-                        Código de Verificação: {String(renderCertificate._id)}
-                      </p>
-
-                      {renderCertificate.frontBottomText && (
-                        <p className="text-center" style={{ ...libSourceSerif4.style, whiteSpace: 'pre-wrap', fontSize: '36px', ...renderCertificate.eventId?.styleFrontBottomText }}>
-                          {renderCertificate.frontBottomText.replace(/\\n/g, "\n").split("\n").map((linha, indice) => (
-                            <React.Fragment key={indice}>
-                              {linha}
-                              <br />
-                            </React.Fragment>
-                          ))}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-          
-          {/* Verso do Certificado (se existir) */}
-          {renderCertificate.verse?.showVerse && (
-            <div
-              id="hiddenVerseCert"
-              className="relative"
-              style={{ 
-                width: '2000px',
-                height: '1414px'
-              }}
-            >
-              <img
-                src={`/api/get/templateProxy/${String(renderCertificate._id)}|verse?t=${Date.now()}`}
-                alt="Verso do Certificado"
-                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                crossOrigin="anonymous"
-              />
-            </div>
-          )}
         </div>
       )}
     </div>
