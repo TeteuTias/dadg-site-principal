@@ -63,7 +63,9 @@ const ensurePdfCompatibleImage = async (buffer: ArrayBuffer): Promise<ArrayBuffe
     try {
         const sharp = (await import("sharp")).default;
         const pngBuffer = await sharp(Buffer.from(buffer)).png().toBuffer();
-        return pngBuffer.buffer.slice(pngBuffer.byteOffset, pngBuffer.byteOffset + pngBuffer.byteLength);
+        const copy = new Uint8Array(pngBuffer.length);
+        copy.set(pngBuffer);
+        return copy.buffer;
     } catch (err) {
         console.error("Erro ao converter imagem com sharp:", err);
         throw new Error("Formato de imagem não suportado. Use JPG ou PNG.");
