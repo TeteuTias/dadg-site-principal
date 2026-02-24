@@ -1,6 +1,8 @@
 // app/api/ouvidoria/route.ts
 import { NextResponse } from "next/server";
 
+export const runtime = "nodejs";
+
 // ===== Config =====
 const SCRIPT_URL = process.env.OUVIDORIA_SCRIPT_URL;
 
@@ -9,17 +11,30 @@ const MAX_MESSAGE = 2000;
 const MAX_NAME = 80;
 
 const MIN_TURMA = 1;
-const MAX_TURMA = 99;
+const MAX_TURMA = 999;
 
-const ALLOWED_TOPICS = new Set([
-  "infraestrutura",
-  "problemas da turma",
-  "problemas com a coordenação",
-  "problemas com os professores",
-]);
+// Tópicos permitidos (sempre em "forma normalizada")
+function topicKey(x: unknown) {
+  return String(x ?? "")
+    .toLowerCase()
+    .normalize("NFKC")
+    .replace(/[\u200B-\u200D\uFEFF]/g, "") // zero-width
+    .replace(/\u00A0/g, " ")              // NBSP
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+const ALLOWED_TOPICS = new Set(
+  [
+    "infraestrutura",
+    "problemas da turma",
+    "problemas com a coordenação",
+    "problemas com os professores",
+    "certificados",
+  ].map(topicKey)
+);
 
 // ===== Anti-spam: rate limit em memória (5 req/min por IP) =====
-// Obs.: em serverless com várias instâncias pode não ser perfeito, mas já ajuda bastante.
 const bucket = new Map<string, { count: number; resetAt: number }>();
 
 function rateLimit(key: string, limit: number, windowMs: number) {
@@ -49,6 +64,16 @@ function getClientIp(req: Request) {
   return "unknown";
 }
 
+async function fetchWithTimeout(url: string, init: RequestInit, timeoutMs: number) {
+  const controller = new AbortController();
+  const t = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(t);
+  }
+}
+
 export async function POST(req: Request) {
   try {
     if (!SCRIPT_URL) {
@@ -69,22 +94,22 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json().catch(() => ({}));
-    const website = norm(body.website);
 
-    // Honeypot: se bot preencher, finge sucesso e descarta
+    // Honeypot vindo do front
+    const website = norm(body.website);
     if (website) return NextResponse.json({ ok: true });
 
-    const topic = norm(body.topic).toLowerCase();
+    const topic = topicKey(body.topic);
     const classNumberRaw = norm(body.classNumber);
-    const name = norm(body.name); // opcional
+    const name = norm(body.name);
     const message = norm(body.message);
 
-    // Validações
+    // Valida tópico
     if (!ALLOWED_TOPICS.has(topic)) {
       return NextResponse.json({ ok: false, error: "Tópico inválido." }, { status: 400 });
     }
 
-    // Turma (obrigatória)
+    // Valida turma
     const classNumber = parseInt(classNumberRaw, 10);
     if (!Number.isFinite(classNumber) || classNumber < MIN_TURMA || classNumber > MAX_TURMA) {
       return NextResponse.json(
@@ -93,6 +118,7 @@ export async function POST(req: Request) {
       );
     }
 
+    // Valida nome
     if (name.length > MAX_NAME) {
       return NextResponse.json(
         { ok: false, error: `Nome muito longo (máx ${MAX_NAME} caracteres).` },
@@ -100,6 +126,7 @@ export async function POST(req: Request) {
       );
     }
 
+    // Valida mensagem
     if (message.length < MIN_MESSAGE || message.length > MAX_MESSAGE) {
       return NextResponse.json(
         { ok: false, error: `Mensagem inválida (mín ${MIN_MESSAGE}, máx ${MAX_MESSAGE} caracteres).` },
@@ -108,34 +135,56 @@ export async function POST(req: Request) {
     }
 
     // Envia pro Apps Script
-    const r = await fetch(SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      // website vazio aqui (o honeypot é só do front)
-      body: JSON.stringify({ topic, classNumber, name, message, website: "" }),
-    });
+    const payload = {
+      topic,               // já normalizado
+      classNumber,         // number
+      name,
+      message,
+      website: "",         // honeypot só do front; aqui sempre vazio
+    };
 
-    // Apps Script às vezes responde HTML em erro; por isso lemos como texto e tentamos parsear.
+    const r = await fetchWithTimeout(
+      SCRIPT_URL,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      },
+      12_000
+    );
+
     const text = await r.text();
     let data: any = null;
+
     try {
       data = JSON.parse(text);
     } catch {
-      data = null;
+      // se o GAS responder HTML (erro), loga e devolve erro genérico
+      console.error("OUVIDORIA script returned non-JSON:", text.slice(0, 500));
+      return NextResponse.json(
+        { ok: false, error: "Falha no serviço de envio (resposta inválida do script)." },
+        { status: 502 }
+      );
     }
 
-    if (!r.ok || !data?.ok) {
+    // IMPORTANTÍSSIMO: Apps Script frequentemente retorna 200 mesmo em erro.
+    // Então a regra é: sucesso só se data.ok === true
+    if (!data?.ok) {
       return NextResponse.json(
-        {
-          ok: false,
-          error: data?.error ?? `Falha ao enviar (status do script: ${r.status}).`,
-        },
+        { ok: false, error: data?.error ?? "Falha ao enviar.", script: data },
         { status: 502 }
       );
     }
 
     return NextResponse.json({ ok: true });
-  } catch {
+  } catch (err: any) {
+    if (err?.name === "AbortError") {
+      return NextResponse.json(
+        { ok: false, error: "Tempo excedido ao enviar. Tente novamente." },
+        { status: 504 }
+      );
+    }
+
     return NextResponse.json({ ok: false, error: "Erro interno." }, { status: 500 });
   }
 }

@@ -8,18 +8,19 @@ const MAX_LENGTH = 2000;
 const MAX_NAME_LENGTH = 80;
 
 const MIN_TURMA = 1;
-const MAX_TURMA = 999;
+const MAX_TURMA = 99;
 
 const TOPIC_OPTIONS = [
   { value: "infraestrutura", label: "Infraestrutura" },
   { value: "problemas da turma", label: "Problemas da turma" },
   { value: "problemas com a coordenação", label: "Problemas com a coordenação" },
   { value: "problemas com os professores", label: "Problemas com os professores" },
+  { value: "certificados", label: "Certificados" }, // NOVO
 ] as const;
 
 export default function OuvidoriaPage() {
   const [topic, setTopic] = useState("");
-  const [classNumber, setClassNumber] = useState(""); // NOVO: turma
+  const [classNumber, setClassNumber] = useState(""); // turma
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
