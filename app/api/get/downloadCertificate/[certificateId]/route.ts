@@ -44,6 +44,35 @@ const getBufferByImageUrl = async (url: string): Promise<ArrayBuffer> => {
     return await response.arrayBuffer();
 };
 
+// Detecta se o buffer é um PDF (magic bytes: %PDF)
+const isPdfBuffer = (buffer: ArrayBuffer): boolean => {
+    const uint = new Uint8Array(buffer);
+    return uint[0] === 0x25 && uint[1] === 0x50 && uint[2] === 0x44 && uint[3] === 0x46;
+};
+
+// Converte para JPG/PNG se necessário (pdf-lib só aceita esses). Sharp converte WebP, GIF, BMP, TIFF, etc.
+const ensurePdfCompatibleImage = async (buffer: ArrayBuffer): Promise<ArrayBuffer> => {
+    const uint = new Uint8Array(buffer);
+    const isJpeg = uint[0] === 0xff && uint[1] === 0xd8;
+    const isPng = uint[0] === 0x89 && uint[1] === 0x50 && uint[2] === 0x4e && uint[3] === 0x47;
+    if (isJpeg || isPng) return buffer;
+
+    // PDF não é imagem - não converter aqui
+    if (isPdfBuffer(buffer)) throw new Error("PDF_DETECTED");
+
+    // Para WebP, GIF, BMP, TIFF e outros: converte com sharp
+    try {
+        const sharp = (await import("sharp")).default;
+        const pngBuffer = await sharp(Buffer.from(buffer)).png().toBuffer();
+        const copy = new Uint8Array(pngBuffer.length);
+        copy.set(pngBuffer);
+        return copy.buffer;
+    } catch (err) {
+        console.error("Erro ao converter imagem com sharp:", err);
+        throw new Error("Formato de imagem não suportado. Use JPG ou PNG.");
+    }
+};
+
 // Converte cor CSS (hex ou rgb) para RGB do pdf-lib
 const parseColor = (color?: string): ReturnType<typeof rgb> => {
     if (!color) return rgb(0, 0, 0); // Preto por padrão
@@ -291,6 +320,7 @@ export async function GET(req: NextRequest, {
         let frontImageBuffer: ArrayBuffer;
         let width: number;
         let height: number;
+        let frontImageExt: string | undefined;
 
         // Verifica se é certificado com certificatePath (scan template)
         if (certificate.certificatePath && ObjectId.isValid(String(certificate.certificatePath))) {
@@ -317,6 +347,46 @@ export async function GET(req: NextRequest, {
             }
             
             frontImageBuffer = await getBufferByImageUrl(templateLink);
+            frontImageExt = template.templateExtension?.toLowerCase();
+
+            // Se o scan for PDF, carrega e retorna diretamente (com verso se houver)
+            if (frontImageExt === "pdf" || isPdfBuffer(frontImageBuffer)) {
+                const sourcePdf = await PDFDocument.load(new Uint8Array(frontImageBuffer));
+                const destPdf = await PDFDocument.create();
+                const pageCount = sourcePdf.getPageCount();
+                const copiedPages = await destPdf.copyPages(sourcePdf, Array.from({ length: pageCount }, (_, i) => i));
+                copiedPages.forEach((p) => destPdf.addPage(p));
+
+                if (certificate.verse?.showVerse && certificate.eventId.templateVersePath) {
+                    const verseLink = await getSignedUrl(process.env.R2_BUCKET_NAME ?? "", certificate.eventId.templateVersePath);
+                    if (verseLink) {
+                        const verseBuffer = await getBufferByImageUrl(verseLink);
+                        if (isPdfBuffer(verseBuffer)) {
+                            const versePdf = await PDFDocument.load(new Uint8Array(verseBuffer));
+                            const vCount = versePdf.getPageCount();
+                            const vPages = await destPdf.copyPages(versePdf, Array.from({ length: vCount }, (_, i) => i));
+                            vPages.forEach((p) => destPdf.addPage(p));
+                        } else {
+                            const convVerse = await ensurePdfCompatibleImage(verseBuffer);
+                            const verseU8 = new Uint8Array(convVerse);
+                            const verseIsPng = verseU8[0] === 0x89 && verseU8[1] === 0x50 && verseU8[2] === 0x4e;
+                            const verseImage = verseIsPng ? await destPdf.embedPng(convVerse) : await destPdf.embedJpg(convVerse);
+                            const { width: vw, height: vh } = verseImage.scale(1);
+                            destPdf.addPage([vw, vh]).drawImage(verseImage, { x: 0, y: 0, width: vw, height: vh });
+                        }
+                    }
+                }
+
+                const pdfBytes = await destPdf.save();
+                const fileName = `${certificate.eventName} - ${certificate.ownerName}.pdf`.replace(/[^a-z0-9]/gi, "_");
+                return new Response(Buffer.from(pdfBytes), {
+                    headers: {
+                        "Content-Type": "application/pdf",
+                        "Content-Disposition": `attachment; filename="${fileName}"`,
+                        "Cache-Control": "no-cache",
+                    },
+                });
+            }
         } else {
             // Certificado normal com templatePath
             const frontTemplateLink = await getSignedUrl(
@@ -329,22 +399,42 @@ export async function GET(req: NextRequest, {
             }
 
             frontImageBuffer = await getBufferByImageUrl(frontTemplateLink);
+            const pathMatch = certificate.eventId.templatePath?.match(/\.(jpe?g|png|webp)$/i);
+            frontImageExt = pathMatch?.[1]?.toLowerCase();
         }
 
-        // Tenta embed como JPG, se falhar tenta PNG
+        // Converte WebP para PNG se necessário (pdf-lib não suporta WebP)
+        frontImageBuffer = await ensurePdfCompatibleImage(frontImageBuffer);
+
+        // Detecta formato real (após conversão) pelos magic bytes para escolher embed correto
+        const u8 = new Uint8Array(frontImageBuffer);
+        const isPng = u8[0] === 0x89 && u8[1] === 0x50 && u8[2] === 0x4e;
+        const tryPngFirst = isPng;
         let frontImage;
         
         try {
-            frontImage = await pdfDoc.embedJpg(frontImageBuffer);
+            if (tryPngFirst) {
+                frontImage = await pdfDoc.embedPng(frontImageBuffer);
+            } else {
+                frontImage = await pdfDoc.embedJpg(frontImageBuffer);
+            }
             const scaled = frontImage.scale(1);
             width = scaled.width;
             height = scaled.height;
         } catch {
-            // Se não for JPG, tenta PNG
-            frontImage = await pdfDoc.embedPng(frontImageBuffer);
-            const scaled = frontImage.scale(1);
-            width = scaled.width;
-            height = scaled.height;
+            try {
+                if (tryPngFirst) {
+                    frontImage = await pdfDoc.embedJpg(frontImageBuffer);
+                } else {
+                    frontImage = await pdfDoc.embedPng(frontImageBuffer);
+                }
+                const scaled = frontImage.scale(1);
+                width = scaled.width;
+                height = scaled.height;
+            } catch (err) {
+                console.error('Formato da imagem não suportado (use JPG ou PNG). Extensão:', frontImageExt, err);
+                throw new Error('O formato da imagem do certificado não é suportado. Use JPG ou PNG.');
+            }
         }
 
         const frontPage = pdfDoc.addPage([width, height]);
@@ -371,12 +461,15 @@ export async function GET(req: NextRequest, {
             );
 
             if (verseTemplateLink) {
-                const verseImageBuffer = await getBufferByImageUrl(verseTemplateLink);
+                let verseImageBuffer = await getBufferByImageUrl(verseTemplateLink);
+                verseImageBuffer = await ensurePdfCompatibleImage(verseImageBuffer);
+                const verseU8 = new Uint8Array(verseImageBuffer);
+                const verseIsPng = verseU8[0] === 0x89 && verseU8[1] === 0x50 && verseU8[2] === 0x4e;
                 let verseImage;
                 try {
-                    verseImage = await pdfDoc.embedJpg(verseImageBuffer);
+                    verseImage = verseIsPng ? await pdfDoc.embedPng(verseImageBuffer) : await pdfDoc.embedJpg(verseImageBuffer);
                 } catch {
-                    verseImage = await pdfDoc.embedPng(verseImageBuffer);
+                    verseImage = verseIsPng ? await pdfDoc.embedJpg(verseImageBuffer) : await pdfDoc.embedPng(verseImageBuffer);
                 }
                 const versePage = pdfDoc.addPage([width, height]);
                 versePage.drawImage(verseImage, {

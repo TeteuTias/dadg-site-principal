@@ -40,6 +40,7 @@ const CertificateSchema: Schema<ICertificate> = new Schema(
         ownerEmail: { type: String, required: true },
         frontTopperText: { type: String },
         frontBottomText: { type: String },
+        certificatePath: { type: Schema.Types.Mixed, required: false },
         certificateHours: { type: String, required: true },
         onlyImage: { type: Boolean, required: false, default: false },
         isReady: { type: Boolean, required: false, default: false },
