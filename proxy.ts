@@ -4,7 +4,7 @@ import { auth0 } from "./app/src/lib/auth0/Auth0Client";
 
 export async function proxy(req: NextRequest) {
   const session = await auth0.getSession()
-  if (req.nextUrl.pathname.startsWith("/panel")) {
+  if (req.nextUrl.pathname.startsWith("/painel")) {
     if (!session) {
       return await auth0.startInteractiveLogin({ returnTo: req.nextUrl.toString() })
     }
