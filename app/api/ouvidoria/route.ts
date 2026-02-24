@@ -170,8 +170,9 @@ export async function POST(req: Request) {
     // IMPORTANTÍSSIMO: Apps Script frequentemente retorna 200 mesmo em erro.
     // Então a regra é: sucesso só se data.ok === true
     if (!data?.ok) {
+      console.error("OUVIDORIA script error:", data);
       return NextResponse.json(
-        { ok: false, error: data?.error ?? "Falha ao enviar.", script: data },
+        { ok: false, error: data?.error ?? "Falha ao enviar." },
         { status: 502 }
       );
     }
