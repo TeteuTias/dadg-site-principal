@@ -15,7 +15,6 @@ interface MongooseCache {
 
 // Estende o objeto global para incluir a propriedade mongoose com o tipo definido
 declare global {
-    // eslint-disable-next-line no-var
     var mongoose: MongooseCache;
 }
 

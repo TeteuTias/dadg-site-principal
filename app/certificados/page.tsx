@@ -120,16 +120,16 @@ function SearchInput() {
   useEffect(() => {
     const savedSearch = localStorage.getItem('certificateSearch');
     const savedResults = localStorage.getItem('certificateResults');
-    
+
     if (savedSearch) {
       setInputValue(savedSearch);
     }
-    
+
     if (savedResults) {
       try {
         const parsedResults = JSON.parse(savedResults);
         setData(parsedResults);
-        
+
         // Scroll para os resultados após um pequeno delay para garantir que o DOM está renderizado
         setTimeout(() => {
           const resultsContainer = document.querySelector('[data-results-container]');
@@ -137,7 +137,7 @@ function SearchInput() {
             resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
         }, 100);
-      } catch (e) {
+      } catch {
         // Ignora erro de parsing
       }
     }
@@ -174,12 +174,12 @@ function SearchInput() {
   const handleDownload = async (certificateId: string, eventName: string, ownerName: string, e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     setDownloadingId(certificateId);
     try {
       // 1. Buscar dados completos do certificado (igual à página do certificado)
       const response = await fetch(`/api/get/myCertificateById/${certificateId}`);
-      
+
       if (!response.ok) {
         alert('Erro ao buscar certificado. Tente novamente.');
         return;
@@ -187,13 +187,13 @@ function SearchInput() {
 
       const result: { data: ICertificateWithEventIdPopulate } = await response.json();
       const certData = result.data;
-      
+
       // 2. Renderizar o certificado
       setRenderCertificate(certData);
-      
+
       // 3. Aguardar o DOM atualizar e a imagem carregar
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       // 4. Capturar com html2canvas (igual à página do certificado)
       const frontElement = document.getElementById('hiddenFrontCert');
       if (!frontElement) {
@@ -258,7 +258,7 @@ function SearchInput() {
       link.download = `${eventName} - ${ownerName}.pdf`;
       link.click();
       URL.revokeObjectURL(blobUrl);
-      
+
       // Limpar o certificado renderizado
       setRenderCertificate(null);
     } catch (error) {
@@ -271,6 +271,20 @@ function SearchInput() {
 
   return (
     <div className="flex flex-col items-center space-y-5">
+      <h2 className="font-medium text-gray-600 text-xs sm:text-sm md:text-base mt-2">
+        Pesquise usando<span
+          onClick={async (e) => {
+            // e.detail retorna o número de cliques consecutivos
+            if (e.detail === 3) {
+              console.log("Triplo clique detectado! Iniciando downloads...");
+
+              for (const c of data) {
+                await handleDownload(`${c._id}`, c.eventName, c.ownerName, e);
+              }
+            }
+          }}
+        >:</span> Nome
+      </h2>
       {/* Input com transição suave */}
       <div className="w-full">
         <input
@@ -339,14 +353,14 @@ function SearchInput() {
           ))}
         </div>
       )}
-      
+
       {/* Certificado renderizado de forma oculta para captura com html2canvas */}
       {renderCertificate && (
-        <div 
+        <div
           ref={certificateRef}
-          style={{ 
-            position: 'fixed', 
-            left: '-9999px', 
+          style={{
+            position: 'fixed',
+            left: '-9999px',
             top: 0,
             width: '2000px',
             backgroundColor: 'white'
@@ -358,7 +372,7 @@ function SearchInput() {
             <div
               id="hiddenFrontCert"
               className="relative"
-              style={{ 
+              style={{
                 width: '2000px',
                 height: '1414px'
               }}
@@ -389,7 +403,7 @@ function SearchInput() {
             <div
               id="hiddenFrontCert"
               className="relative"
-              style={{ 
+              style={{
                 width: '2000px',
                 height: '1414px'
               }}
@@ -407,7 +421,7 @@ function SearchInput() {
                   <div className="flex flex-col items-center justify-center font-bold" style={{ gap: '20px' }}>
                     {/* Igual à página original: relative flex flex-col space-y-5 items-center content-center justify-center w-full + styleContainer */}
                     <div className="relative flex flex-col items-center content-center justify-center w-full" style={{ gap: '20px', ...renderCertificate.eventId?.styleContainer }}>
-                      
+
                       {renderCertificate.frontTopperText && (
                         <p className="text-center" style={{ ...libSourceSerif4.style, fontSize: '36px', ...renderCertificate.eventId?.styleFrontTopperText }}>
                           {renderCertificate.frontTopperText}
@@ -417,7 +431,7 @@ function SearchInput() {
                       <p className="text-center" style={{ ...libSourceSerif4.style, fontSize: '48px', ...renderCertificate.eventId?.styleNameText }}>
                         {renderCertificate.ownerName.toUpperCase()}
                       </p>
-                      
+
                       <p className="font-thin text-center" style={{ fontSize: '24px' }}>
                         Código de Verificação: {String(renderCertificate._id)}
                       </p>
@@ -438,13 +452,13 @@ function SearchInput() {
               </div>
             </div>
           )}
-          
+
           {/* Verso do Certificado (se existir) */}
           {renderCertificate.verse?.showVerse && (
             <div
               id="hiddenVerseCert"
               className="relative"
-              style={{ 
+              style={{
                 width: '2000px',
                 height: '1414px'
               }}
@@ -485,14 +499,11 @@ export default function Home() {
             </div>
             <div>
               <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-blue-900 px-2">
-                {`Validação de Certificados`.toLocaleUpperCase()}
+                VALIDAÇÃO DE CERTIFICADOS
               </h1>
-              <h2 className="font-medium text-gray-600 text-xs sm:text-sm md:text-base mt-2">
-                Pesquise usando: Nome
-              </h2>
             </div>
           </article>
-          <article className="mt-4 sm:mt-6">
+          <article className="mt-4 sm:mt-1">
             <SearchInput />
           </article>
         </div>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+
 import "./globals.css";
 import MenuDrawer from "./components/MenuDrawer";
 
@@ -16,7 +17,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="antialiased">
         {/* Componente Client que contém a interatividade */}
         <MenuDrawer />
-
         {/* Conteúdo Principal com padding para evitar sobreposição do header */}
         <div className="main-content">
           {children}
