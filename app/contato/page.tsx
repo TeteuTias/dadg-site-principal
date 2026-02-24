@@ -1,109 +1,80 @@
-'use client'
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
-import { Poppins } from 'next/font/google';
 import { FaInstagram } from 'react-icons/fa';
-
-const poppins = Poppins({
-  subsets: ['latin', 'latin-ext'],
-  weight: ['400', '600', '700'],
-  style: ['normal'],
-});
+import './style.css';
 
 const instagramAccounts = [
-  {
-    name: "DADG ImePAC",
-    handle: "@dadg.imepac",
-    url: "https://instagram.com/dadg.imepac"
-  },
-  {
-    name: "CAEP ImePAC",
-    handle: "@caep.imepac",
-    url: "https://instagram.com/caep.imepac"
-  },
-  {
-    name: "CLAM ImePAC",
-    handle: "@clam.imepac",
-    url: "https://instagram.com/clam.imepac"
-  },
-  {
-    name: "CLEVI ImePAC Araguari",
-    handle: "@clevimepacaraguari",
-    url: "https://instagram.com/clevimepacaraguari"
-  },
-  {
-    name: "CAES ImePAC",
-    handle: "@caes.imepac",
-    url: "https://instagram.com/caes.imepac"
-  },
-  {
-    name: "COEPS Araguari",
-    handle: "@coeps.araguari",
-    url: "https://instagram.com/coeps.araguari"
-  }
+  { name: "DADG ImePAC", handle: "@dadg.imepac", url: "https://instagram.com/dadg.imepac" },
+  { name: "CAEP ImePAC", handle: "@caep.imepac", url: "https://instagram.com/caep.imepac" },
+  { name: "CLAM ImePAC", handle: "@clam.imepac", url: "https://instagram.com/clam.imepac" },
+  { name: "CLEVI ImePAC Araguari", handle: "@clevimepacaraguari", url: "https://instagram.com/clevimepacaraguari" },
+  { name: "CAES ImePAC", handle: "@caes.imepac", url: "https://instagram.com/caes.imepac" },
+  { name: "COEPS Araguari", handle: "@coeps.araguari", url: "https://instagram.com/coeps.araguari" },
 ];
 
 export default function ContatoPage() {
   return (
-    <main className="relative min-h-screen w-full overflow-hidden pb-20 sm:pb-40" style={{ ...poppins.style, backgroundColor: "#ffffff" }}>
-      <div className="relative flex flex-col items-center justify-center p-4 sm:p-8">
-        <header className="mb-8 sm:mb-12 text-center px-4">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#09427d] uppercase mb-3 sm:mb-4">Contato</h1>
-          <p className="text-sm sm:text-base md:text-lg text-[#09427d]">
-            Siga-nos no Instagram para ficar por dentro das novidades
+    <main className="contato-container">
+      <div className="contato-content">
+        <header className="contato-header">
+          <h1 className="contato-title">Contato</h1>
+          <p className="contato-subtitle">
+            Siga-nos no Instagram para ficar por dentro das novidades e entre em contato pelo e-mail.
           </p>
         </header>
 
-        <section className="w-full max-w-4xl grid gap-4 sm:gap-6 md:gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 px-4">
+        <section className="contato-grid">
           {instagramAccounts.map((account) => (
             <Link
               key={account.handle}
               href={account.url}
               target="_blank"
-              className="instagram-hover flex flex-col items-center justify-center p-4 sm:p-6 bg-white rounded-xl shadow-md transition-transform duration-300 hover:scale-105 cursor-pointer"
+              rel="noopener noreferrer"
+              className="contato-card instagram-hover"
             >
-              <div className="mb-3 sm:mb-4">
-                <FaInstagram className="w-10 h-10 sm:w-12 sm:h-12 text-[#09427d]" />
-              </div>
-              <div className="text-center">
-                <h2 className="text-base sm:text-lg md:text-xl font-bold text-[#09427d] uppercase break-words">
-                  {account.name}
-                </h2>
-                <p className="text-sm sm:text-base md:text-lg text-gray-600 break-words">{account.handle}</p>
-              </div>
+              <span className="contato-card-icon" aria-hidden>
+                <FaInstagram size={28} />
+              </span>
+              <span className="contato-card-name">{account.name}</span>
+              <span className="contato-card-handle">{account.handle}</span>
             </Link>
           ))}
         </section>
 
-        <section className="mt-8 sm:mt-12 w-full max-w-4xl mx-auto px-4">
-          <div className="email-shadow-wrapper mx-auto">
-            <div className="p-4 sm:p-6 bg-white rounded-xl email-hover text-center transition-transform duration-300 hover:scale-105">
-              <h2 className="text-xl sm:text-2xl font-bold text-[#09427d] uppercase mb-2">Email</h2>
+        <section className="contato-email-section">
+          <div className="email-shadow-wrapper">
+            <div className="contato-email-card email-hover">
+              <p className="contato-email-label">E-mail</p>
               <a
                 href="mailto:dadg.imepac@gmail.com"
-                className="text-sm sm:text-base md:text-lg text-gray-600 hover:text-[#09427d] transition-colors duration-300 break-all"
+                className="contato-email-link"
               >
                 dadg.imepac@gmail.com
               </a>
             </div>
           </div>
         </section>
+
+        <section className="contato-ouvidoria-wrap">
+          <Link href="/ouvidoria" className="contato-ouvidoria-card">
+            <p className="contato-ouvidoria-text">
+              Mas se precisar falar de algo mais sério, use nossa ouvidoria.
+            </p>
+            <span className="contato-ouvidoria-link">
+              Ir para Ouvidoria
+              <span className="contato-ouvidoria-arrow" aria-hidden>→</span>
+            </span>
+          </Link>
+        </section>
       </div>
 
-      <div className="absolute bottom-0 left-0 w-full overflow-hidden" style={{ lineHeight: 0 }}>
-        <svg
-          viewBox="0 0 500 150"
-          preserveAspectRatio="none"
-          style={{
-            display: 'block',
-            width: '100%',
-            height: '150px',
-            opacity: 0.6,
-          }}
-        >
+      <div className="contato-wave">
+        <svg viewBox="0 0 500 150" preserveAspectRatio="none">
           <path
             d="M0.00,49.98 C150.00,150.00 349.12,-50.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z"
-            style={{ fill: '#09427d' }}
+            fill="#09427d"
           />
         </svg>
       </div>

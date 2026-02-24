@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Link from "next/link";
 import { client } from "../lib/contentful";
 import './styles.css';

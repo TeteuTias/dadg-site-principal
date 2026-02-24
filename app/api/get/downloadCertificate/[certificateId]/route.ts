@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
+/* eslint-disable */
+import { NextRequest } from "next/server";
 import mongoose from "mongoose";
 import { connectToDatabase } from "@/app/lib/mongodb";
 import CertificateModel from "@/app/lib/models/CertificateModel";

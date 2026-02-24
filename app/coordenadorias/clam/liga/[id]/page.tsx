@@ -34,7 +34,7 @@ export default function LamePage({ params }: { params: Promise<{ id: string }> }
       setData(data.data);
     }
     fetchData()
-  }, [])
+  }, [params])
   if (!data) {
     return (
       <main className="lame-main" style={poppins.style}>
@@ -47,7 +47,7 @@ export default function LamePage({ params }: { params: Promise<{ id: string }> }
       <div className="lame-header">
         <div className="lame-logo-circle-pro">
           <img
-            src={"/leagues/"+data?.acronym.toLocaleLowerCase()+".png"}
+            src={"/leagues/" + data?.acronym.toLocaleLowerCase() + ".png"}
             alt="Logo CLAM"
             className='rounded-full'
             width={180}
@@ -108,7 +108,7 @@ export default function LamePage({ params }: { params: Promise<{ id: string }> }
           {
             data?.examples.map((value) => {
               return (
-                <li><span className="lame-list-bullet" />{value}</li>
+                <li key={value}><span className="lame-list-bullet" />{value}</li>
               )
             })
           }
