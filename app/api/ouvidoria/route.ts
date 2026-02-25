@@ -118,6 +118,14 @@ export async function POST(req: Request) {
       );
     }
 
+    // Para tópico certificados, nome é obrigatório
+    if (topic === "certificados" && !name) {
+      return NextResponse.json(
+        { ok: false, error: "Para o tópico Certificados, o nome completo é obrigatório." },
+        { status: 400 }
+      );
+    }
+
     // Valida nome
     if (name.length > MAX_NAME) {
       return NextResponse.json(
