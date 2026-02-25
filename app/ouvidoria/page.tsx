@@ -18,6 +18,8 @@ const TOPIC_OPTIONS = [
   { value: "certificados", label: "Certificados" }, // NOVO
 ] as const;
 
+const CERTIFICADOS_TOPIC = "certificados";
+
 export default function OuvidoriaPage() {
   const [topic, setTopic] = useState("");
   const [classNumber, setClassNumber] = useState(""); // turma
@@ -26,6 +28,16 @@ export default function OuvidoriaPage() {
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
   const [error, setError] = useState("");
   const [website, setWebsite] = useState("");
+  const [showCertificadosPopup, setShowCertificadosPopup] = useState(false);
+
+  const isCertificadosTopic = topic === CERTIFICADOS_TOPIC;
+
+  function handleTopicClick(value: string) {
+    if (value === CERTIFICADOS_TOPIC) {
+      setShowCertificadosPopup(true);
+    }
+    setTopic(value);
+  }
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -33,6 +45,11 @@ export default function OuvidoriaPage() {
     setError("");
 
     // Validação leve no front (o server valida de novo)
+    if (topic === CERTIFICADOS_TOPIC && !name.trim()) {
+      setStatus("error");
+      setError("Para o tópico Certificados, o nome completo é obrigatório.");
+      return;
+    }
     if (name.trim().length > MAX_NAME_LENGTH) {
       setStatus("error");
       setError(`Nome muito longo (máx ${MAX_NAME_LENGTH} caracteres).`);
@@ -122,7 +139,7 @@ export default function OuvidoriaPage() {
                     key={opt.value}
                     type="button"
                     className={`ouvidoria-topic-option ${topic === opt.value ? "selected" : ""}`}
-                    onClick={() => setTopic(opt.value)}
+                    onClick={() => handleTopicClick(opt.value)}
                     aria-pressed={topic === opt.value}
                   >
                     <span className="ouvidoria-topic-option-text">{opt.label}</span>
@@ -189,7 +206,9 @@ export default function OuvidoriaPage() {
             </div>
 
             <div className="ouvidoria-field">
-              <label htmlFor="ouvidoria-name">Nome (opcional)</label>
+              <label htmlFor="ouvidoria-name">
+                Nome {isCertificadosTopic ? <span className="ouvidoria-required">*</span> : "(opcional)"}
+              </label>
               <div className="ouvidoria-input-wrap ouvidoria-name-wrap">
                 <span className="ouvidoria-input-icon" aria-hidden>
                   <svg
@@ -213,8 +232,10 @@ export default function OuvidoriaPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   maxLength={MAX_NAME_LENGTH}
-                  placeholder="Se quiser se identificar..."
+                  placeholder={isCertificadosTopic ? "Digite seu nome completo" : "Se quiser se identificar..."}
                   autoComplete="name"
+                  required={isCertificadosTopic}
+                  aria-required={isCertificadosTopic}
                 />
               </div>
               <span className="ouvidoria-char-count">
@@ -256,6 +277,25 @@ export default function OuvidoriaPage() {
           </form>
         </div>
       </div>
+
+      {showCertificadosPopup && (
+        <div className="ouvidoria-popup-overlay" role="dialog" aria-modal="true" aria-labelledby="ouvidoria-popup-title">
+          <div className="ouvidoria-popup">
+            <h2 id="ouvidoria-popup-title" className="ouvidoria-popup-title">Tópico Certificados</h2>
+            <p className="ouvidoria-popup-text">
+              Para este tópico, é necessário inserir o <strong>nome completo</strong> no campo.
+            </p>
+            <button
+              type="button"
+              className="ouvidoria-popup-close"
+              onClick={() => setShowCertificadosPopup(false)}
+              aria-label="Fechar"
+            >
+              Entendi
+            </button>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
