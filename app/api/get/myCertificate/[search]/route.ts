@@ -41,8 +41,11 @@ export async function GET(req: NextRequest, {
     }
 
     // Executa a consulta no banco de dados
+    // collation com strength: 1 ignora acentos e maiúsculas/minúsculas
     await connectToDatabase()
-    const owners = await CertificateModel.find(searchCriteria);
+    const owners = await CertificateModel
+        .find(searchCriteria)
+        .collation({ locale: "pt", strength: 1 });
 
     if (owners.length == 0) {
         return NextResponse.json({ "message": "Nenhum resultado encontrado." }, { status: 404 })
