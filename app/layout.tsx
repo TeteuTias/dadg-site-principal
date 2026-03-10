@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-
+import { UserProvider } from "@/lib/userProvider";
 import "./globals.css";
 import MenuDrawer from "./components/MenuDrawer";
-
+import { auth0 } from "@/app/src/lib/auth0/Auth0Client"
 export const metadata: Metadata = {
   title: "@dadg.imepac",
   description: "Bem vindo(a) ao site do Dadg Imepac Araguari!",
@@ -11,7 +11,8 @@ export const metadata: Metadata = {
   }
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const session = await auth0.getSession()
   return (
     <html lang="pt-BR">
       <body className="antialiased">
@@ -19,7 +20,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <MenuDrawer />
         {/* Conteúdo Principal com padding para evitar sobreposição do header */}
         <div className="main-content">
-          {children}
+          <UserProvider tokenVar={session?.tokenSet.idToken || undefined}>
+            {children}
+          </UserProvider>
         </div>
       </body>
     </html>
