@@ -24,7 +24,8 @@ export default function MenuDrawer() {
   const [scrolled, setScrolled] = useState(false);
   const [coordenadoriasSubmenuOpen, setCoordenadoriasSubmenuOpen] = useState(false);
   const [drawerWidth, setDrawerWidth] = useState("250px");
-  const [windowWidth, setWindowWidth] = useState<number>(typeof window !== "undefined" ? window.innerWidth : 1024);
+  const [mounted, setMounted] = useState(false);
+  const [windowWidth, setWindowWidth] = useState<number>(1024);
   const pathname = usePathname() || '/';
 
   const headerBackgroundColor =
@@ -42,6 +43,7 @@ export default function MenuDrawer() {
   const drawerBackgroundColor = headerBackgroundColor;
 
   useEffect(() => {
+    setMounted(true);
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
@@ -97,10 +99,16 @@ export default function MenuDrawer() {
     ? `${coordenadoriasSubmenuItems.length * 40}px`
     : "0px";
 
-  const isMobile = windowWidth < 768;
-  const headerHeight = isMobile ? (scrolled ? "30px" : "35px") : (scrolled ? "35px" : "45px");
-  const headerFontSize = isMobile ? (scrolled ? "11px" : "12px") : (scrolled ? "14px" : "16px");
+  const isMobile = mounted ? windowWidth < 768 : false;
+  const isScrolled = mounted ? scrolled : false;
+  const headerHeight = isMobile ? (isScrolled ? "30px" : "35px") : (isScrolled ? "35px" : "45px");
+  const headerFontSize = isMobile ? (isScrolled ? "11px" : "12px") : (isScrolled ? "14px" : "16px");
   const headerGap = isMobile ? "8px" : "16px";
+
+  useEffect(() => {
+    if (!mounted) return;
+    document.documentElement.style.setProperty("--dadg-header-height", headerHeight);
+  }, [headerHeight, mounted]);
 
   return (
     <>

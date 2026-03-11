@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Poppins } from 'next/font/google';
 import './styles/home.css';
+import UpcomingSchedulePopup from './components/UpcomingSchedulePopup';
 
 const stylePoppins = Poppins({
   subsets: ['latin', 'latin-ext'],
@@ -69,6 +70,7 @@ export default function Home() {
       className="home-background relative flex flex-col items-center justify-center min-h-screen w-full p-8"
       style={stylePoppins.style}
     >
+      <UpcomingSchedulePopup />
       <div className="z-10 flex flex-col items-center text-center max-w-4xl mx-auto pb-20 sm:pb-32 px-4">
         <div className="home-logo-container relative w-24 h-24 sm:w-32 sm:h-32 mb-4 sm:mb-6">
           <Image

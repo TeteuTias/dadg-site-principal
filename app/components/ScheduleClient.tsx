@@ -22,6 +22,18 @@ interface Event {
   end?: { dateTime?: string; date?: string };
 }
 
+const getEventDate = (dateTime?: string, date?: string): Date | null => {
+  if (dateTime) {
+    return new Date(dateTime);
+  }
+  if (date) {
+    const [year, month, day] = date.split('-').map(Number);
+    if (!year || !month || !day) return null;
+    return new Date(year, month - 1, day);
+  }
+  return null;
+};
+
 export default function ScheduleClient() {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -31,9 +43,22 @@ export default function ScheduleClient() {
   const fetchEvents = async (month: Date) => {
     setLoading(true);
     try {
-      const startMonth = startOfMonth(month).toISOString();
-      const endMonth = endOfMonth(month).toISOString();
-      console.log('Buscando eventos:', { startMonth, endMonth });
+      const monthStart = startOfMonth(month);
+      const monthEnd = endOfMonth(month);
+      const calendarStart = startOfWeek(monthStart, { weekStartsOn: 0 });
+      const calendarEnd = addDays(
+        startOfWeek(monthEnd, { weekStartsOn: 0 }),
+        6
+      );
+
+      const startMonth = calendarStart.toISOString();
+      const endMonth = calendarEnd.toISOString();
+      console.log('Buscando eventos:', {
+        calendarStart,
+        calendarEnd,
+        startMonth,
+        endMonth
+      });
       
       const res = await fetch(
         `/api/get/eventsByDate?start=${startMonth}&end=${endMonth}`
@@ -69,14 +94,8 @@ export default function ScheduleClient() {
       for (let i = 0; i < 7; i++) {
         const cloneDay = day;
         const hasEvent = events.some((event) => {
-          let eventDate: Date;
-          if (event.start.dateTime) {
-            eventDate = new Date(event.start.dateTime);
-          } else if (event.start.date) {
-            eventDate = new Date(event.start.date);
-          } else {
-            return false;
-          }
+          const eventDate = getEventDate(event.start.dateTime, event.start.date);
+          if (!eventDate) return false;
           return isSameDay(eventDate, day);
         });
 
@@ -105,14 +124,8 @@ export default function ScheduleClient() {
   };
 
   const eventsForSelectedDate = events.filter((event) => {
-    let eventDate: Date;
-    if (event.start.dateTime) {
-      eventDate = new Date(event.start.dateTime);
-    } else if (event.start.date) {
-      eventDate = new Date(event.start.date);
-    } else {
-      return false;
-    }
+    const eventDate = getEventDate(event.start.dateTime, event.start.date);
+    if (!eventDate) return false;
     return isSameDay(eventDate, selectedDate);
   });
 
@@ -158,16 +171,30 @@ export default function ScheduleClient() {
               <h4 className="event-name">{event.summary}</h4>
               <p className="event-time">
                 <span className="font-bold">Início:</span>{' '}
-                {event.start.dateTime
-                  ? new Date(event.start.dateTime).toLocaleString()
-                  : event.start.date}
+                {(() => {
+                  const startDate = getEventDate(
+                    event.start.dateTime,
+                    event.start.date
+                  );
+                  if (!startDate) return 'Data inválida';
+                  return event.start.dateTime
+                    ? format(startDate, 'dd/MM/yyyy HH:mm', { locale: ptBR })
+                    : format(startDate, 'dd/MM/yyyy', { locale: ptBR });
+                })()}
               </p>
               {event.end && (
                 <p className="event-time">
                   <span className="font-bold">Fim:</span>{' '}
-                  {event.end.dateTime
-                    ? new Date(event.end.dateTime).toLocaleString()
-                    : event.end.date}
+                  {(() => {
+                    const endDate = getEventDate(
+                      event.end?.dateTime,
+                      event.end?.date
+                    );
+                    if (!endDate) return 'Data inválida';
+                    return event.end?.dateTime
+                      ? format(endDate, 'dd/MM/yyyy HH:mm', { locale: ptBR })
+                      : format(endDate, 'dd/MM/yyyy', { locale: ptBR });
+                  })()}
                 </p>
               )}
             </div>
