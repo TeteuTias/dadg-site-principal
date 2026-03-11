@@ -107,24 +107,24 @@ function Loader() {
 function SearchInput() {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
- const [noResults, setNoResults] = useState(false);
+  const [noResults, setNoResults] = useState(false);
   const [data, setData] = useState<ICertificate[]>([]);
-  const [downloadingId, setDownloadingId] = useState<string | null>(null);
+  const [/*downloadingId*/, setDownloadingId] = useState<string | null>(null);
 
   // Restaura estado salvo ao montar o componente
   useEffect(() => {
     const savedSearch = localStorage.getItem('certificateSearch');
     const savedResults = localStorage.getItem('certificateResults');
-    
+
     if (savedSearch) {
       setInputValue(savedSearch);
     }
-    
+
     if (savedResults) {
       try {
         const parsedResults = JSON.parse(savedResults);
         setData(parsedResults);
-        
+
         // Scroll para os resultados após um pequeno delay para garantir que o DOM está renderizado
         setTimeout(() => {
           const resultsContainer = document.querySelector('[data-results-container]');
@@ -165,15 +165,15 @@ function SearchInput() {
       setIsLoading(false);
     }
   };
-
+  /*
   const handleDownload = async (certificateId: string, eventName: string, ownerName: string, e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     setDownloadingId(certificateId);
     try {
       const response = await fetch(`/api/get/downloadCertificate/${certificateId}`);
-      
+
       if (!response.ok) {
         const errData = await response.json().catch(() => ({}));
         alert(errData.message || 'Erro ao baixar certificado. Tente novamente.');
@@ -194,7 +194,7 @@ function SearchInput() {
       setDownloadingId(null);
     }
   };
-
+  */
   return (
     <div className="flex flex-col items-center space-y-5">
       {/* Input com transição suave */}
@@ -244,28 +244,31 @@ function SearchInput() {
                   </div>
                 </div>
               </Link>
+              {/*
               <button
                 onClick={(e) => handleDownload(String(certificate._id), certificate.eventName, certificate.ownerName, e)}
                 disabled={downloadingId === String(certificate._id)}
                 className="absolute top-3 right-3 p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg z-10"
                 title="Baixar certificado"
               >
-                {downloadingId === String(certificate._id) ? (
-                  <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                ) : (
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                  </svg>
-                )}
-              </button>
+              {downloadingId === String(certificate._id) ? (
+                <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              ) : (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+              )}
+            </button>
+                  */}
             </div>
           ))}
         </div>
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 }
 
