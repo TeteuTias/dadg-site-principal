@@ -10,6 +10,9 @@ const MIN_MESSAGE = 20;
 const MAX_MESSAGE = 2000;
 const MAX_NAME = 80;
 
+const MIN_PHONE_DIGITS = 10;
+const MAX_PHONE_DIGITS = 13;
+
 const MIN_TURMA = 1;
 const MAX_TURMA = 999;
 
@@ -18,8 +21,8 @@ function topicKey(x: unknown) {
   return String(x ?? "")
     .toLowerCase()
     .normalize("NFKC")
-    .replace(/[\u200B-\u200D\uFEFF]/g, "") // zero-width
-    .replace(/\u00A0/g, " ")              // NBSP
+    .replace(/[\u200B-\u200D\uFEFF]/g, "")
+    .replace(/\u00A0/g, " ")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -56,6 +59,10 @@ function norm(x: unknown) {
   return String(x ?? "").trim();
 }
 
+function onlyDigits(x: unknown) {
+  return String(x ?? "").replace(/\D/g, "");
+}
+
 function getClientIp(req: Request) {
   const xff = req.headers.get("x-forwarded-for");
   if (xff) return xff.split(",")[0].trim();
@@ -83,7 +90,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // Rate limit
     const ip = getClientIp(req);
     const rl = rateLimit(ip, 5, 60_000);
     if (!rl.ok) {
@@ -95,21 +101,20 @@ export async function POST(req: Request) {
 
     const body = await req.json().catch(() => ({}));
 
-    // Honeypot vindo do front
     const website = norm(body.website);
     if (website) return NextResponse.json({ ok: true });
 
     const topic = topicKey(body.topic);
     const classNumberRaw = norm(body.classNumber);
     const name = norm(body.name);
+    const phone = norm(body.phone ?? body.telefone);
+    const phoneDigits = onlyDigits(phone);
     const message = norm(body.message);
 
-    // Valida tópico
     if (!ALLOWED_TOPICS.has(topic)) {
       return NextResponse.json({ ok: false, error: "Tópico inválido." }, { status: 400 });
     }
 
-    // Valida turma
     const classNumber = parseInt(classNumberRaw, 10);
     if (!Number.isFinite(classNumber) || classNumber < MIN_TURMA || classNumber > MAX_TURMA) {
       return NextResponse.json(
@@ -118,7 +123,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // Para tópico certificados, nome é obrigatório
     if (topic === "certificados" && !name) {
       return NextResponse.json(
         { ok: false, error: "Para o tópico Certificados, o nome completo é obrigatório." },
@@ -126,7 +130,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // Valida nome
     if (name.length > MAX_NAME) {
       return NextResponse.json(
         { ok: false, error: `Nome muito longo (máx ${MAX_NAME} caracteres).` },
@@ -134,7 +137,26 @@ export async function POST(req: Request) {
       );
     }
 
-    // Valida mensagem
+    if (topic === "certificados") {
+      if (
+        !phoneDigits ||
+        phoneDigits.length < MIN_PHONE_DIGITS ||
+        phoneDigits.length > MAX_PHONE_DIGITS
+      ) {
+        return NextResponse.json(
+          { ok: false, error: "Telefone inválido. Informe um número com DDD." },
+          { status: 400 }
+        );
+      }
+    } else if (phoneDigits) {
+      if (phoneDigits.length < MIN_PHONE_DIGITS || phoneDigits.length > MAX_PHONE_DIGITS) {
+        return NextResponse.json(
+          { ok: false, error: "Telefone inválido. Informe um número com DDD." },
+          { status: 400 }
+        );
+      }
+    }
+
     if (message.length < MIN_MESSAGE || message.length > MAX_MESSAGE) {
       return NextResponse.json(
         { ok: false, error: `Mensagem inválida (mín ${MIN_MESSAGE}, máx ${MAX_MESSAGE} caracteres).` },
@@ -142,13 +164,13 @@ export async function POST(req: Request) {
       );
     }
 
-    // Envia pro Apps Script
     const payload = {
-      topic,               // já normalizado
-      classNumber,         // number
+      topic,
+      classNumber,
       name,
+      phone,
       message,
-      website: "",         // honeypot só do front; aqui sempre vazio
+      website: "",
     };
 
     const r = await fetchWithTimeout(
@@ -167,7 +189,6 @@ export async function POST(req: Request) {
     try {
       data = JSON.parse(text);
     } catch {
-      // se o GAS responder HTML (erro), loga e devolve erro genérico
       console.error("OUVIDORIA script returned non-JSON:", text.slice(0, 500));
       return NextResponse.json(
         { ok: false, error: "Falha no serviço de envio (resposta inválida do script)." },
@@ -175,8 +196,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // IMPORTANTÍSSIMO: Apps Script frequentemente retorna 200 mesmo em erro.
-    // Então a regra é: sucesso só se data.ok === true
     if (!data?.ok) {
       console.error("OUVIDORIA script error:", data);
       return NextResponse.json(

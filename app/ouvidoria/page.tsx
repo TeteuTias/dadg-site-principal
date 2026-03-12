@@ -7,23 +7,51 @@ const MIN_LENGTH = 20;
 const MAX_LENGTH = 2000;
 const MAX_NAME_LENGTH = 80;
 
+const MIN_PHONE_DIGITS = 10;
+const MAX_PHONE_DIGITS = 13;
+
 const MIN_TURMA = 1;
-const MAX_TURMA = 99;
+const MAX_TURMA = 999;
 
 const TOPIC_OPTIONS = [
   { value: "infraestrutura", label: "Infraestrutura" },
   { value: "problemas da turma", label: "Problemas da turma" },
   { value: "problemas com a coordenação", label: "Problemas com a coordenação" },
   { value: "problemas com os professores", label: "Problemas com os professores" },
-  { value: "certificados", label: "Certificados" }, // NOVO
+  { value: "certificados", label: "Certificados" },
 ] as const;
 
 const CERTIFICADOS_TOPIC = "certificados";
 
+function onlyDigits(value: string) {
+  return value.replace(/\D/g, "");
+}
+
+function formatPhoneBR(value: string) {
+  const digits = onlyDigits(value).slice(0, MAX_PHONE_DIGITS);
+
+  if (!digits) return "";
+  if (digits.length <= 2) return `(${digits}`;
+
+  const ddd = digits.slice(0, 2);
+  const rest = digits.slice(2);
+
+  if (!rest) return `(${ddd})`;
+
+  // 11 dígitos (celular): (DD) 99999-9999
+  // 10 dígitos (fixo):    (DD) 9999-9999
+  const prefixLen = rest.length >= 9 ? 5 : 4;
+  const prefix = rest.slice(0, prefixLen);
+  const suffix = rest.slice(prefixLen, prefixLen + 4);
+
+  return suffix ? `(${ddd}) ${prefix}-${suffix}` : `(${ddd}) ${prefix}`;
+}
+
 export default function OuvidoriaPage() {
   const [topic, setTopic] = useState("");
-  const [classNumber, setClassNumber] = useState(""); // turma
+  const [classNumber, setClassNumber] = useState("");
   const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
   const [error, setError] = useState("");
@@ -35,6 +63,8 @@ export default function OuvidoriaPage() {
   function handleTopicClick(value: string) {
     if (value === CERTIFICADOS_TOPIC) {
       setShowCertificadosPopup(true);
+    } else {
+      setPhone("");
     }
     setTopic(value);
   }
@@ -44,12 +74,12 @@ export default function OuvidoriaPage() {
     setStatus("sending");
     setError("");
 
-    // Validação leve no front (o server valida de novo)
     if (topic === CERTIFICADOS_TOPIC && !name.trim()) {
       setStatus("error");
       setError("Para o tópico Certificados, o nome completo é obrigatório.");
       return;
     }
+
     if (name.trim().length > MAX_NAME_LENGTH) {
       setStatus("error");
       setError(`Nome muito longo (máx ${MAX_NAME_LENGTH} caracteres).`);
@@ -63,10 +93,44 @@ export default function OuvidoriaPage() {
       return;
     }
 
+    const phoneDigits = onlyDigits(phone);
+    if (topic === CERTIFICADOS_TOPIC) {
+      if (
+        phoneDigits.length < MIN_PHONE_DIGITS ||
+        phoneDigits.length > MAX_PHONE_DIGITS
+      ) {
+        setStatus("error");
+        setError("Telefone inválido. Informe um número com DDD.");
+        return;
+      }
+    } else if (phoneDigits) {
+      if (
+        phoneDigits.length < MIN_PHONE_DIGITS ||
+        phoneDigits.length > MAX_PHONE_DIGITS
+      ) {
+        setStatus("error");
+        setError("Telefone inválido. Informe um número com DDD.");
+        return;
+      }
+    }
+
+    if (message.length < MIN_LENGTH || message.length > MAX_LENGTH) {
+      setStatus("error");
+      setError(`Mensagem inválida (mín ${MIN_LENGTH}, máx ${MAX_LENGTH} caracteres).`);
+      return;
+    }
+
     const r = await fetch("/api/ouvidoria", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ topic, classNumber: turmaNum, name, message, website }),
+      body: JSON.stringify({
+        topic,
+        classNumber: turmaNum,
+        name,
+        phone,
+        message,
+        website,
+      }),
     });
 
     const data = await r.json().catch(() => ({}));
@@ -81,6 +145,7 @@ export default function OuvidoriaPage() {
     setTopic("");
     setClassNumber("");
     setName("");
+    setPhone("");
     setMessage("");
     setWebsite("");
   }
@@ -243,6 +308,44 @@ export default function OuvidoriaPage() {
               </span>
             </div>
 
+            {isCertificadosTopic && (
+              <div className="ouvidoria-field">
+                <label htmlFor="ouvidoria-phone">
+                  Telefone <span className="ouvidoria-required">*</span>
+                </label>
+                <div className="ouvidoria-input-wrap ouvidoria-phone-wrap">
+                  <span className="ouvidoria-input-icon" aria-hidden>
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.86 19.86 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.63 2.62a2 2 0 0 1-.45 2.11L8 9.91a16 16 0 0 0 6.09 6.09l1.46-1.29a2 2 0 0 1 2.11-.45c.84.3 1.72.51 2.62.63A2 2 0 0 1 22 16.92z" />
+                    </svg>
+                  </span>
+                  <input
+                    id="ouvidoria-phone"
+                    type="tel"
+                    inputMode="tel"
+                    className="ouvidoria-input"
+                    value={phone}
+                  onChange={(e) => setPhone(formatPhoneBR(e.target.value))}
+                    placeholder="Ex.: (34) 99999-9999"
+                    autoComplete="tel"
+                    required
+                  />
+                </div>
+                <span className="ouvidoria-char-count">
+                  {onlyDigits(phone).length} dígitos informados
+                </span>
+              </div>
+            )}
+
             <div className="ouvidoria-field">
               <label htmlFor="ouvidoria-message">Mensagem</label>
               <textarea
@@ -283,7 +386,8 @@ export default function OuvidoriaPage() {
           <div className="ouvidoria-popup">
             <h2 id="ouvidoria-popup-title" className="ouvidoria-popup-title">Tópico Certificados</h2>
             <p className="ouvidoria-popup-text">
-              Para este tópico, é necessário inserir o <strong>nome completo</strong> no campo.
+              Para este tópico, é necessário inserir o <strong>nome completo</strong> no campo e{" "}
+              <strong>telefone</strong> para que possamos entrar em contato com você se necessário.
             </p>
             <button
               type="button"
