@@ -61,8 +61,13 @@ function SearchInput() {
     <div className="space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row">
         <div className="relative flex-1">
+          <label htmlFor="certificate-search" className="sr-only">
+            Pesquisar certificado
+          </label>
           <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
           <input
+            id="certificate-search"
+            name="certificateSearch"
             type="text"
             value={inputValue}
             onChange={(event) => setInputValue(event.target.value)}
@@ -71,6 +76,7 @@ function SearchInput() {
             }}
             className="h-14 w-full rounded-full border border-[rgba(9,66,125,0.14)] bg-white pl-12 pr-4 text-sm font-medium text-slate-950 outline-none transition focus:border-[var(--brand-800)] focus:ring-4 focus:ring-[rgba(9,66,125,0.08)]"
             placeholder="Digite nome, e-mail, CPF ou evento"
+            autoComplete="off"
           />
         </div>
 
@@ -85,14 +91,22 @@ function SearchInput() {
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center rounded-[26px] border border-white/70 bg-white px-5 py-10 text-sm font-medium text-slate-500 shadow-[0_18px_40px_rgba(7,48,89,0.08)]">
+        <div
+          role="status"
+          aria-live="polite"
+          className="flex items-center justify-center rounded-[26px] border border-white/70 bg-white px-5 py-10 text-sm font-medium text-slate-500 shadow-[0_18px_40px_rgba(7,48,89,0.08)]"
+        >
           <LoaderCircle className="mr-3 h-5 w-5 animate-spin" />
           Carregando certificados...
         </div>
       ) : null}
 
       {noResults ? (
-        <div className="rounded-[26px] border border-dashed border-[rgba(9,66,125,0.18)] bg-white px-5 py-10 text-center text-sm font-medium text-slate-500">
+        <div
+          role="status"
+          aria-live="polite"
+          className="rounded-[26px] border border-dashed border-[rgba(9,66,125,0.18)] bg-white px-5 py-10 text-center text-sm font-medium text-slate-500"
+        >
           Nenhum resultado encontrado.
         </div>
       ) : null}

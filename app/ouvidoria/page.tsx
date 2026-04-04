@@ -1,5 +1,6 @@
 "use client";
 
+import type { FormEvent, ReactNode } from "react";
 import { useState } from "react";
 import { ArrowRight, MessageSquareQuote, Phone, Send, ShieldCheck, UserRound } from "lucide-react";
 import { InfoCard, PageHero } from "@/app/components/site-sections";
@@ -67,10 +68,16 @@ export default function OuvidoriaPage() {
     setTopic(value);
   }
 
-  async function onSubmit(event: React.FormEvent) {
+  async function onSubmit(event: FormEvent) {
     event.preventDefault();
     setStatus("sending");
     setError("");
+
+    if (!topic) {
+      setStatus("error");
+      setError("Selecione um topico para continuar.");
+      return;
+    }
 
     if (topic === CERTIFICADOS_TOPIC && !name.trim()) {
       setStatus("error");
@@ -157,10 +164,13 @@ export default function OuvidoriaPage() {
       <section className="page-shell grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
         <div className="glass-panel surface-outline rounded-[32px] border border-white/70 p-6 sm:p-7">
           <form onSubmit={onSubmit} className="space-y-6">
+            <input type="hidden" name="topic" value={topic} />
+
             <div className="hidden" aria-hidden>
               <label htmlFor="website">Website</label>
               <input
                 id="website"
+                name="website"
                 tabIndex={-1}
                 autoComplete="off"
                 value={website}
@@ -169,13 +179,16 @@ export default function OuvidoriaPage() {
             </div>
 
             <div className="space-y-3">
-              <label className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Topico</label>
-              <div className="grid gap-3 sm:grid-cols-2">
+              <p id="ouvidoria-topic-label" className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">
+                Topico
+              </p>
+              <div className="grid gap-3 sm:grid-cols-2" aria-labelledby="ouvidoria-topic-label">
                 {TOPIC_OPTIONS.map((option) => (
                   <button
                     key={option.value}
                     type="button"
                     onClick={() => handleTopicClick(option.value)}
+                    aria-pressed={topic === option.value}
                     className={cn(
                       "rounded-[22px] border px-4 py-4 text-left text-sm font-semibold transition",
                       topic === option.value
@@ -190,10 +203,16 @@ export default function OuvidoriaPage() {
             </div>
 
             <div className="grid gap-5 sm:grid-cols-2">
-              <Field label="Turma" hint={classNumber ? `Turma ${classNumber}` : undefined}>
+              <Field
+                label="Turma"
+                htmlFor="ouvidoria-class-number"
+                hint={classNumber ? `Turma ${classNumber}` : undefined}
+              >
                 <div className="relative">
                   <UserRound className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
                   <input
+                    id="ouvidoria-class-number"
+                    name="classNumber"
                     type="number"
                     inputMode="numeric"
                     value={classNumber}
@@ -209,11 +228,14 @@ export default function OuvidoriaPage() {
 
               <Field
                 label={isCertificadosTopic ? "Nome completo" : "Nome"}
+                htmlFor="ouvidoria-name"
                 hint={`${name.trim().length} / ${MAX_NAME_LENGTH}`}
               >
                 <div className="relative">
                   <UserRound className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
                   <input
+                    id="ouvidoria-name"
+                    name="name"
                     type="text"
                     value={name}
                     onChange={(event) => setName(event.target.value)}
@@ -228,10 +250,16 @@ export default function OuvidoriaPage() {
             </div>
 
             {isCertificadosTopic ? (
-              <Field label="Telefone" hint={`${onlyDigits(phone).length} digitos informados`}>
+              <Field
+                label="Telefone"
+                htmlFor="ouvidoria-phone"
+                hint={`${onlyDigits(phone).length} digitos informados`}
+              >
                 <div className="relative">
                   <Phone className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
                   <input
+                    id="ouvidoria-phone"
+                    name="phone"
                     type="tel"
                     inputMode="tel"
                     value={phone}
@@ -245,8 +273,10 @@ export default function OuvidoriaPage() {
               </Field>
             ) : null}
 
-            <Field label="Mensagem" hint={`${message.length} / ${MAX_LENGTH}`}>
+            <Field label="Mensagem" htmlFor="ouvidoria-message" hint={`${message.length} / ${MAX_LENGTH}`}>
               <textarea
+                id="ouvidoria-message"
+                name="message"
                 value={message}
                 onChange={(event) => setMessage(event.target.value)}
                 rows={8}
@@ -268,13 +298,21 @@ export default function OuvidoriaPage() {
             </button>
 
             {status === "ok" ? (
-              <div className="rounded-[22px] border border-emerald-200 bg-emerald-50 px-4 py-4 text-sm font-medium text-emerald-700">
+              <div
+                role="status"
+                aria-live="polite"
+                className="rounded-[22px] border border-emerald-200 bg-emerald-50 px-4 py-4 text-sm font-medium text-emerald-700"
+              >
                 Mensagem enviada com sucesso.
               </div>
             ) : null}
 
             {status === "error" ? (
-              <div className="rounded-[22px] border border-rose-200 bg-rose-50 px-4 py-4 text-sm font-medium text-rose-700">
+              <div
+                role="alert"
+                aria-live="assertive"
+                className="rounded-[22px] border border-rose-200 bg-rose-50 px-4 py-4 text-sm font-medium text-rose-700"
+              >
                 {error}
               </div>
             ) : null}
@@ -321,15 +359,18 @@ export default function OuvidoriaPage() {
 
 type FieldProps = {
   label: string;
+  htmlFor: string;
   hint?: string;
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
-function Field({ label, hint, children }: FieldProps) {
+function Field({ label, htmlFor, hint, children }: FieldProps) {
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between gap-3">
-        <label className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">{label}</label>
+        <label htmlFor={htmlFor} className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">
+          {label}
+        </label>
         {hint ? <span className="text-xs font-medium uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">{hint}</span> : null}
       </div>
       {children}

@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
@@ -8,9 +9,10 @@ import { InfoCard, SectionHeading, StatStrip } from "@/app/components/site-secti
 
 type CoordinatorTemplateProps = {
   profile: CoordinatorProfile;
+  children?: ReactNode;
 };
 
-export default function CoordinatorTemplate({ profile }: CoordinatorTemplateProps) {
+export default function CoordinatorTemplate({ profile, children }: CoordinatorTemplateProps) {
   return (
     <div className="space-y-12 pb-8 sm:space-y-16">
       <section className="page-shell">
@@ -114,6 +116,8 @@ export default function CoordinatorTemplate({ profile }: CoordinatorTemplateProp
           ))}
         </div>
       </section>
+
+      {children}
 
       {profile.team?.length ? (
         <section className="page-shell space-y-8">

@@ -164,7 +164,7 @@ export default function UpcomingSchedulePopup() {
             </div>
           ) : (
             <ul className="space-y-3">
-              {items.slice(0, 3).map(({ event, date }) => {
+              {items.map(({ event, date }) => {
                 const timeLabel = event.start.dateTime ? format(date, "HH:mm", { locale: ptBR }) : "Dia inteiro";
 
                 return (
@@ -185,12 +185,6 @@ export default function UpcomingSchedulePopup() {
               })}
             </ul>
           )}
-
-          {items.length > 3 ? (
-            <p className="text-xs font-medium uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
-              +{items.length - 3} evento(s) no periodo.
-            </p>
-          ) : null}
 
           {isMobile ? (
             <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
