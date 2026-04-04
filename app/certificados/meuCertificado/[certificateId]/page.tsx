@@ -106,7 +106,7 @@ export default function Home({
 
   if (isLoading) {
     return (
-      <main className="relative flex flex-col max-w-screen overflow-hidden">
+      <main className="relative flex flex-col max-w-screen overflow-hidden bg-white text-black">
         <div className="fixed inset-0 flex items-center justify-center bg-[#09427D] bg-opacity-50">
           <div className="bg-white p-6 rounded-md shadow-md">
             <p className="text-lg" onClick={() => {
@@ -121,7 +121,7 @@ export default function Home({
   }
   if (data?.certificatePath && ObjectId.isValid(String(data?.certificatePath))) {
     return (
-      <main className="relative flex flex-col max-w-screen overflow-hidden">
+      <main className="relative flex flex-col max-w-screen overflow-hidden bg-white text-black">
         <div className='absolute min-h-svg min-w-full z-[500]'>
           <Fireworks autorun={{
             speed: 1.5,
@@ -177,7 +177,7 @@ export default function Home({
 
   if (data?.onlyImage === true) {
     return (
-      <main className="relative flex flex-col max-w-screen overflow-hidden">
+      <main className="relative flex flex-col max-w-screen overflow-hidden bg-white text-black">
         <div className='absolute min-h-svg min-w-full z-[500]'>
           <Fireworks autorun={{
             speed: 1.5,
@@ -209,7 +209,7 @@ export default function Home({
   }
 
   return (
-    <main className="relative flex flex-col max-w-screen overflow-hidden">
+    <main className="relative flex flex-col max-w-screen overflow-hidden bg-white text-black">
       <div className='absolute min-h-svg min-w-full z-[500]'>
         <Fireworks autorun={{
           speed: 1.5,
