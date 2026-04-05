@@ -74,7 +74,7 @@ function SearchInput() {
             onKeyDown={(event) => {
               if (event.key === "Enter") handleSearch();
             }}
-            className="h-14 w-full rounded-full border border-[rgba(9,66,125,0.14)] bg-white pl-12 pr-4 text-sm font-medium text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-[var(--brand-800)] focus:ring-4 focus:ring-[rgba(9,66,125,0.08)] dark:border-white/10 dark:bg-slate-900/72 dark:text-slate-100 dark:placeholder:text-slate-500"
+            className="certificate-search-input h-14 w-full rounded-full border border-[rgba(9,66,125,0.14)] bg-white pl-12 pr-4 text-sm font-medium text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-[var(--brand-800)] focus:ring-4 focus:ring-[rgba(9,66,125,0.08)] dark:border-white/10 dark:bg-slate-900/72 dark:text-slate-100 dark:placeholder:text-slate-500"
             placeholder="Digite nome, e-mail, CPF ou evento"
             autoComplete="off"
           />

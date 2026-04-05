@@ -259,6 +259,35 @@ body::before {
   border-color: rgba(255, 255, 255, 0.08);
 }
 
+.certificate-search-input {
+  color: rgb(15 23 42);
+  caret-color: var(--brand-900);
+  -webkit-text-fill-color: rgb(15 23 42);
+}
+
+.certificate-search-input:-webkit-autofill,
+.certificate-search-input:-webkit-autofill:hover,
+.certificate-search-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: rgb(15 23 42);
+  caret-color: var(--brand-900);
+  box-shadow: 0 0 0 1000px rgba(255, 255, 255, 1) inset;
+  transition: background-color 9999s ease-out 0s;
+}
+
+.dark .certificate-search-input {
+  color: rgb(241 245 249);
+  caret-color: rgb(255 255 255);
+  -webkit-text-fill-color: rgb(241 245 249);
+}
+
+.dark .certificate-search-input:-webkit-autofill,
+.dark .certificate-search-input:-webkit-autofill:hover,
+.dark .certificate-search-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: rgb(241 245 249);
+  caret-color: rgb(255 255 255);
+  box-shadow: 0 0 0 1000px rgba(15, 23, 42, 0.92) inset;
+}
+
 @keyframes blink {
   0%,
   100% {

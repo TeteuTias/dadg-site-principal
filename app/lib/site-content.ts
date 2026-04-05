@@ -280,14 +280,6 @@ export const coordinatorProfiles: Record<CoordinatorSlug, CoordinatorProfile> = 
       "Atendimento mais claro para quem precisa de certificados",
       "Apoio técnico para dar escala e consistência aos processos",
     ],
-    team: [
-      { name: "Mateus Rosa", role: "Coordenador", photo: "/membersCAC/mateus.jpg" },
-      { name: "Nicoly Gonzaga", role: "Coordenadora", photo: "/membersCAC/nicoly.jpeg" },
-      { name: "Gianluca Zambiazi", role: "Núcleo de apoio", photo: "/membersCAC/gianluca.jpeg" },
-      { name: "Rafaela Luiza Gonzaga", role: "Núcleo de apoio", photo: "/membersCAC/rafaela.png" },
-      { name: "Lucas Borges", role: "Núcleo de apoio", photo: "/membersCAC/lucas.jpg" },
-      { name: "Heloisa Benatt", role: "Núcleo de apoio", photo: "/membersCAC/helo.jpeg" },
-    ],
   },
   clev: {
     slug: "clev",
