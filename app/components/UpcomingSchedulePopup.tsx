@@ -58,7 +58,7 @@ export default function UpcomingSchedulePopup() {
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
       setShowAttentionRing(false);
-    }, 1850);
+    }, 1200);
 
     return () => window.clearTimeout(timeoutId);
   }, []);
@@ -105,7 +105,21 @@ export default function UpcomingSchedulePopup() {
         expanded ? "space-y-3" : "space-y-0"
       )}
     >
-      {showAttentionRing ? <div aria-hidden="true" className="popup-attention-ring" /> : null}
+      {showAttentionRing ? (
+        <div aria-hidden="true" className="popup-attention-ring">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="popup-attention-ring-svg">
+            <rect
+              x="1.5"
+              y="1.5"
+              width="97"
+              height="97"
+              rx="7.5"
+              pathLength="100"
+              className="popup-attention-ring-stroke"
+            />
+          </svg>
+        </div>
+      ) : null}
 
       <div className="flex items-start justify-between gap-3">
         <button

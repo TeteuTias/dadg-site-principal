@@ -157,45 +157,35 @@
 .popup-attention-ring {
   position: absolute;
   inset: 0;
-  padding: 1.5px;
   border-radius: inherit;
   pointer-events: none;
-  background: conic-gradient(
-    from 0deg,
-    transparent 0deg,
-    transparent 286deg,
-    rgba(79, 143, 214, 0.12) 312deg,
-    rgba(96, 165, 250, 0.98) 334deg,
-    rgba(191, 219, 254, 0.96) 346deg,
-    rgba(79, 143, 214, 0.22) 354deg,
-    transparent 360deg
-  );
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  mask-composite: exclude;
+  --popup-ring-color: rgba(14, 183, 218, 0.98);
+}
+
+.popup-attention-ring-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.popup-attention-ring-stroke {
+  fill: none;
+  stroke: var(--popup-ring-color);
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 18 82;
+  stroke-dashoffset: 100;
   filter:
-    drop-shadow(0 0 10px rgba(96, 165, 250, 0.95))
-    drop-shadow(0 0 22px rgba(59, 130, 246, 0.45));
+    drop-shadow(0 0 6px rgba(14, 183, 218, 0.95))
+    drop-shadow(0 0 16px rgba(14, 183, 218, 0.4));
   opacity: 0;
-  animation: popup-ring-orbit 1.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: popup-ring-trace 1s linear forwards;
 }
 
 .dark .popup-attention-ring {
-  background: conic-gradient(
-    from 0deg,
-    transparent 0deg,
-    transparent 286deg,
-    rgba(125, 211, 252, 0.12) 312deg,
-    rgba(96, 165, 250, 1) 334deg,
-    rgba(224, 242, 254, 0.98) 346deg,
-    rgba(56, 189, 248, 0.24) 354deg,
-    transparent 360deg
-  );
+  --popup-ring-color: rgba(96, 165, 250, 1);
 }
 
 body::before {
@@ -273,22 +263,22 @@ body::before {
   }
 }
 
-@keyframes popup-ring-orbit {
+@keyframes popup-ring-trace {
   0% {
-    transform: rotate(-35deg) scale(0.995);
+    stroke-dashoffset: 100;
     opacity: 0;
   }
 
-  12% {
+  10% {
     opacity: 1;
   }
 
-  82% {
+  85% {
     opacity: 1;
   }
 
   100% {
-    transform: rotate(325deg) scale(1);
+    stroke-dashoffset: 0;
     opacity: 0;
   }
 }
