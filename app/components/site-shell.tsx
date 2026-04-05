@@ -42,7 +42,7 @@ export default function SiteShell({ children }: SiteShellProps) {
                   </div>
                   <div>
                     <p className="text-sm font-semibold uppercase tracking-[0.32em] text-slate-500 dark:text-slate-400">DADG</p>
-                    <p className="text-sm font-medium text-slate-950 dark:text-slate-100 sm:text-base">ImePAC Araguari</p>
+                    <p className="text-sm font-medium text-slate-950 dark:text-slate-100 sm:text-base">Imepac Araguari</p>
                   </div>
                 </Link>
               </div>
@@ -97,9 +97,9 @@ export default function SiteShell({ children }: SiteShellProps) {
             <div className="grid gap-10 lg:grid-cols-[minmax(0,1.2fr)_repeat(3,minmax(0,0.8fr))]">
               <div className="space-y-5">
                 <span className="section-eyebrow">Portal institucional</span>
-                <h2 className="section-title !text-3xl sm:!text-4xl">Diretorio Academico Diogo Guimaraes</h2>
+                <h2 className="section-title !text-3xl sm:!text-4xl">Diretório Acadêmico Diogo Guimarães</h2>
                 <p className="max-w-xl text-sm leading-7 text-slate-600 dark:text-slate-300 sm:text-base">
-                  Servicos, coordenadorias, agenda e canais oficiais reunidos em um portal claro, direto e facil de usar.
+                  Serviços, coordenadorias, agenda e canais oficiais reunidos em um portal claro, direto e fácil de usar.
                 </p>
               </div>
 
@@ -136,7 +136,7 @@ export default function SiteShell({ children }: SiteShellProps) {
                 ))}
               </div>
               <p className="text-sm text-slate-500 dark:text-slate-400">
-                {new Date().getFullYear()} DADG ImePAC Araguari. Canais oficiais, servicos e informacoes institucionais.
+                {new Date().getFullYear()} DADG Imepac Araguari. Canais oficiais, serviços e informações institucionais.
               </p>
             </div>
           </div>
@@ -147,7 +147,7 @@ export default function SiteShell({ children }: SiteShellProps) {
           <Dialog.Content className="fixed right-0 top-0 z-[70] flex h-screen w-full max-w-sm flex-col bg-[linear-gradient(180deg,#073059_0%,#041a31_100%)] p-6 text-white shadow-[0_30px_80px_rgba(4,26,49,0.35)] lg:hidden">
             <Dialog.Title className="sr-only">Menu principal</Dialog.Title>
             <Dialog.Description className="sr-only">
-              Navegue pelas paginas institucionais, coordenadorias e canais de contato do DADG.
+              Navegue pelas páginas institucionais, coordenadorias e canais de contato do DADG.
             </Dialog.Description>
 
             <div className="flex items-center justify-between">
@@ -157,7 +157,7 @@ export default function SiteShell({ children }: SiteShellProps) {
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-[0.32em] text-blue-200/80">DADG</p>
-                  <p className="text-base font-semibold">Navegacao</p>
+                  <p className="text-base font-semibold">Navegação</p>
                 </div>
               </div>
               <Dialog.Close asChild>

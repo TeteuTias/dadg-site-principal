@@ -9,21 +9,21 @@ export default function CoordenadoriasPage() {
     <div className="space-y-12 pb-8 sm:space-y-14">
       <PageHero
         eyebrow="Coordenadorias"
-        title="Areas do DADG"
-        description="Acesse rapidamente cada coordenadoria e sua pagina propria."
+        title="Áreas do DADG"
+        description="Acesse rapidamente cada coordenadoria e sua página própria."
         aside={
-          <div className="rounded-[28px] border border-white/70 bg-white px-5 py-5 shadow-[0_18px_40px_rgba(7,48,89,0.08)]">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Acesso rapido</p>
-            <p className="mt-3 text-lg font-semibold text-slate-950">Cinco coordenadorias principais.</p>
+          <div className="rounded-[28px] border border-white/70 bg-white px-5 py-5 shadow-[0_18px_40px_rgba(7,48,89,0.08)] dark:border-white/10 dark:bg-slate-900/72">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400">Acesso rápido</p>
+            <p className="mt-3 text-lg font-semibold text-slate-950 dark:text-white">Cinco coordenadorias principais.</p>
           </div>
         }
       />
 
       <section className="page-shell space-y-8">
         <SectionHeading
-          eyebrow="Nucleos"
+          eyebrow="Núcleos"
           title="Escolha uma coordenadoria"
-          description="Cada area tem acesso proprio, identidade preservada e pagina dedicada."
+          description="Cada área tem acesso próprio, identidade preservada e página dedicada."
         />
 
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -52,7 +52,7 @@ export default function CoordenadoriasPage() {
                 <p className="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-300">{card.summary}</p>
 
                 <div className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-slate-800 dark:text-slate-100">
-                  Abrir pagina
+                  Abrir página
                   <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </div>
               </article>

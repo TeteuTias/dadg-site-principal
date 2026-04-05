@@ -9,7 +9,7 @@ export default function ContatoPage() {
       <PageHero
         eyebrow="Contato"
         title="Canais oficiais"
-        description="Redes sociais, e-mail e acesso rapido a ouvidoria."
+        description="Redes sociais, e-mail e acesso rápido à ouvidoria."
         aside={
           <InfoCard title="E-mail principal" description="dadg.imepac@gmail.com">
             <a
@@ -46,7 +46,7 @@ export default function ContatoPage() {
         <div className="overflow-hidden rounded-[32px] bg-slate-950 px-6 py-8 text-white shadow-[0_32px_90px_rgba(4,26,49,0.22)] sm:px-10 sm:py-10">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
             <div>
-              <h2 className="text-3xl font-semibold sm:text-4xl">Para assuntos mais sensiveis</h2>
+              <h2 className="text-3xl font-semibold sm:text-4xl">Para assuntos mais sensíveis</h2>
               <p className="mt-4 max-w-2xl text-sm leading-7 text-blue-100/78 sm:text-base">
                 Use a ouvidoria quando precisar registrar uma mensagem com mais contexto.
               </p>

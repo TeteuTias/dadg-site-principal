@@ -17,7 +17,7 @@ const MAX_TURMA = 999;
 const TOPIC_OPTIONS = [
   { value: "infraestrutura", label: "Infraestrutura" },
   { value: "problemas da turma", label: "Problemas da turma" },
-  { value: "problemas com a coordenacao", label: "Problemas com a coordenacao" },
+  { value: "problemas com a coordenacao", label: "Problemas com a coordenação" },
   { value: "problemas com os professores", label: "Problemas com os professores" },
   { value: "certificados", label: "Certificados" },
 ] as const;
@@ -75,26 +75,26 @@ export default function OuvidoriaPage() {
 
     if (!topic) {
       setStatus("error");
-      setError("Selecione um topico para continuar.");
+      setError("Selecione um tópico para continuar.");
       return;
     }
 
     if (topic === CERTIFICADOS_TOPIC && !name.trim()) {
       setStatus("error");
-      setError("Para certificados, o nome completo e obrigatorio.");
+      setError("Para certificados, o nome completo é obrigatório.");
       return;
     }
 
     if (name.trim().length > MAX_NAME_LENGTH) {
       setStatus("error");
-      setError(`Nome muito longo. Maximo de ${MAX_NAME_LENGTH} caracteres.`);
+      setError(`Nome muito longo. Máximo de ${MAX_NAME_LENGTH} caracteres.`);
       return;
     }
 
     const turmaNum = parseInt(classNumber, 10);
     if (!Number.isFinite(turmaNum) || turmaNum < MIN_TURMA || turmaNum > MAX_TURMA) {
       setStatus("error");
-      setError(`Turma invalida. Use um numero entre ${MIN_TURMA} e ${MAX_TURMA}.`);
+      setError(`Turma inválida. Use um número entre ${MIN_TURMA} e ${MAX_TURMA}.`);
       return;
     }
 
@@ -102,18 +102,18 @@ export default function OuvidoriaPage() {
     if (topic === CERTIFICADOS_TOPIC) {
       if (phoneDigits.length < MIN_PHONE_DIGITS || phoneDigits.length > MAX_PHONE_DIGITS) {
         setStatus("error");
-        setError("Telefone invalido. Informe um numero com DDD.");
+        setError("Telefone inválido. Informe um número com DDD.");
         return;
       }
     } else if (phoneDigits && (phoneDigits.length < MIN_PHONE_DIGITS || phoneDigits.length > MAX_PHONE_DIGITS)) {
       setStatus("error");
-      setError("Telefone invalido. Informe um numero com DDD.");
+      setError("Telefone inválido. Informe um número com DDD.");
       return;
     }
 
     if (message.length < MIN_LENGTH || message.length > MAX_LENGTH) {
       setStatus("error");
-      setError(`Mensagem invalida. Minimo de ${MIN_LENGTH} e maximo de ${MAX_LENGTH} caracteres.`);
+      setError(`Mensagem inválida. Mínimo de ${MIN_LENGTH} e máximo de ${MAX_LENGTH} caracteres.`);
       return;
     }
 
@@ -134,7 +134,7 @@ export default function OuvidoriaPage() {
 
     if (!response.ok || !data.ok) {
       setStatus("error");
-      setError(data?.error ?? "Nao foi possivel enviar.");
+      setError(data?.error ?? "Não foi possível enviar.");
       return;
     }
 
@@ -152,11 +152,11 @@ export default function OuvidoriaPage() {
       <PageHero
         eyebrow="Ouvidoria"
         title="Canal direto"
-        description="Envie sua mensagem com clareza e escolha o topico certo para o encaminhamento."
+        description="Envie sua mensagem com clareza e escolha o tópico certo para o encaminhamento."
         aside={
           <div className="space-y-4">
-            <InfoCard title="Quando usar" description="Sugestoes, reclamacoes, problemas de turma, coordenacao, professores ou certificados." />
-            <InfoCard title="Privacidade" description="Envie apenas as informacoes necessarias para que o DADG consiga entender e encaminhar a demanda." />
+            <InfoCard title="Quando usar" description="Sugestões, reclamações, problemas de turma, coordenação, professores ou certificados." />
+            <InfoCard title="Privacidade" description="Envie apenas as informações necessárias para que o DADG consiga entender e encaminhar a demanda." />
           </div>
         }
       />
@@ -179,8 +179,8 @@ export default function OuvidoriaPage() {
             </div>
 
             <div className="space-y-3">
-              <p id="ouvidoria-topic-label" className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">
-                Topico
+              <p id="ouvidoria-topic-label" className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">
+                Tópico
               </p>
               <div className="grid gap-3 sm:grid-cols-2" aria-labelledby="ouvidoria-topic-label">
                 {TOPIC_OPTIONS.map((option) => (
@@ -253,7 +253,7 @@ export default function OuvidoriaPage() {
               <Field
                 label="Telefone"
                 htmlFor="ouvidoria-phone"
-                hint={`${onlyDigits(phone).length} digitos informados`}
+                hint={`${onlyDigits(phone).length} dígitos informados`}
               >
                 <div className="relative">
                   <Phone className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
@@ -320,14 +320,14 @@ export default function OuvidoriaPage() {
         </div>
 
         <div className="space-y-5">
-          <InfoCard title="Envio correto" description="Escolha o topico mais proximo da sua demanda para facilitar o encaminhamento." />
-          <InfoCard title="Para certificados" description="Nome completo e telefone sao obrigatorios quando o topico for certificados.">
+          <InfoCard title="Envio correto" description="Escolha o tópico mais próximo da sua demanda para facilitar o encaminhamento." />
+          <InfoCard title="Para certificados" description="Nome completo e telefone são obrigatórios quando o tópico for certificados.">
             <div className="inline-flex items-center gap-2 rounded-full bg-[var(--brand-50)] px-3 py-2 text-sm font-semibold text-[var(--brand-800)]">
               <ShieldCheck className="h-4 w-4" />
-              Informacoes completas
+              Informações completas
             </div>
           </InfoCard>
-          <InfoCard title="Mensagem objetiva" description={`Informe o contexto e os detalhes essenciais. Minimo de ${MIN_LENGTH} caracteres.`}>
+          <InfoCard title="Mensagem objetiva" description={`Informe o contexto e os detalhes essenciais. Mínimo de ${MIN_LENGTH} caracteres.`}>
             <div className="inline-flex items-center gap-2 rounded-full bg-[var(--brand-50)] px-3 py-2 text-sm font-semibold text-[var(--brand-800)]">
               <MessageSquareQuote className="h-4 w-4" />
               Clareza ajuda no retorno
@@ -339,9 +339,9 @@ export default function OuvidoriaPage() {
       {showCertificadosPopup ? (
         <div className="fixed inset-0 z-[80] flex items-center justify-center bg-slate-950/40 px-4 backdrop-blur-sm">
           <div className="glass-panel-strong w-full max-w-md rounded-[28px] border border-white/80 p-6 shadow-[0_30px_80px_rgba(4,26,49,0.24)] dark:border-white/10">
-            <h2 className="text-2xl font-semibold text-slate-950 dark:text-white">Topico certificados</h2>
+            <h2 className="text-2xl font-semibold text-slate-950 dark:text-white">Tópico certificados</h2>
             <p className="mt-4 text-sm leading-7 text-slate-600 dark:text-slate-300">
-              Para esse topico, informe nome completo e telefone para facilitar o contato, se necessario.
+              Para esse tópico, informe nome completo e telefone para facilitar o contato, se necessário.
             </p>
             <button
               type="button"

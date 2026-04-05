@@ -74,6 +74,12 @@
     scroll-behavior: smooth;
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
   body {
     @apply bg-background text-foreground;
     min-height: 100vh;
@@ -148,6 +154,50 @@
   }
 }
 
+.popup-attention-ring {
+  position: absolute;
+  inset: 0;
+  padding: 1.5px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 286deg,
+    rgba(79, 143, 214, 0.12) 312deg,
+    rgba(96, 165, 250, 0.98) 334deg,
+    rgba(191, 219, 254, 0.96) 346deg,
+    rgba(79, 143, 214, 0.22) 354deg,
+    transparent 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  filter:
+    drop-shadow(0 0 10px rgba(96, 165, 250, 0.95))
+    drop-shadow(0 0 22px rgba(59, 130, 246, 0.45));
+  opacity: 0;
+  animation: popup-ring-orbit 1.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.dark .popup-attention-ring {
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 286deg,
+    rgba(125, 211, 252, 0.12) 312deg,
+    rgba(96, 165, 250, 1) 334deg,
+    rgba(224, 242, 254, 0.98) 346deg,
+    rgba(56, 189, 248, 0.24) 354deg,
+    transparent 360deg
+  );
+}
+
 body::before {
   content: "";
   position: fixed;
@@ -219,6 +269,26 @@ body::before {
     opacity: 1;
   }
   50% {
+    opacity: 0;
+  }
+}
+
+@keyframes popup-ring-orbit {
+  0% {
+    transform: rotate(-35deg) scale(0.995);
+    opacity: 0;
+  }
+
+  12% {
+    opacity: 1;
+  }
+
+  82% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: rotate(325deg) scale(1);
     opacity: 0;
   }
 }

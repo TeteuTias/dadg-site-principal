@@ -8,8 +8,8 @@ export default function SobrePage() {
     <div className="space-y-12 pb-8 sm:space-y-14">
       <PageHero
         eyebrow="Sobre"
-        title="DADG ImePAC Araguari"
-        description="Representacao estudantil, integracao academica e apoio as iniciativas que fortalecem a formacao em medicina."
+        title="DADG Imepac Araguari"
+        description="Representação estudantil, integração acadêmica e apoio às iniciativas que fortalecem a formação em medicina."
         aside={
           <div className="glass-panel surface-outline rounded-[28px] border border-white/70 p-5 dark:border-white/10">
             <div className="flex items-center gap-4">
@@ -18,7 +18,7 @@ export default function SobrePage() {
               </div>
               <div>
                 <p className="text-sm uppercase tracking-[0.32em] text-slate-500 dark:text-slate-400">Institucional</p>
-                <p className="mt-2 text-lg font-semibold text-slate-950 dark:text-white">Diretorio Academico Diogo Guimaraes</p>
+                <p className="mt-2 text-lg font-semibold text-slate-950 dark:text-white">Diretório Acadêmico Diogo Guimarães</p>
               </div>
             </div>
           </div>
@@ -28,22 +28,22 @@ export default function SobrePage() {
       <section className="page-shell grid gap-5 lg:grid-cols-3">
         <InfoCard
           title="Quem somos"
-          description="Entidade representativa dos estudantes de Medicina do ImePAC, comprometida com organizacao, integracao e vida academica."
+          description="Entidade representativa dos estudantes de Medicina do Imepac, comprometida com organização, integração e vida acadêmica."
         />
         <InfoCard
           title="Missao"
-          description="Representar e defender os interesses dos estudantes, promovendo atividades academicas, culturais e sociais."
+          description="Representar e defender os interesses dos estudantes, promovendo atividades acadêmicas, culturais e sociais."
         />
         <InfoCard
           title="Valores"
-          description="Excelencia academica, etica, transparencia, colaboracao e responsabilidade social."
+          description="Excelência acadêmica, ética, transparência, colaboração e responsabilidade social."
         />
       </section>
 
       <section className="page-shell">
         <InfoCard
-          title="Historia"
-          description="O DADG foi consolidado para fortalecer a voz estudantil e organizar iniciativas que ampliem a experiencia universitaria e a formacao medica."
+          title="História"
+          description="O DADG foi consolidado para fortalecer a voz estudantil e organizar iniciativas que ampliem a experiência universitária e a formação médica."
         >
           <Link
             href="/contato"

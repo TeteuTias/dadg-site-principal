@@ -74,7 +74,7 @@ function SearchInput() {
             onKeyDown={(event) => {
               if (event.key === "Enter") handleSearch();
             }}
-            className="h-14 w-full rounded-full border border-[rgba(9,66,125,0.14)] bg-white pl-12 pr-4 text-sm font-medium text-slate-950 outline-none transition focus:border-[var(--brand-800)] focus:ring-4 focus:ring-[rgba(9,66,125,0.08)]"
+            className="h-14 w-full rounded-full border border-[rgba(9,66,125,0.14)] bg-white pl-12 pr-4 text-sm font-medium text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-[var(--brand-800)] focus:ring-4 focus:ring-[rgba(9,66,125,0.08)] dark:border-white/10 dark:bg-slate-900/72 dark:text-slate-100 dark:placeholder:text-slate-500"
             placeholder="Digite nome, e-mail, CPF ou evento"
             autoComplete="off"
           />
@@ -94,7 +94,7 @@ function SearchInput() {
         <div
           role="status"
           aria-live="polite"
-          className="flex items-center justify-center rounded-[26px] border border-white/70 bg-white px-5 py-10 text-sm font-medium text-slate-500 shadow-[0_18px_40px_rgba(7,48,89,0.08)]"
+          className="flex items-center justify-center rounded-[26px] border border-white/70 bg-white px-5 py-10 text-sm font-medium text-slate-500 shadow-[0_18px_40px_rgba(7,48,89,0.08)] dark:border-white/10 dark:bg-slate-900/72 dark:text-slate-400"
         >
           <LoaderCircle className="mr-3 h-5 w-5 animate-spin" />
           Carregando certificados...
@@ -105,7 +105,7 @@ function SearchInput() {
         <div
           role="status"
           aria-live="polite"
-          className="rounded-[26px] border border-dashed border-[rgba(9,66,125,0.18)] bg-white px-5 py-10 text-center text-sm font-medium text-slate-500"
+          className="rounded-[26px] border border-dashed border-[rgba(9,66,125,0.18)] bg-white px-5 py-10 text-center text-sm font-medium text-slate-500 dark:bg-slate-900/68 dark:text-slate-400"
         >
           Nenhum resultado encontrado.
         </div>
@@ -136,7 +136,7 @@ function SearchInput() {
                   <p className="mt-2 font-medium text-slate-800 dark:text-slate-100">{certificate.ownerName}</p>
                 </div>
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">Codigo verificador</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">Código verificador</p>
                   <p className="mt-2 break-all font-medium text-slate-800 dark:text-slate-100">{String(certificate._id)}</p>
                 </div>
               </div>
@@ -153,7 +153,7 @@ export default function CertificadosPage() {
     <div className="space-y-12 pb-8 sm:space-y-14">
       <PageHero
         eyebrow="Certificados"
-        title="Busca e validacao"
+        title="Busca e validação"
         description="Pesquise certificados por nome, e-mail, CPF ou nome do evento."
         aside={
           <div className="glass-panel surface-outline rounded-[28px] border border-white/70 p-5">
@@ -162,8 +162,8 @@ export default function CertificadosPage() {
                 <Image src="/logoDadg02.png" alt="Logo DADG" fill sizes="64px" className="object-cover" />
               </div>
               <div>
-                <p className="text-sm uppercase tracking-[0.32em] text-slate-500">Acesso direto</p>
-                <p className="mt-2 text-lg font-semibold text-slate-950">Consulta oficial de certificados</p>
+                <p className="text-sm uppercase tracking-[0.32em] text-slate-500 dark:text-slate-400">Acesso direto</p>
+                <p className="mt-2 text-lg font-semibold text-slate-950 dark:text-white">Consulta oficial de certificados</p>
               </div>
             </div>
           </div>
@@ -180,13 +180,13 @@ export default function CertificadosPage() {
             title="Como pesquisar"
             description="Use nome, e-mail, CPF ou o nome do evento. Ao encontrar o certificado, abra para visualizar e baixar."
           />
-          <InfoCard title="Validacao" description="Cada certificado exibe um codigo verificador unico para consulta e conferencia.">
+          <InfoCard title="Validação" description="Cada certificado exibe um código verificador único para consulta e conferência.">
             <div className="inline-flex items-center gap-2 rounded-full bg-[var(--brand-50)] px-3 py-2 text-sm font-semibold text-[var(--brand-800)]">
               <ShieldCheck className="h-4 w-4" />
-              Codigo individual
+              Código individual
             </div>
           </InfoCard>
-          <InfoCard title="Atendimento" description="Se o certificado nao aparecer ou houver alguma divergencia, use a ouvidoria.">
+          <InfoCard title="Atendimento" description="Se o certificado não aparecer ou houver alguma divergência, use a ouvidoria.">
             <Link
               href="/ouvidoria"
               className="inline-flex items-center gap-2 rounded-full bg-slate-950 px-4 py-3 text-sm font-semibold text-white hover:bg-[var(--brand-900)]"

@@ -10,13 +10,13 @@ export const dynamic = "force-dynamic";
 const leagueGroups = [
   {
     key: "basic",
-    title: "Ciclo basico",
-    description: "Ligas com foco nas bases da formacao medica e na consolidacao dos primeiros ciclos.",
+    title: "Ciclo básico",
+    description: "Ligas com foco nas bases da formação médica e na consolidação dos primeiros ciclos.",
   },
   {
     key: "clinic",
-    title: "Ciclo clinico",
-    description: "Ligas voltadas para pratica, aprofundamento e experiencias ligadas ao cuidado clinico.",
+    title: "Ciclo clínico",
+    description: "Ligas voltadas para prática, aprofundamento e experiências ligadas ao cuidado clínico.",
   },
 ] as const;
 
@@ -28,8 +28,8 @@ export default async function CLAMPage() {
       <section className="page-shell space-y-8">
         <SectionHeading
           eyebrow="Ligas"
-          title="Explore as ligas academicas"
-          description="Abra cada grupo para navegar pelas ligas vinculadas a CLAM e seguir para a pagina detalhada de cada uma."
+          title="Explore as ligas acadêmicas"
+          description="Abra cada grupo para navegar pelas ligas vinculadas à CLAM e seguir para a página detalhada de cada uma."
         />
 
         <div className="grid gap-5 xl:grid-cols-2">

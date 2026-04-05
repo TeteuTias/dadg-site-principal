@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { UserProvider } from "@/lib/userProvider";
@@ -7,13 +8,13 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "@dadg.imepac",
-  description: "Portal oficial do Diretorio Academico Diogo Guimaraes do ImePAC Araguari.",
+  description: "Portal oficial do Diretório Acadêmico Diogo Guimarães do Imepac Araguari.",
   icons: {
     icon: "/logoDadg02.ico",
   },
 };
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
   const cookieStore = await cookies();
   const session = await auth0.getSession();
   const theme = cookieStore.get("dadg-theme")?.value === "dark" ? "dark" : "light";

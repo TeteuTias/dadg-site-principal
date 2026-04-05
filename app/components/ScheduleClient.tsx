@@ -153,7 +153,7 @@ export default function ScheduleClient() {
       <div className="glass-panel surface-outline rounded-[30px] border border-white/70 p-5 sm:p-6">
         <div className="flex flex-col gap-4 border-b border-[rgba(9,66,125,0.08)] pb-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.32em] text-slate-500 dark:text-slate-400">Calendario</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.32em] text-slate-500 dark:text-slate-400">Calendário</p>
             <h2 className="mt-2 text-3xl font-semibold capitalize text-slate-950 dark:text-white">
               {format(currentMonth, "MMMM yyyy", { locale: ptBR })}
             </h2>
@@ -171,7 +171,7 @@ export default function ScheduleClient() {
               onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
               className="inline-flex items-center gap-2 rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-[var(--brand-900)]"
             >
-              Proximo
+              Próximo
               <ChevronRight className="h-4 w-4" />
             </button>
           </div>
@@ -235,7 +235,7 @@ export default function ScheduleClient() {
             Eventos em {format(selectedDate, DATE_FMT)}
           </h3>
           <p className="mt-2 text-sm leading-7 text-slate-600 dark:text-slate-300">
-            Selecione um dia no calendario para visualizar a programacao prevista.
+            Selecione um dia no calendário para visualizar a programação prevista.
           </p>
         </div>
 
@@ -267,7 +267,7 @@ export default function ScheduleClient() {
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-500 dark:text-slate-400">
-                        {isAllDay ? "Dia inteiro" : "Horario definido"}
+                        {isAllDay ? "Dia inteiro" : "Horário definido"}
                       </p>
                       <h4 className="mt-2 text-xl font-semibold text-slate-950 dark:text-white">{event.summary}</h4>
                     </div>
@@ -278,7 +278,7 @@ export default function ScheduleClient() {
 
                   <div className="mt-5 space-y-2 text-sm leading-7 text-slate-600 dark:text-slate-300">
                     <p>
-                      <span className="font-semibold text-slate-800 dark:text-slate-100">Inicio:</span> {startLabel}
+                      <span className="font-semibold text-slate-800 dark:text-slate-100">Início:</span> {startLabel}
                     </p>
                     {endLabel ? (
                       <p>

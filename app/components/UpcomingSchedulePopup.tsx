@@ -29,10 +29,11 @@ function getEventDate(dateTime?: string, date?: string): Date | null {
 
 export default function UpcomingSchedulePopup() {
   const [dismissed, setDismissed] = useState(false);
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [loading, setLoading] = useState(false);
+  const [showAttentionRing, setShowAttentionRing] = useState(true);
 
   const range = useMemo(() => {
     const now = new Date();
@@ -47,12 +48,19 @@ export default function UpcomingSchedulePopup() {
 
     const apply = () => {
       setIsMobile(query.matches);
-      setExpanded(false);
     };
 
     apply();
     query.addEventListener("change", apply);
     return () => query.removeEventListener("change", apply);
+  }, []);
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      setShowAttentionRing(false);
+    }, 1850);
+
+    return () => window.clearTimeout(timeoutId);
   }, []);
 
   useEffect(() => {
@@ -93,10 +101,12 @@ export default function UpcomingSchedulePopup() {
   return (
     <aside
       className={cn(
-        "fixed bottom-3 right-3 z-[60] max-h-[calc(100vh-6.5rem)] w-[min(86vw,320px)] overflow-hidden rounded-[24px] border border-white/70 bg-white/82 p-3 shadow-[0_20px_60px_rgba(7,48,89,0.18)] backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/88",
+        "relative fixed bottom-3 right-3 z-[60] max-h-[calc(100vh-6.5rem)] w-[min(86vw,320px)] overflow-hidden rounded-[24px] border border-white/70 bg-white/82 p-3 shadow-[0_20px_60px_rgba(7,48,89,0.18)] backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/88",
         expanded ? "space-y-3" : "space-y-0"
       )}
     >
+      {showAttentionRing ? <div aria-hidden="true" className="popup-attention-ring" /> : null}
+
       <div className="flex items-start justify-between gap-3">
         <button
           type="button"
@@ -178,7 +188,7 @@ export default function UpcomingSchedulePopup() {
                     <p className="mt-2 text-sm font-semibold text-slate-950 dark:text-white">{event.summary}</p>
                     <p className="mt-1 text-xs leading-5 text-slate-600 dark:text-slate-300">
                       {timeLabel}
-                      {event.location ? ` • ${event.location}` : ""}
+                      {event.location ? ` - ${event.location}` : ""}
                     </p>
                   </li>
                 );

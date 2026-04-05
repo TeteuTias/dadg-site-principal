@@ -49,47 +49,47 @@ export type CoordinatorProfile = {
 };
 
 export const siteNavigation: SiteNavItem[] = [
-  { href: "/", label: "Inicio", description: "Visao geral do DADG" },
+  { href: "/", label: "Início", description: "Visão geral do DADG" },
   { href: "/certificados", label: "Certificados", description: "Busque e valide certificados" },
-  { href: "/coordenadorias", label: "Coordenadorias", description: "Conheca os nucleos de atuacao" },
-  { href: "/eventos", label: "Eventos", description: "Calendario academico e programacao" },
+  { href: "/coordenadorias", label: "Coordenadorias", description: "Conheça os núcleos de atuação" },
+  { href: "/eventos", label: "Eventos", description: "Calendário acadêmico e programação" },
   { href: "/mural", label: "Mural", description: "Avisos e comunicados" },
-  { href: "/sobre", label: "Sobre", description: "Historia, missao e valores" },
+  { href: "/sobre", label: "Sobre", description: "História, missão e valores" },
   { href: "/contato", label: "Contato", description: "Instagram, e-mail e canais" },
-  { href: "/ouvidoria", label: "Ouvidoria", description: "Envie manifestacoes e sugestoes" },
+  { href: "/ouvidoria", label: "Ouvidoria", description: "Envie manifestações e sugestões" },
 ];
 
 export const socialAccounts: SocialAccount[] = [
-  { name: "DADG ImePAC", handle: "@dadg.imepac", url: "https://instagram.com/dadg.imepac" },
-  { name: "CAEP ImePAC", handle: "@caep.imepac", url: "https://instagram.com/caep.imepac" },
-  { name: "CLAM ImePAC", handle: "@clam.imepac", url: "https://instagram.com/clam.imepac" },
-  { name: "CLEV ImePAC Araguari", handle: "@clevimepacaraguari", url: "https://instagram.com/clevimepacaraguari" },
-  { name: "CAES ImePAC", handle: "@caes.imepac", url: "https://instagram.com/caes.imepac" },
+  { name: "DADG Imepac", handle: "@dadg.imepac", url: "https://instagram.com/dadg.imepac" },
+  { name: "CAEP Imepac", handle: "@caep.imepac", url: "https://instagram.com/caep.imepac" },
+  { name: "CLAM Imepac", handle: "@clam.imepac", url: "https://instagram.com/clam.imepac" },
+  { name: "CLEV Imepac Araguari", handle: "@clevimepacaraguari", url: "https://instagram.com/clevimepacaraguari" },
+  { name: "CAES Imepac", handle: "@caes.imepac", url: "https://instagram.com/caes.imepac" },
   { name: "COEPS Araguari", handle: "@coeps.araguari", url: "https://instagram.com/coeps.araguari" },
 ];
 
 export const homepageHighlights = [
   {
-    title: "Acesso rapido a servicos",
-    text: "Certificados, calendario, mural e canais de contato ficam a poucos cliques, em uma estrutura mais clara e objetiva.",
+    title: "Acesso rápido a serviços",
+    text: "Certificados, calendário, mural e canais de contato ficam a poucos cliques, em uma estrutura mais clara e objetiva.",
   },
   {
-    title: "Representacao com organizacao",
-    text: "O site passa a apresentar o DADG como uma instituicao estudantil forte, com comunicacao profissional e bem segmentada.",
+    title: "Representação com organização",
+    text: "O site passa a apresentar o DADG como uma instituição estudantil forte, com comunicação profissional e bem segmentada.",
   },
   {
-    title: "Experiencia pensada para estudantes",
-    text: "Cada pagina prioriza legibilidade, orientacao e fluxo, sem perder as funcoes que ja sustentam o dia a dia academico.",
+    title: "Experiência pensada para estudantes",
+    text: "Cada página prioriza legibilidade, orientação e fluxo, sem perder as funções que já sustentam o dia a dia acadêmico.",
   },
 ];
 
 export const supportPillars = [
-  "Representacao estudantil",
-  "Extensao e pesquisa",
-  "Educacao em saude",
-  "Ligas academicas",
+  "Representação estudantil",
+  "Extensão e pesquisa",
+  "Educação em saúde",
+  "Ligas acadêmicas",
   "Certificados e tecnologia",
-  "Estagios e vivencias",
+  "Estágios e vivências",
 ];
 
 export const coordinatorProfiles: Record<CoordinatorSlug, CoordinatorProfile> = {
@@ -97,10 +97,10 @@ export const coordinatorProfiles: Record<CoordinatorSlug, CoordinatorProfile> = 
     slug: "caep",
     shortName: "CAEP",
     title: "CAEP",
-    subtitle: "Coordenadoria Academica de Extensao e Pesquisa",
-    summary: "Conecta ensino, pesquisa e extensao em iniciativas com impacto academico e social.",
+    subtitle: "Coordenadoria Acadêmica de Extensão e Pesquisa",
+    summary: "Conecta ensino, pesquisa e extensão em iniciativas com impacto acadêmico e social.",
     description:
-      "A CAEP fortalece o ambiente universitario ao aproximar estudantes de projetos, pesquisas e acoes extensionistas que ampliam a formacao medica.",
+      "A CAEP fortalece o ambiente universitário ao aproximar estudantes de projetos, pesquisas e ações extensionistas que ampliam a formação médica.",
     imageSrc: "/coordinators/CAEP.png",
     accent: {
       primary: "#000066",
@@ -108,46 +108,46 @@ export const coordinatorProfiles: Record<CoordinatorSlug, CoordinatorProfile> = 
       surface: "rgba(51, 102, 204, 0.18)",
     },
     stats: [
-      { label: "Foco", value: "Pesquisa e extensao" },
-      { label: "Atuacao", value: "Integracao academica" },
-      { label: "Perfil", value: "Inovacao cientifica" },
+      { label: "Foco", value: "Pesquisa e extensão" },
+      { label: "Atuação", value: "Integração acadêmica" },
+      { label: "Perfil", value: "Inovação científica" },
     ],
     overview: [
       {
         title: "Quem somos",
-        text: "Somos a coordenadoria responsavel por fomentar e coordenar as atividades de extensao e pesquisa dentro da estrutura do DADG.",
+        text: "Somos a coordenadoria responsável por fomentar e coordenar as atividades de extensão e pesquisa dentro da estrutura do DADG.",
       },
       {
         title: "O que buscamos",
-        text: "Promover a integracao entre ensino, pesquisa e extensao por meio de projetos que contribuam para o desenvolvimento academico e social.",
+        text: "Promover a integração entre ensino, pesquisa e extensão por meio de projetos que contribuam para o desenvolvimento acadêmico e social.",
       },
       {
         title: "Como contribuimos",
-        text: "Criamos pontes entre alunos, projetos e oportunidades para transformar curiosidade cientifica em acao concreta.",
+        text: "Criamos pontes entre alunos, projetos e oportunidades para transformar curiosidade científica em ação concreta.",
       },
     ],
     mission:
-      "Promover o desenvolvimento academico por meio da integracao entre ensino, pesquisa e extensao, contribuindo para a formacao de profissionais comprometidos com a transformacao social.",
+      "Promover o desenvolvimento acadêmico por meio da integração entre ensino, pesquisa e extensão, contribuindo para a formação de profissionais comprometidos com a transformação social.",
     values: [
-      "Excelencia academica",
-      "Inovacao cientifica",
+      "Excelência acadêmica",
+      "Inovação científica",
       "Compromisso social",
-      "Integracao com a comunidade",
+      "Integração com a comunidade",
     ],
     highlights: [
       "Apoio a projetos com impacto para a comunidade",
-      "Estreitamento entre teoria, pratica e producao cientifica",
-      "Valorizacao de uma formacao medica mais completa",
+      "Estreitamento entre teoria, prática e produção científica",
+      "Valorização de uma formação médica mais completa",
     ],
   },
   caes: {
     slug: "caes",
     shortName: "CAES",
     title: "CAES",
-    subtitle: "Coordenadoria Academica de Educacao em Saude",
-    summary: "Leva educacao em saude para dentro e para fora da faculdade com foco em transformacao social.",
+    subtitle: "Coordenadoria Acadêmica de Educação em Saúde",
+    summary: "Leva educação em saúde para dentro e para fora da faculdade com foco em transformação social.",
     description:
-      "A CAES organiza iniciativas educativas que aproximam conhecimento, prevencao e impacto social, reforcando o compromisso do curso com a comunidade.",
+      "A CAES organiza iniciativas educativas que aproximam conhecimento, prevenção e impacto social, reforçando o compromisso do curso com a comunidade.",
     imageSrc: "/coordinators/CAES.jpg",
     accent: {
       primary: "#056653",
@@ -155,46 +155,46 @@ export const coordinatorProfiles: Record<CoordinatorSlug, CoordinatorProfile> = 
       surface: "rgba(22, 163, 74, 0.18)",
     },
     stats: [
-      { label: "Foco", value: "Educacao em saude" },
+      { label: "Foco", value: "Educação em saúde" },
       { label: "Impacto", value: "Comunidade" },
-      { label: "Direcao", value: "Prevencao e cuidado" },
+      { label: "Direção", value: "Prevenção e cuidado" },
     ],
     overview: [
       {
         title: "Quem somos",
-        text: "Somos a coordenadoria dedicada a desenvolver iniciativas de educacao em saude com linguagem acessivel e impacto real.",
+        text: "Somos a coordenadoria dedicada a desenvolver iniciativas de educação em saúde com linguagem acessível e impacto real.",
       },
       {
         title: "O que buscamos",
-        text: "Levar educacao em saude para a comunidade e ampliar a consciencia sobre temas que transformam a qualidade de vida da populacao.",
+        text: "Levar educação em saúde para a comunidade e ampliar a consciência sobre temas que transformam a qualidade de vida da população.",
       },
       {
         title: "Como atuamos",
-        text: "Conectamos estudantes, conhecimento e acao pratica em projetos voltados para orientacao, prevencao e promocao da saude.",
+        text: "Conectamos estudantes, conhecimento e ação prática em projetos voltados para orientação, prevenção e promoção da saúde.",
       },
     ],
     mission:
-      "Trabalhamos para impactar positivamente a vida das pessoas e transformar a comunidade em um lugar melhor por meio da educacao em saude.",
+      "Trabalhamos para impactar positivamente a vida das pessoas e transformar a comunidade em um lugar melhor por meio da educação em saúde.",
     values: [
-      "Compromisso com a excelencia",
-      "Etica",
-      "Educacao em saude para a populacao",
-      "Inovacao e evolucao constante",
+      "Compromisso com a excelência",
+      "Ética",
+      "Educação em saúde para a população",
+      "Inovação e evolução constante",
     ],
     highlights: [
       "Projetos com linguagem clara e orientada ao cuidado",
-      "Vivencias que aproximam estudantes da realidade social",
-      "Fortalecimento da responsabilidade coletiva em saude",
+      "Vivências que aproximam estudantes da realidade social",
+      "Fortalecimento da responsabilidade coletiva em saúde",
     ],
   },
   clam: {
     slug: "clam",
     shortName: "CLAM",
     title: "CLAM",
-    subtitle: "Coordenadoria de Ligas Academicas de Medicina",
-    summary: "Organiza, integra e da visibilidade ao ecossistema de ligas academicas da Imepac.",
+    subtitle: "Coordenadoria de Ligas Acadêmicas de Medicina",
+    summary: "Organiza, integra e dá visibilidade ao ecossistema de ligas acadêmicas da Imepac.",
     description:
-      "A CLAM conecta ligas, estudantes e oportunidades, fortalecendo a cultura academica e o aprofundamento em diferentes areas da medicina.",
+      "A CLAM conecta ligas, estudantes e oportunidades, fortalecendo a cultura acadêmica e o aprofundamento em diferentes áreas da medicina.",
     imageSrc: "/coordinators/CLAM.png",
     accent: {
       primary: "#0A7A1A",
@@ -202,46 +202,46 @@ export const coordinatorProfiles: Record<CoordinatorSlug, CoordinatorProfile> = 
       surface: "rgba(34, 197, 94, 0.18)",
     },
     stats: [
-      { label: "Foco", value: "Ligas academicas" },
-      { label: "Atuacao", value: "Integracao e organizacao" },
+      { label: "Foco", value: "Ligas acadêmicas" },
+      { label: "Atuação", value: "Integração e organização" },
       { label: "Perfil", value: "Protagonismo estudantil" },
     ],
     overview: [
       {
         title: "Quem somos",
-        text: "A CLAM e o orgao responsavel por coordenar e integrar todas as ligas academicas da Imepac.",
+        text: "A CLAM é o órgão responsável por coordenar e integrar todas as ligas acadêmicas da Imepac.",
       },
       {
         title: "Objetivo central",
-        text: "Promover integracao entre as ligas, incentivar o desenvolvimento cientifico e ampliar as possibilidades de aprendizado.",
+        text: "Promover integração entre as ligas, incentivar o desenvolvimento científico e ampliar as possibilidades de aprendizado.",
       },
       {
         title: "Como apoiamos",
-        text: "Facilitamos o acesso a informacoes, fortalecemos a identidade das ligas e organizamos a vitrine de oportunidades academicas.",
+        text: "Facilitamos o acesso a informações, fortalecemos a identidade das ligas e organizamos a vitrine de oportunidades acadêmicas.",
       },
     ],
     mission:
-      "Fomentar um ambiente colaborativo no qual as ligas academicas contribuam para uma formacao medica de excelencia.",
+      "Fomentar um ambiente colaborativo no qual as ligas acadêmicas contribuam para uma formação médica de excelência.",
     values: [
-      "Integracao",
-      "Organizacao",
+      "Integração",
+      "Organização",
       "Autonomia estudantil",
-      "Desenvolvimento cientifico",
+      "Desenvolvimento científico",
     ],
     highlights: [
-      "Navegacao organizada por ciclo academico",
-      "Apresentacao clara da identidade de cada liga",
-      "Maior visibilidade para projetos e areas de atuacao",
+      "Navegação organizada por ciclo acadêmico",
+      "Apresentação clara da identidade de cada liga",
+      "Maior visibilidade para projetos e áreas de atuação",
     ],
   },
   cac: {
     slug: "cac",
     shortName: "CAC",
     title: "CAC",
-    subtitle: "Coordenadoria Academica de Certificados e TI",
-    summary: "Cuida dos fluxos de certificados e evolui a experiencia digital do DADG.",
+    subtitle: "Coordenadoria Acadêmica de Certificados e TI",
+    summary: "Cuida dos fluxos de certificados e evolui a experiência digital do DADG.",
     description:
-      "A CAC atua como ponte entre organizacao, tecnologia e atendimento, melhorando processos internos e a usabilidade dos servicos oferecidos aos estudantes.",
+      "A CAC atua como ponte entre organização, tecnologia e atendimento, melhorando processos internos e a usabilidade dos serviços oferecidos aos estudantes.",
     imageSrc: "/coordinators/CAC.jpeg",
     accent: {
       primary: "#050A4A",
@@ -250,54 +250,54 @@ export const coordinatorProfiles: Record<CoordinatorSlug, CoordinatorProfile> = 
     },
     stats: [
       { label: "Foco", value: "Certificados e TI" },
-      { label: "Atuacao", value: "Processos digitais" },
-      { label: "Perfil", value: "Organizacao e suporte" },
+      { label: "Atuação", value: "Processos digitais" },
+      { label: "Perfil", value: "Organização e suporte" },
     ],
     overview: [
       {
-        title: "Visao",
-        text: "Ser a ponte entre setores, pessoas e ideias com empatia, organizacao e excelencia.",
+        title: "Visão",
+        text: "Ser a ponte entre setores, pessoas e ideias com empatia, organização e excelência.",
       },
       {
         title: "Missao operacional",
-        text: "Garantir inovacao e organizacao para os processos de certificados e melhorar continuamente a experiencia digital dos discentes.",
+        text: "Garantir inovação e organização para os processos de certificados e melhorar continuamente a experiência digital dos discentes.",
       },
       {
         title: "Papel no site",
-        text: "A CAC sustenta fluxos que precisam funcionar de verdade: busca, validacao, visualizacao e distribuicao de certificados.",
+        text: "A CAC sustenta fluxos que precisam funcionar de verdade: busca, validação, visualização e distribuição de certificados.",
       },
     ],
     mission:
-      "Trazer clareza, agilidade e tecnologia para os processos que precisam ser confiaveis e simples para todos os estudantes.",
+      "Trazer clareza, agilidade e tecnologia para os processos que precisam ser confiáveis e simples para todos os estudantes.",
     values: [
       "Empatia",
-      "Transparencia",
+      "Transparência",
       "Agilidade",
-      "Organizacao",
-      "Colaboracao",
+      "Organização",
+      "Colaboração",
     ],
     highlights: [
-      "Melhoria continua dos fluxos digitais do DADG",
+      "Melhoria contínua dos fluxos digitais do DADG",
       "Atendimento mais claro para quem precisa de certificados",
-      "Apoio tecnico para dar escala e consistencia aos processos",
+      "Apoio técnico para dar escala e consistência aos processos",
     ],
     team: [
       { name: "Mateus Rosa", role: "Coordenador", photo: "/membersCAC/mateus.jpg" },
       { name: "Nicoly Gonzaga", role: "Coordenadora", photo: "/membersCAC/nicoly.jpeg" },
-      { name: "Gianluca Zambiazi", role: "Nucleo de apoio", photo: "/membersCAC/gianluca.jpeg" },
-      { name: "Rafaela Luiza Gonzaga", role: "Nucleo de apoio", photo: "/membersCAC/rafaela.png" },
-      { name: "Lucas Borges", role: "Nucleo de apoio", photo: "/membersCAC/lucas.jpg" },
-      { name: "Heloisa Benatt", role: "Nucleo de apoio", photo: "/membersCAC/helo.jpeg" },
+      { name: "Gianluca Zambiazi", role: "Núcleo de apoio", photo: "/membersCAC/gianluca.jpeg" },
+      { name: "Rafaela Luiza Gonzaga", role: "Núcleo de apoio", photo: "/membersCAC/rafaela.png" },
+      { name: "Lucas Borges", role: "Núcleo de apoio", photo: "/membersCAC/lucas.jpg" },
+      { name: "Heloisa Benatt", role: "Núcleo de apoio", photo: "/membersCAC/helo.jpeg" },
     ],
   },
   clev: {
     slug: "clev",
     shortName: "CLEV",
     title: "CLEV",
-    subtitle: "Coordenadoria Local de Estagios e Vivencias",
-    summary: "Transforma experiencias praticas em oportunidades de crescimento academico e profissional.",
+    subtitle: "Coordenadoria Local de Estágios e Vivências",
+    summary: "Transforma experiências práticas em oportunidades de crescimento acadêmico e profissional.",
     description:
-      "A CLEV organiza experiencias, estagios e vivencias que conectam estudantes a contextos praticos importantes para sua formacao medica.",
+      "A CLEV organiza experiências, estágios e vivências que conectam estudantes a contextos práticos importantes para sua formação médica.",
     imageSrc: "/coordinators/CLEV.jpg",
     accent: {
       primary: "#526C94",
@@ -305,41 +305,41 @@ export const coordinatorProfiles: Record<CoordinatorSlug, CoordinatorProfile> = 
       surface: "rgba(96, 165, 250, 0.18)",
     },
     stats: [
-      { label: "Foco", value: "Estagios e vivencias" },
-      { label: "Atuacao", value: "Experiencias praticas" },
+      { label: "Foco", value: "Estágios e vivências" },
+      { label: "Atuação", value: "Experiências práticas" },
       { label: "Perfil", value: "Crescimento profissional" },
     ],
     overview: [
       {
         title: "Quem somos",
-        text: "Somos a coordenadoria responsavel por gerenciar e organizar experiencias praticas para os estudantes de medicina.",
+        text: "Somos a coordenadoria responsável por gerenciar e organizar experiências práticas para os estudantes de medicina.",
       },
       {
         title: "O que buscamos",
-        text: "Garantir acesso a estagios e vivencias que complementem a formacao academica com qualidade e relevancia.",
+        text: "Garantir acesso a estágios e vivências que complementem a formação acadêmica com qualidade e relevância.",
       },
       {
         title: "Como apoiamos",
-        text: "Ajudamos os alunos a transformar interesse em oportunidade por meio de organizacao, orientacao e acesso.",
+        text: "Ajudamos os alunos a transformar interesse em oportunidade por meio de organização, orientação e acesso.",
       },
     ],
     mission:
-      "Garantir que cada estudante tenha acesso a experiencias praticas de qualidade, contribuindo para uma formacao medica completa e excelente.",
+      "Garantir que cada estudante tenha acesso a experiências práticas de qualidade, contribuindo para uma formação médica completa e excelente.",
     values: [
-      "Excelencia na formacao pratica",
-      "Organizacao e eficiencia",
+      "Excelência na formação prática",
+      "Organização e eficiência",
       "Compromisso com a qualidade",
-      "Inovacao nos processos",
+      "Inovação nos processos",
     ],
     highlights: [
-      "Proximidade com vivencias que ampliam repertorio",
-      "Mais organizacao para oportunidades extracurriculares",
-      "Rede de informacoes acessivel e direta",
+      "Proximidade com vivências que ampliam repertório",
+      "Mais organização para oportunidades extracurriculares",
+      "Rede de informações acessível e direta",
     ],
     qrCode: {
       src: "/QRCLEV.png",
       title: "Grupo oficial da CLEV",
-      caption: "Escaneie o QR Code para entrar no grupo do WhatsApp e receber informacoes sobre eventos e vivencias.",
+      caption: "Escaneie o QR Code para entrar no grupo do WhatsApp e receber informações sobre eventos e vivências.",
     },
   },
 };

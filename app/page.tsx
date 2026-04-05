@@ -17,19 +17,19 @@ const serviceCards = [
   {
     href: "/certificados",
     title: "Certificados",
-    description: "Busca, validacao e acesso direto aos certificados.",
+    description: "Busca, validação e acesso direto aos certificados.",
     icon: FileCheck2,
   },
   {
     href: "/eventos",
     title: "Eventos",
-    description: "Calendario academico e programacao do DADG.",
+    description: "Calendário acadêmico e programação do DADG.",
     icon: CalendarDays,
   },
   {
     href: "/coordenadorias",
     title: "Coordenadorias",
-    description: "Conheca os nucleos e suas paginas.",
+    description: "Conheça os núcleos e suas páginas.",
     icon: UsersRound,
   },
   {
@@ -41,7 +41,7 @@ const serviceCards = [
   {
     href: "/ouvidoria",
     title: "Ouvidoria",
-    description: "Sugestoes, reclamacoes e duvidas.",
+    description: "Sugestões, reclamações e dúvidas.",
     icon: MessageSquareQuote,
   },
   {
@@ -58,9 +58,9 @@ export default function Home() {
       <UpcomingSchedulePopup />
 
       <PageHero
-        eyebrow="DADG ImePAC"
-        title="Diretorio Academico Diogo Guimaraes"
-        description="Acesso rapido aos principais servicos, paginas institucionais e canais oficiais do DADG."
+        eyebrow="DADG Imepac"
+        title="Diretório Acadêmico Diogo Guimarães"
+        description="Acesso rápido aos principais serviços, páginas institucionais e canais oficiais do DADG."
         actions={
           <>
             <Link
@@ -72,7 +72,7 @@ export default function Home() {
             </Link>
             <Link
               href="/eventos"
-              className="inline-flex items-center justify-center rounded-full border border-[rgba(9,66,125,0.16)] bg-white/85 px-5 py-3 text-sm font-semibold text-slate-700 hover:border-[rgba(9,66,125,0.26)] hover:text-slate-950"
+              className="inline-flex items-center justify-center rounded-full border border-[rgba(9,66,125,0.16)] bg-white/85 px-5 py-3 text-sm font-semibold text-slate-700 hover:border-[rgba(9,66,125,0.26)] hover:text-slate-950 dark:border-white/10 dark:bg-slate-900/72 dark:text-slate-200 dark:hover:text-white"
             >
               Ver eventos
             </Link>
@@ -87,15 +87,15 @@ export default function Home() {
                 </div>
                 <div>
                   <p className="text-sm uppercase tracking-[0.32em] text-slate-500 dark:text-slate-400">DADG</p>
-                  <p className="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">ImePAC Araguari</p>
+                  <p className="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">Imepac Araguari</p>
                 </div>
               </div>
             </div>
 
             <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
               {[
-                ["Certificados", "Busca e validacao"],
-                ["Agenda", "Eventos e calendario"],
+                ["Certificados", "Busca e validação"],
+                ["Agenda", "Eventos e calendário"],
                 ["Canais", "Contato e ouvidoria"],
               ].map(([label, value]) => (
                 <div
@@ -113,9 +113,9 @@ export default function Home() {
 
       <section className="page-shell space-y-8">
         <SectionHeading
-          eyebrow="Acesso rapido"
+          eyebrow="Acesso rápido"
           title="Tudo em um clique"
-          description="Entrada direta para as areas mais importantes do site."
+          description="Entrada direta para as áreas mais importantes do site."
         />
 
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -133,7 +133,7 @@ export default function Home() {
                     <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--brand-50)] text-[var(--brand-800)]">
                       <Icon className="h-5 w-5" />
                     </div>
-                    <span className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700">
+                    <span className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-slate-200">
                       Abrir
                       <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                     </span>
@@ -148,14 +148,14 @@ export default function Home() {
       <section className="page-shell space-y-8">
         <SectionHeading
           eyebrow="Coordenadorias"
-          title="Areas de atuacao"
-          description="Acesso rapido as coordenadorias do DADG."
+          title="Áreas de atuação"
+          description="Acesso rápido às coordenadorias do DADG."
         />
 
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {coordinatorCards.map((card) => (
             <Link key={card.slug} href={`/coordenadorias/${card.slug}`} className="group">
-              <article className="glass-panel surface-outline h-full overflow-hidden rounded-[30px] border border-white/70 p-5 transition-transform duration-300 group-hover:-translate-y-1">
+              <article className="glass-panel surface-outline h-full overflow-hidden rounded-[30px] border border-white/70 p-5 transition-transform duration-300 group-hover:-translate-y-1 dark:border-white/10">
                 <div
                   className="mb-5 rounded-[24px] p-4"
                   style={{
@@ -187,7 +187,7 @@ export default function Home() {
             <div>
               <h2 className="text-3xl font-semibold sm:text-4xl">Precisa falar com o DADG?</h2>
               <p className="mt-4 max-w-2xl text-sm leading-7 text-blue-100/78 sm:text-base">
-                Para assuntos importantes, sugestoes, reclamacoes ou duvidas, use a ouvidoria.
+                Para assuntos importantes, sugestões, reclamações ou dúvidas, use a ouvidoria.
               </p>
             </div>
 
