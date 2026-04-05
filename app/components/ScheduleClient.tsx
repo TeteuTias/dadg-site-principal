@@ -162,7 +162,7 @@ export default function ScheduleClient() {
           <div className="flex gap-3">
             <button
               onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
-              className="inline-flex items-center gap-2 rounded-full border border-[rgba(9,66,125,0.12)] bg-white/80 px-4 py-2 text-sm font-semibold text-slate-700 hover:text-slate-950 dark:border-white/10 dark:bg-slate-900/72 dark:text-slate-200 dark:hover:text-white"
+              className="inline-flex items-center gap-2 rounded-full border border-[rgba(9,66,125,0.14)] bg-white/86 px-4 py-2 text-sm font-semibold text-slate-700 shadow-[0_12px_28px_rgba(7,48,89,0.08)] transition-all duration-200 hover:border-[rgba(9,66,125,0.22)] hover:bg-white hover:text-slate-950 dark:border-[rgba(148,163,184,0.24)] dark:bg-[linear-gradient(180deg,rgba(30,41,59,0.96)_0%,rgba(15,23,42,0.96)_100%)] dark:text-slate-100 dark:shadow-[0_18px_40px_rgba(2,6,23,0.34)] dark:hover:border-[rgba(96,165,250,0.34)] dark:hover:bg-[linear-gradient(180deg,rgba(51,65,85,0.98)_0%,rgba(15,23,42,0.98)_100%)] dark:hover:text-white"
             >
               <ChevronLeft className="h-4 w-4" />
               Anterior
@@ -204,21 +204,27 @@ export default function ScheduleClient() {
                     type="button"
                     onClick={() => setSelectedDate(day)}
                     className={cn(
-                      "relative min-h-[76px] rounded-[22px] border px-3 py-3 text-left transition-all duration-200 sm:min-h-[88px]",
+                      "relative min-h-[76px] rounded-[22px] border px-3 py-3 text-center transition-all duration-200 sm:min-h-[88px] sm:text-left",
                       outsideMonth
-                        ? "border-transparent bg-white/45 text-slate-400 dark:bg-slate-900/28 dark:text-slate-600"
-                        : "border-white/70 bg-white/78 text-slate-800 hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(7,48,89,0.08)] dark:border-white/10 dark:bg-slate-900/72 dark:text-slate-200",
+                        ? "border-[rgba(9,66,125,0.08)] bg-white/45 text-slate-400 dark:border-white/6 dark:bg-slate-900/28 dark:text-slate-600"
+                        : "border-[rgba(9,66,125,0.14)] bg-white/78 text-slate-800 hover:-translate-y-0.5 hover:border-[rgba(9,66,125,0.2)] hover:shadow-[0_16px_36px_rgba(7,48,89,0.08)] dark:border-white/10 dark:bg-slate-900/72 dark:text-slate-200",
                       isSelected && "border-[var(--brand-800)] bg-[rgba(9,66,125,0.08)] text-slate-950 dark:text-white",
                       isToday && !isSelected && "border-[rgba(9,66,125,0.18)] bg-[rgba(9,66,125,0.04)]"
                     )}
                   >
-                    <span className={cn("text-sm font-semibold", isToday && "text-[var(--brand-800)]")}>
+                    <span className={cn("block text-sm font-semibold", isToday && "text-[var(--brand-800)]")}>
                       {format(day, "d")}
                     </span>
                     {hasEvent ? (
-                      <span className="absolute bottom-3 left-3 inline-flex items-center rounded-full bg-[var(--brand-800)] px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-white">
-                        Evento
-                      </span>
+                      <>
+                        <span
+                          aria-hidden="true"
+                          className="absolute left-1/2 top-3 h-2.5 w-2.5 -translate-x-1/2 rounded-full bg-[var(--brand-800)] shadow-[0_0_0_4px_rgba(9,66,125,0.12)] sm:hidden"
+                        />
+                        <span className="absolute bottom-3 left-3 hidden items-center rounded-full bg-[var(--brand-800)] px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-white sm:inline-flex">
+                          Evento
+                        </span>
+                      </>
                     ) : null}
                   </button>
                 );
@@ -295,7 +301,7 @@ export default function ScheduleClient() {
               );
             })
           ) : (
-            <div className="rounded-[24px] border border-dashed border-[rgba(9,66,125,0.18)] bg-white/70 px-5 py-8 text-center text-sm font-medium text-slate-500 dark:bg-slate-900/68 dark:text-slate-400">
+            <div className="rounded-[24px] border border-dashed border-[rgba(9,66,125,0.18)] bg-white/70 px-5 py-8 text-center text-sm font-medium text-slate-500 dark:border-[rgba(148,163,184,0.24)] dark:bg-[linear-gradient(180deg,rgba(30,41,59,0.96)_0%,rgba(15,23,42,0.96)_100%)] dark:text-slate-100 dark:shadow-[0_18px_40px_rgba(2,6,23,0.34)]">
               Nenhum evento para este dia.
             </div>
           )}

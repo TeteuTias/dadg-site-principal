@@ -275,17 +275,17 @@ body::before {
 }
 
 .dark .certificate-search-input {
-  color: rgb(241 245 249);
-  caret-color: rgb(255 255 255);
-  -webkit-text-fill-color: rgb(241 245 249);
+  color: rgb(15 23 42);
+  caret-color: var(--brand-900);
+  -webkit-text-fill-color: rgb(15 23 42);
 }
 
 .dark .certificate-search-input:-webkit-autofill,
 .dark .certificate-search-input:-webkit-autofill:hover,
 .dark .certificate-search-input:-webkit-autofill:focus {
-  -webkit-text-fill-color: rgb(241 245 249);
-  caret-color: rgb(255 255 255);
-  box-shadow: 0 0 0 1000px rgba(15, 23, 42, 0.92) inset;
+  -webkit-text-fill-color: rgb(15 23 42);
+  caret-color: var(--brand-900);
+  box-shadow: 0 0 0 1000px rgba(255, 255, 255, 1) inset;
 }
 
 @keyframes blink {

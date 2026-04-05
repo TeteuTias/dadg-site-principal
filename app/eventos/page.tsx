@@ -10,20 +10,12 @@ export default function EventosPage() {
         title="Calendário acadêmico"
         description="Consulte a programação, navegue pelos meses e veja os detalhes de cada dia."
         actions={
-          <>
-            <Link
-              href="#calendario"
-              className="inline-flex items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white hover:bg-[var(--brand-900)]"
-            >
-              Ir para o calendário
-            </Link>
-            <Link
-              href="/ouvidoria"
-              className="inline-flex items-center justify-center rounded-full border border-[rgba(9,66,125,0.2)] bg-[rgba(239,246,255,0.92)] px-5 py-3 text-sm font-semibold text-[var(--brand-900)] shadow-[0_14px_32px_rgba(7,48,89,0.08)] hover:border-[rgba(9,66,125,0.34)] hover:bg-white hover:text-[var(--brand-950)] dark:border-white/20 dark:bg-white/12 dark:text-white dark:hover:border-white/30 dark:hover:bg-white/18"
-            >
-              Comunicar conflito ou dúvida
-            </Link>
-          </>
+          <Link
+            href="#calendario"
+            className="inline-flex items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white hover:bg-[var(--brand-900)]"
+          >
+            Ir para o calendário
+          </Link>
         }
         aside={
           <div className="glass-panel-strong surface-outline relative overflow-hidden rounded-[28px] border border-white/90 bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(243,247,252,0.94)_100%)] px-5 py-5 shadow-[0_24px_64px_rgba(4,26,49,0.14)] dark:border-white/12 dark:bg-[linear-gradient(180deg,rgba(15,23,42,0.92)_0%,rgba(2,6,23,0.86)_100%)]">
