@@ -140,10 +140,16 @@
   }
 
   .brand-gradient-text {
-    background: linear-gradient(135deg, var(--brand-950), var(--brand-700) 60%, var(--brand-500));
+    display: inline-block;
+    background: linear-gradient(90deg, var(--brand-950) 0%, var(--brand-800) 54%, var(--brand-500) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    padding-bottom: 0.08em;
+  }
+
+  .brand-gradient-overlay {
+    opacity: 1;
   }
 
   .soft-grid {
@@ -181,7 +187,7 @@
     drop-shadow(0 0 6px rgba(14, 183, 218, 0.95))
     drop-shadow(0 0 16px rgba(14, 183, 218, 0.4));
   opacity: 0;
-  animation: popup-ring-trace 1s linear forwards;
+  animation: popup-ring-trace 1.4s linear forwards;
 }
 
 .dark .popup-attention-ring {

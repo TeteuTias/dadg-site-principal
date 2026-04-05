@@ -53,7 +53,6 @@ export const siteNavigation: SiteNavItem[] = [
   { href: "/certificados", label: "Certificados", description: "Busque e valide certificados" },
   { href: "/coordenadorias", label: "Coordenadorias", description: "Conheça os núcleos de atuação" },
   { href: "/eventos", label: "Eventos", description: "Calendário acadêmico e programação" },
-  { href: "/mural", label: "Mural", description: "Avisos e comunicados" },
   { href: "/sobre", label: "Sobre", description: "História, missão e valores" },
   { href: "/contato", label: "Contato", description: "Instagram, e-mail e canais" },
   { href: "/ouvidoria", label: "Ouvidoria", description: "Envie manifestações e sugestões" },

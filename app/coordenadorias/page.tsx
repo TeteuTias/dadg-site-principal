@@ -12,9 +12,13 @@ export default function CoordenadoriasPage() {
         title="Áreas do DADG"
         description="Acesse rapidamente cada coordenadoria e sua página própria."
         aside={
-          <div className="rounded-[28px] border border-white/70 bg-white px-5 py-5 shadow-[0_18px_40px_rgba(7,48,89,0.08)] dark:border-white/10 dark:bg-slate-900/72">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400">Acesso rápido</p>
-            <p className="mt-3 text-lg font-semibold text-slate-950 dark:text-white">Cinco coordenadorias principais.</p>
+          <div className="glass-panel-strong surface-outline relative overflow-hidden rounded-[28px] border border-white/90 bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(243,247,252,0.94)_100%)] px-5 py-5 shadow-[0_24px_64px_rgba(4,26,49,0.14)] dark:border-white/12 dark:bg-[linear-gradient(180deg,rgba(15,23,42,0.92)_0%,rgba(2,6,23,0.86)_100%)]">
+            <div className="absolute inset-x-5 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(9,66,125,0.35)] to-transparent" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(79,143,214,0.14),transparent_42%)]" />
+            <div className="relative">
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400">Acesso rápido</p>
+              <p className="mt-3 text-lg font-semibold text-slate-950 dark:text-white">Cinco coordenadorias principais.</p>
+            </div>
           </div>
         }
       />

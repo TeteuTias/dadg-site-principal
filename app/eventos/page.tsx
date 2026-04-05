@@ -19,16 +19,20 @@ export default function EventosPage() {
             </Link>
             <Link
               href="/ouvidoria"
-              className="inline-flex items-center justify-center rounded-full border border-[rgba(9,66,125,0.16)] bg-white/85 px-5 py-3 text-sm font-semibold text-slate-700 hover:border-[rgba(9,66,125,0.26)] hover:text-slate-950 dark:border-white/10 dark:bg-slate-900/72 dark:text-slate-200 dark:hover:text-white"
+              className="inline-flex items-center justify-center rounded-full border border-[rgba(9,66,125,0.2)] bg-[rgba(239,246,255,0.92)] px-5 py-3 text-sm font-semibold text-[var(--brand-900)] shadow-[0_14px_32px_rgba(7,48,89,0.08)] hover:border-[rgba(9,66,125,0.34)] hover:bg-white hover:text-[var(--brand-950)] dark:border-white/20 dark:bg-white/12 dark:text-white dark:hover:border-white/30 dark:hover:bg-white/18"
             >
               Comunicar conflito ou dúvida
             </Link>
           </>
         }
         aside={
-          <div className="rounded-[28px] border border-white/70 bg-white/82 px-5 py-5 shadow-[0_18px_40px_rgba(7,48,89,0.08)] dark:border-white/10 dark:bg-slate-900/72">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400">Agenda</p>
-            <p className="mt-3 text-lg font-semibold text-slate-950 dark:text-white">Consulta mensal e detalhe diário.</p>
+          <div className="glass-panel-strong surface-outline relative overflow-hidden rounded-[28px] border border-white/90 bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(243,247,252,0.94)_100%)] px-5 py-5 shadow-[0_24px_64px_rgba(4,26,49,0.14)] dark:border-white/12 dark:bg-[linear-gradient(180deg,rgba(15,23,42,0.92)_0%,rgba(2,6,23,0.86)_100%)]">
+            <div className="absolute inset-x-5 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(9,66,125,0.35)] to-transparent" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(79,143,214,0.14),transparent_42%)]" />
+            <div className="relative">
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400">Agenda</p>
+              <p className="mt-3 text-lg font-semibold text-slate-950 dark:text-white">Consulta mensal e detalhe diário.</p>
+            </div>
           </div>
         }
       />

@@ -4,7 +4,6 @@ import {
   ArrowRight,
   CalendarDays,
   FileCheck2,
-  LayoutPanelTop,
   Mail,
   MessageSquareQuote,
   UsersRound,
@@ -33,12 +32,6 @@ const serviceCards = [
     icon: UsersRound,
   },
   {
-    href: "/mural",
-    title: "Mural",
-    description: "Avisos e comunicados importantes.",
-    icon: LayoutPanelTop,
-  },
-  {
     href: "/ouvidoria",
     title: "Ouvidoria",
     description: "Sugestões, reclamações e dúvidas.",
@@ -60,6 +53,7 @@ export default function Home() {
       <PageHero
         eyebrow="DADG Imepac"
         title="Diretório Acadêmico Diogo Guimarães"
+        titleClassName="text-[var(--brand-800)] dark:text-white"
         description="Acesso rápido aos principais serviços, páginas institucionais e canais oficiais do DADG."
         actions={
           <>
@@ -72,7 +66,7 @@ export default function Home() {
             </Link>
             <Link
               href="/eventos"
-              className="inline-flex items-center justify-center rounded-full border border-[rgba(9,66,125,0.16)] bg-white/85 px-5 py-3 text-sm font-semibold text-slate-700 hover:border-[rgba(9,66,125,0.26)] hover:text-slate-950 dark:border-white/10 dark:bg-slate-900/72 dark:text-slate-200 dark:hover:text-white"
+              className="inline-flex items-center justify-center rounded-full border border-[rgba(9,66,125,0.16)] bg-white/85 px-5 py-3 text-sm font-semibold text-slate-700 hover:border-[rgba(9,66,125,0.26)] hover:text-slate-950 dark:border-white/10 dark:bg-slate-900/75 dark:text-slate-100 dark:hover:border-white/20 dark:hover:text-white"
             >
               Ver eventos
             </Link>

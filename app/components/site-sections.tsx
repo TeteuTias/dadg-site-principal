@@ -8,6 +8,8 @@ type PageHeroProps = {
   actions?: ReactNode;
   aside?: ReactNode;
   className?: string;
+  titleClassName?: string;
+  useGradientTitle?: boolean;
 };
 
 export function PageHero({
@@ -17,6 +19,8 @@ export function PageHero({
   actions,
   aside,
   className,
+  titleClassName,
+  useGradientTitle = true,
 }: PageHeroProps) {
   return (
     <section className={cn("page-shell", className)}>
@@ -25,7 +29,21 @@ export function PageHero({
         <div className="relative grid gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(280px,0.8fr)] lg:items-center">
           <div>
             <span className="section-eyebrow">{eyebrow}</span>
-            <h1 className="section-title brand-gradient-text max-w-4xl">{title}</h1>
+            <h1 className={cn("section-title max-w-4xl antialiased leading-[1.1] pb-[0.14em]", titleClassName)}>
+              {useGradientTitle ? (
+                <span className="relative block">
+                  <span className="block">{title}</span>
+                  <span
+                    aria-hidden="true"
+                    className="brand-gradient-text brand-gradient-overlay pointer-events-none absolute inset-x-0 top-0 -bottom-[0.22em] block dark:hidden"
+                  >
+                    {title}
+                  </span>
+                </span>
+              ) : (
+                title
+              )}
+            </h1>
             <p className="section-subtitle mt-5 max-w-3xl">{description}</p>
             {actions ? <div className="mt-8 flex flex-wrap gap-3">{actions}</div> : null}
           </div>

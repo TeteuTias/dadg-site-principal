@@ -8,7 +8,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArrowRight, ChevronRight, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { coordinatorCards, siteNavigation, socialAccounts } from "@/app/lib/site-content";
+import { coordinatorCards, siteNavigation } from "@/app/lib/site-content";
 import ThemeToggle from "@/app/components/theme-toggle";
 
 type SiteShellProps = {
@@ -34,8 +34,8 @@ export default function SiteShell({ children }: SiteShellProps) {
 
         <header className="sticky top-0 z-50 px-3 pt-3 sm:px-5">
           <div className="page-shell">
-            <div className="glass-panel-strong surface-outline flex items-center justify-between rounded-[26px] border border-white/70 px-4 py-3 sm:px-6">
-              <div className="flex items-center gap-3">
+            <div className="glass-panel-strong surface-outline flex items-center justify-between rounded-[26px] border border-white/70 px-4 py-3 sm:px-6 lg:grid lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:gap-6 lg:justify-normal">
+              <div className="flex min-w-0 items-center gap-3">
                 <Link href="/" className="flex items-center gap-3">
                   <div className="relative h-11 w-11 overflow-hidden rounded-full border border-white/80 bg-white shadow-[0_10px_30px_rgba(7,48,89,0.14)]">
                     <Image src="/logoDadg02.png" alt="Logo DADG" fill sizes="44px" className="object-cover" />
@@ -47,7 +47,7 @@ export default function SiteShell({ children }: SiteShellProps) {
                 </Link>
               </div>
 
-              <nav className="hidden items-center gap-1 lg:flex">
+              <nav className="hidden items-center justify-center gap-1 lg:flex lg:px-2">
                 {siteNavigation.map((item) => {
                   const isActive = item.href === "/" ? pathname === item.href : pathname.startsWith(item.href);
 
@@ -66,7 +66,7 @@ export default function SiteShell({ children }: SiteShellProps) {
                 })}
               </nav>
 
-              <div className="hidden items-center gap-3 lg:flex">
+              <div className="hidden items-center justify-end gap-3 lg:flex">
                 <ThemeToggle />
                 <Link
                   href="/ouvidoria"
@@ -121,20 +121,7 @@ export default function SiteShell({ children }: SiteShellProps) {
               />
             </div>
 
-            <div className="mt-10 flex flex-col gap-4 border-t border-[rgba(9,66,125,0.08)] pt-6 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex flex-wrap gap-3">
-                {socialAccounts.slice(0, 3).map((account) => (
-                  <Link
-                    key={account.handle}
-                    href={account.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="rounded-full border border-[rgba(9,66,125,0.12)] bg-white/70 px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-950 dark:border-white/10 dark:bg-slate-900/72 dark:text-slate-300 dark:hover:text-white"
-                  >
-                    {account.handle.replace(/^@/, "")}
-                  </Link>
-                ))}
-              </div>
+            <div className="mt-10 border-t border-[rgba(9,66,125,0.08)] pt-6">
               <p className="text-sm text-slate-500 dark:text-slate-400">
                 {new Date().getFullYear()} DADG Imepac Araguari. Canais oficiais, serviços e informações institucionais.
               </p>

@@ -58,7 +58,7 @@ export default function UpcomingSchedulePopup() {
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
       setShowAttentionRing(false);
-    }, 1200);
+    }, 1600);
 
     return () => window.clearTimeout(timeoutId);
   }, []);
