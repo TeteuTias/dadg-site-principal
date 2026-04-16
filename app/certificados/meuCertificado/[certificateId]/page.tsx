@@ -343,14 +343,32 @@ export default function Home({
                 </thead>
                 <tbody>
                   {
-                    data?.verse?.rows?.map((row, index) => (
-                      <tr key={index}>
+                    data?.verse?.rows?.map((row, rowIndex) => (
+                      <tr key={rowIndex}>
                         {
-                          row.map((cell, cellIndex) => (
-                            <td key={cellIndex} className="text-center" style={{ ...libSourceSerif4.style, ...data?.eventId?.styleContainerVerse?.rowsStyle }}>
-                              {cell}
-                            </td>
-                          ))
+                          row.map((cell, cellIndex) => {
+                            if (rowIndex > 0 && data?.verse?.rows && data.verse.rows[rowIndex - 1][cellIndex] === cell) {
+                              return null;
+                            }
+                            let rowSpanCount = 1;
+                            for (let i = rowIndex + 1; i < (data?.verse?.rows?.length ?? 0); i++) {
+                              if (data?.verse?.rows && data.verse.rows[i][cellIndex] === cell) {
+                                rowSpanCount++;
+                              } else {
+                                break; // Para a contagem assim que o valor mudar
+                              }
+                            }
+                            return (
+                              <td
+                                key={cellIndex}
+                                rowSpan={rowSpanCount > 1 ? rowSpanCount : undefined}
+                                className="text-center"
+                                style={{ ...libSourceSerif4.style, ...data?.eventId?.styleContainerVerse?.rowsStyle }}
+                              >
+                                {cell}
+                              </td>
+                            );
+                          })
                         }
                       </tr>
                     ))
