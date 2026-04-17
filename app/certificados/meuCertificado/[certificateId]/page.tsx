@@ -343,35 +343,56 @@ export default function Home({
                 </thead>
                 <tbody>
                   {
-                    data?.verse?.rows?.map((row, rowIndex) => (
-                      <tr key={rowIndex}>
-                        {
-                          row.map((cell, cellIndex) => {
-                            if (rowIndex > 0 && data?.verse?.rows && data.verse.rows[rowIndex - 1][cellIndex] === cell) {
-                              return null;
-                            }
-                            let rowSpanCount = 1;
-                            for (let i = rowIndex + 1; i < (data?.verse?.rows?.length ?? 0); i++) {
-                              if (data?.verse?.rows && data.verse.rows[i][cellIndex] === cell) {
-                                rowSpanCount++;
-                              } else {
-                                break; // Para a contagem assim que o valor mudar
+                    data?.verse?.rows?.map((row, rowIndex) => {
+                      // 1. Identifica se estamos na última linha da tabela
+                      const isLastRow = rowIndex === (data?.verse?.rows?.length ?? 0) - 1;
+
+                      return (
+                        <tr key={rowIndex}>
+                          {
+                            row.map((cell, cellIndex) => {
+                              const isCargaHoraria = cellIndex === row.length - 1;
+
+                              if (!isCargaHoraria && rowIndex > 0 && data?.verse?.rows && data.verse.rows[rowIndex - 1][cellIndex] === cell) {
+                                return null;
                               }
-                            }
-                            return (
-                              <td
-                                key={cellIndex}
-                                rowSpan={rowSpanCount > 1 ? rowSpanCount : undefined}
-                                className="text-center"
-                                style={{ ...libSourceSerif4.style, ...data?.eventId?.styleContainerVerse?.rowsStyle }}
-                              >
-                                {cell}
-                              </td>
-                            );
-                          })
-                        }
-                      </tr>
-                    ))
+
+                              let rowSpanCount = 1;
+
+                              if (!isCargaHoraria) {
+                                for (let i = rowIndex + 1; i < (data?.verse?.rows?.length ?? 0); i++) {
+                                  if (data?.verse?.rows && data.verse.rows[i][cellIndex] === cell) {
+                                    rowSpanCount++;
+                                  } else {
+                                    break;
+                                  }
+                                }
+                              }
+
+                              // 2. Define o alinhamento: 
+                              // Se for a última linha, centraliza tudo. 
+                              // Se NÃO for a última, aplica a regra anterior (coluna 2 no "start", resto no "center").
+                              const cellTextAlign = isLastRow ? "center" : (cellIndex === 1 ? "start" : "center");
+
+                              return (
+                                <td
+                                  key={cellIndex}
+                                  rowSpan={rowSpanCount > 1 ? rowSpanCount : undefined}
+                                  className="text-center"
+                                  style={{
+                                    ...libSourceSerif4.style,
+                                    ...data?.eventId?.styleContainerVerse?.rowsStyle,
+                                    textAlign: cellTextAlign // Aplica a variável criada acima
+                                  }}
+                                >
+                                  {cell}
+                                </td>
+                              );
+                            })
+                          }
+                        </tr>
+                      );
+                    })
                   }
                 </tbody>
               </table>
