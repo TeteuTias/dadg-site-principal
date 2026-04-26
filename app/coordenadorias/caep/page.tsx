@@ -1,107 +1,154 @@
+'use client';
+
 import React from "react";
-import "../../globals.css";
+import { motion } from "framer-motion";
+import { Target, Lightbulb, Microscope, ChevronRight } from "lucide-react";
+import Link from "next/link";
 
-const CaepPage: React.FC = () => {
-  return (
-    <div className="w-full min-h-screen bg-gradient-to-b from-[#000066]/80 to-[#000033]/90 flex justify-center py-16">
-      <div className="max-w-7xl w-full px-6">
-        {/* Header com Logo e Título */}
-        <div className="flex flex-col md:flex-row items-center justify-between mb-12 sm:mb-16 md:mb-20 gap-6 sm:gap-8">
-          <div className="flex-1 text-center md:text-left">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-200 to-white mb-3 sm:mb-4 drop-shadow-lg animate-title-glow">
-              CAEP
-            </h1>
-            <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 font-medium tracking-wide animate-slide-up px-4 md:px-0">
-              Coordenadoria Acadêmica de Extensão e Pesquisa
-            </h2>
-          </div>
-          <div className="relative w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 rounded-full overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.4)] border-4 border-blue-500 transform transition-all duration-700 hover:scale-105 hover:shadow-[0_0_50px_rgba(0,0,0,0.5)] hover:border-blue-400 animate-float">
-            <img src="/coordinators/CAEP.png" alt="Ícone" className="w-full h-full object-cover transition-transform duration-700 hover:scale-110" />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/30"></div>
-          </div>
-        </div>
-
-        {/* Grid Principal */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 md:gap-8">
-          {/* Coluna da Esquerda - Quem Somos */}
-          <div className="lg:col-span-4">
-            <div className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-blue-300 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-              <div className="relative bg-[#000066]/95 backdrop-blur-md text-white p-4 sm:p-6 md:p-8 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.2)] h-full transform hover:scale-[1.02] transition-all duration-500 hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)] border border-blue-400/30 animate-slide-in-left delay-200">
-                <div className="absolute inset-0 bg-[url('/grid-pattern.png')] opacity-10 rounded-2xl"></div>
-                <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl"></div>
-                <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-4 sm:mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-200 animate-fade-in relative z-10">Quem Somos</h2>
-                <p className="text-sm sm:text-base md:text-lg leading-relaxed animate-slide-in-left delay-300 relative z-10">
-                  Somos a Coordenadoria Acadêmica de Extensão e Pesquisa, responsável por fomentar e coordenar as atividades de extensão e pesquisa na DADG.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Coluna do Meio - O que buscamos */}
-          <div className="lg:col-span-4">
-            <div className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-blue-300 to-blue-100 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-              <div className="relative bg-white/95 backdrop-blur-sm p-4 sm:p-6 md:p-8 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.15)] h-full transform hover:scale-[1.02] transition-all duration-500 hover:shadow-[0_12px_40px_rgba(0,0,0,0.25)] border border-blue-200 animate-slide-in-right delay-300">
-                <div className="absolute top-0 left-0 w-24 h-24 bg-blue-200/20 rounded-full blur-2xl"></div>
-                <div className="absolute bottom-0 right-0 w-24 h-24 bg-blue-300/20 rounded-full blur-2xl"></div>
-                <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-900 mb-4 sm:mb-6 text-transparent bg-clip-text bg-gradient-to-r from-[#000066] to-[#0000cc] animate-fade-in relative z-10">O que buscamos</h2>
-                <p className="text-sm sm:text-base md:text-lg text-gray-800 leading-relaxed animate-slide-in-right delay-400 relative z-10">
-                  Buscamos promover a integração entre ensino, pesquisa e extensão, desenvolvendo projetos que contribuam para o desenvolvimento acadêmico e social.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Coluna da Direita - Nossos valores */}
-          <div className="lg:col-span-4">
-            <div className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-blue-200 to-blue-50 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-              <div className="relative bg-gradient-to-br from-white/95 to-blue-50/90 backdrop-blur-sm p-4 sm:p-6 md:p-8 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.15)] h-full transform hover:scale-[1.02] transition-all duration-500 hover:shadow-[0_12px_40px_rgba(0,0,0,0.25)] border border-blue-200 animate-scale-in delay-400">
-                <div className="absolute top-0 left-0 w-24 h-24 bg-blue-100/20 rounded-full blur-2xl"></div>
-                <div className="absolute bottom-0 right-0 w-24 h-24 bg-blue-200/20 rounded-full blur-2xl"></div>
-                <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-900 mb-4 sm:mb-6 text-transparent bg-clip-text bg-gradient-to-r from-[#000066] to-[#0000cc] animate-fade-in relative z-10">Nossos valores</h2>
-                <ul className="text-sm sm:text-base md:text-lg text-gray-800 space-y-3 sm:space-y-4 animate-scale-in delay-500 relative z-10">
-                  <li className="flex items-center gap-2 sm:gap-3 group hover:translate-x-2 transition-transform duration-300">
-                    <span className="text-blue-600 group-hover:scale-110 transition-transform duration-300 flex-shrink-0">✓</span>
-                    <span className="group-hover:text-[#000066] transition-colors duration-300">Excelência acadêmica</span>
-                  </li>
-                  <li className="flex items-center gap-2 sm:gap-3 group hover:translate-x-2 transition-transform duration-300">
-                    <span className="text-blue-600 group-hover:scale-110 transition-transform duration-300 flex-shrink-0">✓</span>
-                    <span className="group-hover:text-[#000066] transition-colors duration-300">Inovação científica</span>
-                  </li>
-                  <li className="flex items-center gap-2 sm:gap-3 group hover:translate-x-2 transition-transform duration-300">
-                    <span className="text-blue-600 group-hover:scale-110 transition-transform duration-300 flex-shrink-0">✓</span>
-                    <span className="group-hover:text-[#000066] transition-colors duration-300">Compromisso social</span>
-                  </li>
-                  <li className="flex items-center gap-2 sm:gap-3 group hover:translate-x-2 transition-transform duration-300">
-                    <span className="text-blue-600 group-hover:scale-110 transition-transform duration-300 flex-shrink-0">✓</span>
-                    <span className="group-hover:text-[#000066] transition-colors duration-300">Integração com a comunidade</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Missão - Largura Total */}
-        <div className="mt-6 sm:mt-8">
-          <div className="relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-blue-300 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-            <div className="relative bg-[#000066]/95 backdrop-blur-md text-white p-6 sm:p-8 md:p-12 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.2)] w-full text-center transform hover:scale-[1.02] transition-all duration-500 hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)] border border-blue-400/30 animate-slide-in-left delay-500">
-              <div className="absolute inset-0 bg-[url('/grid-pattern.png')] opacity-10 rounded-2xl"></div>
-              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl"></div>
-              <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-400/10 rounded-full blur-2xl"></div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold mb-4 sm:mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-200 animate-fade-in relative z-10 px-4">Nossa missão</h2>
-              <p className="text-sm sm:text-base md:text-lg leading-relaxed max-w-3xl mx-auto animate-slide-in-left delay-600 relative z-10 px-4">
-                Promover o desenvolvimento acadêmico através da integração entre ensino, pesquisa e extensão, contribuindo para a formação de profissionais comprometidos com a transformação social.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
 };
 
-export default CaepPage;
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15 }
+  }
+};
+
+export default function CaepPage() {
+  return (
+    <main className="min-h-screen bg-[#001021] text-white pt-24 pb-20">
+      <div className="absolute inset-0 bg-gradient-to-b from-[#002B5B]/40 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        {/* Breadcrumb & Title */}
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mb-12"
+        >
+          <div className="flex items-center gap-2 text-blue-300/60 text-sm font-medium mb-4">
+            <Link href="/coordenadorias" className="hover:text-blue-300 transition-colors">Coordenadorias</Link>
+            <ChevronRight className="w-4 h-4" />
+            <span className="text-blue-200">CAEP</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-blue-500/10 border border-blue-400/20 rounded-2xl">
+              <Microscope className="w-10 h-10 text-blue-300" />
+            </div>
+            <div>
+              <h1 className="text-4xl md:text-5xl font-bold font-serif tracking-tight drop-shadow-md">
+                CAEP
+              </h1>
+              <p className="text-blue-200/80 text-lg">Extensão e Pesquisa</p>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Split Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+          
+          {/* Left Column: Mission & Projects */}
+          <motion.div 
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
+            className="lg:col-span-8 space-y-8"
+          >
+            {/* Missão da Pasta */}
+            <motion.section variants={fadeInUp} className="relative group">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500/20 to-transparent rounded-3xl blur opacity-50 group-hover:opacity-100 transition duration-500"></div>
+              <div className="relative p-8 rounded-3xl bg-[#00152b]/80 backdrop-blur-md border border-white/10 shadow-2xl">
+                <div className="flex items-center gap-3 mb-6">
+                  <Target className="w-6 h-6 text-blue-400" />
+                  <h2 className="text-2xl font-bold font-serif text-white">Missão da Pasta</h2>
+                </div>
+                <p className="text-blue-100/80 leading-relaxed text-lg">
+                  Fomentar o pensamento científico e a responsabilidade social entre os estudantes de medicina do IMEPAC. A CAEP atua como ponte entre a sala de aula e a comunidade, desenvolvendo projetos de extensão que impactam a sociedade e pesquisas que avançam a fronteira do conhecimento médico.
+                </p>
+              </div>
+            </motion.section>
+
+            {/* Projetos em Andamento */}
+            <motion.section variants={fadeInUp} className="relative group">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-400/10 to-transparent rounded-3xl blur opacity-50 group-hover:opacity-100 transition duration-500"></div>
+              <div className="relative p-8 rounded-3xl bg-white/[0.03] backdrop-blur-md border border-white/10 shadow-2xl">
+                <div className="flex items-center gap-3 mb-6">
+                  <Lightbulb className="w-6 h-6 text-yellow-400/80" />
+                  <h2 className="text-2xl font-bold font-serif text-white">Projetos em Andamento</h2>
+                </div>
+                
+                <div className="space-y-6">
+                  <div className="p-5 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+                    <h3 className="text-xl font-bold text-white mb-2">Simpósio de Iniciação Científica</h3>
+                    <p className="text-blue-100/70 text-sm">Organização do evento anual para apresentação de resumos e artigos científicos produzidos pelos acadêmicos durante o semestre.</p>
+                  </div>
+                  <div className="p-5 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+                    <h3 className="text-xl font-bold text-white mb-2">Projeto Saúde na Escola</h3>
+                    <p className="text-blue-100/70 text-sm">Ações de extensão voltadas para a educação em saúde em escolas públicas da região, focando em prevenção primária.</p>
+                  </div>
+                  <div className="p-5 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+                    <h3 className="text-xl font-bold text-white mb-2">Mentoria Acadêmica</h3>
+                    <p className="text-blue-100/70 text-sm">Programa de apoio à submissão de projetos no Comitê de Ética em Pesquisa (CEP) e formatação de artigos.</p>
+                  </div>
+                </div>
+              </div>
+            </motion.section>
+          </motion.div>
+
+          {/* Right Column: Profile Card */}
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="lg:col-span-4"
+          >
+            <div className="sticky top-32">
+              <div className="relative group">
+                <div className="absolute -inset-0.5 bg-gradient-to-b from-blue-500/30 to-blue-900/30 rounded-3xl blur opacity-70 group-hover:opacity-100 transition duration-500"></div>
+                <div className="relative p-8 rounded-3xl bg-[#00152b]/90 backdrop-blur-xl border border-white/20 shadow-2xl text-center flex flex-col items-center">
+                  
+                  {/* Decorative Profile Ring */}
+                  <div className="relative w-40 h-40 mb-6">
+                    <div className="absolute inset-0 rounded-full border-2 border-dashed border-blue-400/50 animate-[spin_20s_linear_infinite]" />
+                    <div className="absolute inset-2 rounded-full border-4 border-[#001021] overflow-hidden bg-blue-900/50">
+                      {/* Substituto elegante de imagem, caso não tenha a foto da pessoa */}
+                      <img 
+                        src="/coordinators/CAEP.png" 
+                        alt="Diretoria CAEP" 
+                        className="w-full h-full object-cover object-center opacity-80"
+                      />
+                    </div>
+                  </div>
+
+                  <span className="inline-block px-3 py-1 bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-bold tracking-widest uppercase rounded-full mb-4">
+                    Diretoria Atual
+                  </span>
+
+                  <h3 className="text-2xl font-bold font-serif text-white mb-1">Membro DADG</h3>
+                  <p className="text-blue-200/80 font-medium mb-6">Diretor(a) da CAEP</p>
+
+                  <div className="w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mb-6" />
+
+                  <p className="text-sm text-blue-100/60 leading-relaxed italic">
+                    "Acreditamos que a pesquisa transforma a medicina, e a extensão transforma o médico."
+                  </p>
+
+                  <button className="mt-8 w-full py-3 px-6 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-medium transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+                    Entrar em Contato
+                  </button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+        </div>
+      </div>
+    </main>
+  );
+}

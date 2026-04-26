@@ -16,16 +16,18 @@ import {
   Mail,
   HelpCircle,
   MessageCircle,
+  Bell,
+  Menu,
   ChevronDown
 } from "lucide-react";
 
 export default function MenuDrawer() {
   const [menuAberto, setMenuAberto] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [coordenadoriasSubmenuOpen, setCoordenadoriasSubmenuOpen] = useState(false);
   const [drawerWidth, setDrawerWidth] = useState("250px");
   const [mounted, setMounted] = useState(false);
   const [windowWidth, setWindowWidth] = useState<number>(1024);
+  const [hasNotification, setHasNotification] = useState(true);
   const pathname = usePathname() || '/';
 
   const headerBackgroundColor =
@@ -39,16 +41,11 @@ export default function MenuDrawer() {
               ? "#050a4a"
               : pathname.startsWith("/coordenadorias/clev")
                 ? "#526c94"
-                : "#09427d";
+                : "#002B5B";
   const drawerBackgroundColor = headerBackgroundColor;
 
   useEffect(() => {
     setMounted(true);
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
@@ -100,9 +97,9 @@ export default function MenuDrawer() {
     : "0px";
 
   const isMobile = mounted ? windowWidth < 768 : false;
-  const isScrolled = mounted ? scrolled : false;
-  const headerHeight = isMobile ? (isScrolled ? "30px" : "35px") : (isScrolled ? "35px" : "45px");
-  const headerFontSize = isMobile ? (isScrolled ? "11px" : "12px") : (isScrolled ? "14px" : "16px");
+  // Fixed sizes — no shrink on scroll
+  const headerHeight = isMobile ? "35px" : "45px";
+  const headerFontSize = isMobile ? "12px" : "16px";
   const headerGap = isMobile ? "8px" : "16px";
 
   useEffect(() => {
@@ -112,90 +109,109 @@ export default function MenuDrawer() {
 
   return (
     <>
-      <header
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: headerHeight,
-          backgroundColor: headerBackgroundColor,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "0 15px",
-          color: "white",
-          fontWeight: "bold",
-          fontSize: headerFontSize,
-          transition: "all 0.5s ease-in-out",
-          zIndex: 1000,
-          backdropFilter: "blur(8px)",
-          WebkitBackdropFilter: "blur(8px)",
-        }}
+      {/* Container with drop-shadow that follows the SVG curve shape */}
+      <div
+        className="fixed top-0 left-0 w-full z-[1000]"
+        style={{ filter: "drop-shadow(0 4px 6px rgba(0,0,0,0.25))" }}
       >
+        <header
+          style={{
+            position: "relative",
+            width: "100%",
+            height: headerHeight,
+            backgroundColor: headerBackgroundColor,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "0 15px",
+            color: "white",
+            fontWeight: "bold",
+            fontSize: headerFontSize,
+            transition: "height 0.3s ease, font-size 0.3s ease, background-color 0.3s ease",
+          }}
+        >
         {/* Botão Hamburger */}
         <div style={{ display: "flex", alignItems: "center" }}>
           <button
             onClick={() => setMenuAberto(true)}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "4px",
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              padding: 0,
-            }}
+            className="text-white hover:text-blue-200 transition-colors relative flex items-center justify-center w-8 h-8 rounded-full hover:bg-white/10"
           >
-            <span style={{ width: "24px", height: "4px", backgroundColor: "white", borderRadius: "4px", display: "block" }}></span>
-            <span style={{ width: "24px", height: "4px", backgroundColor: "white", borderRadius: "4px", display: "block" }}></span>
-            <span style={{ width: "24px", height: "4px", backgroundColor: "white", borderRadius: "4px", display: "block" }}></span>
+            <Menu size={isMobile ? 24 : 26} strokeWidth={2} />
           </button>
         </div>
 
-        {/* Links centrais */}
-        <div
-          style={{
-            position: "absolute",
-            left: "50%",
-            transform: "translateX(-50%)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: isMobile ? "6px" : headerGap,
-            textTransform: "uppercase",
-            textAlign: "center",
+        {/* Curva SVG (Wave/Dip) contínua */}
+        <div 
+          className="absolute left-1/2 -translate-x-1/2 w-[220px] h-[55px] md:w-[280px] md:h-[65px] z-[99]"
+          style={{ 
+            top: "calc(100% - 1px)", 
+            color: headerBackgroundColor,
+            transition: "color 0.3s ease" 
           }}
         >
-          <Link href="/coordenadorias" style={{ color: "white", textDecoration: "none", fontSize: headerFontSize }}>
-            Coordenadorias
-          </Link>
-          <Link href="/" style={{ color: "white", textDecoration: "none", fontSize: headerFontSize }}>
-            Início
-          </Link>
-          <Link href="/certificados" style={{ color: "white", textDecoration: "none", fontSize: headerFontSize }}>
-            Certificados
-          </Link>
-          {/* SEMPRE SEMPRE SEMRPE SEMPRE SEMPRE DEIXE O PREFETCH DO Link DESATIVADO!!!! */}
-          {/*
-          <Link href="/panel/" prefetch={false} style={{ color: "white", textDecoration: "none", fontSize: headerFontSize }}>
-            Minha Conta
-          </Link>
-          */}
+          <svg
+            viewBox="0 0 240 60"
+            preserveAspectRatio="none"
+            className="w-full h-full"
+          >
+            <path d="M 0 0 C 60 0 60 60 120 60 C 180 60 180 0 240 0 Z" fill="currentColor" />
+          </svg>
         </div>
 
-        {/* Ícone à direita */}
-        <div style={{ flexShrink: 0 }}>
-          <Image
-            src="/dadg_sem_fundo.png"
-            alt="Logo DADG"
-            width={isMobile ? 24 : 30}
-            height={isMobile ? 24 : 30}
-            className="object-contain"
-          />
+        {/* Logo Flutuando na Curva */}
+        <Link href="/" className="absolute left-1/2 -translate-x-1/2 top-[2px] md:top-[6px] w-[75px] h-[75px] md:w-[90px] md:h-[90px] z-[100] cursor-pointer hover:scale-105 transition-transform">
+          <div className="relative w-full h-full">
+            <Image
+              src="/dadg_sem_fundo.png"
+              alt="Logo DADG"
+              fill
+              className="object-contain drop-shadow-sm"
+              priority
+            />
+          </div>
+        </Link>
+
+        {/* Direita: Links e Notificações */}
+        <div style={{ display: "flex", alignItems: "center", gap: headerGap }}>
+          {/* Links (Escondido no mobile para não sobrepor o brasão) */}
+          <div
+            className="hidden md:flex"
+            style={{
+              justifyContent: "flex-end",
+              alignItems: "center",
+              gap: headerGap,
+              textTransform: "uppercase",
+            }}
+          >
+            <Link href="/coordenadorias" style={{ color: "white", textDecoration: "none", fontSize: headerFontSize, transition: "color 0.2s hover:text-blue-200" }}>
+              Coordenadorias
+            </Link>
+            <Link href="/" style={{ color: "white", textDecoration: "none", fontSize: headerFontSize, transition: "color 0.2s hover:text-blue-200" }}>
+              Início
+            </Link>
+            <Link href="/certificados" style={{ color: "white", textDecoration: "none", fontSize: headerFontSize, transition: "color 0.2s hover:text-blue-200" }}>
+              Certificados
+            </Link>
+          </div>
+
+          {/* Sino de Notificação */}
+          <button
+            onClick={() => {
+              window.dispatchEvent(new Event('open-schedule-popup'));
+              setHasNotification(false);
+            }}
+            className="text-white hover:text-blue-200 transition-colors relative flex items-center justify-center w-8 h-8 rounded-full hover:bg-white/10"
+            aria-label="Abrir programação"
+          >
+            <Bell size={isMobile ? 18 : 20} />
+            {hasNotification && (
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-400 rounded-full shadow-[0_0_0_2px_rgba(0,43,91,1)]" style={{ boxShadow: `0 0 0 2px ${headerBackgroundColor}` }}></span>
+            )}
+          </button>
         </div>
 
-      </header>
+        </header>
+      </div>
 
 
       {/* DrawerMenu */}
