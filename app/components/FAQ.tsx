@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Minus } from "lucide-react";
+import { useTheme } from "next-themes";
 
 const faqs = [
   {
@@ -39,6 +40,14 @@ const faqs = [
 
 function FAQItem({ question, answer, index }: { question: string; answer: string; index: number }) {
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const { resolvedTheme } = useTheme();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isDark = mounted ? resolvedTheme !== 'light' : true;
 
   return (
     <motion.div
@@ -52,14 +61,14 @@ function FAQItem({ question, answer, index }: { question: string; answer: string
         className="w-full flex items-center justify-between gap-4 py-5 text-left group"
         aria-expanded={open}
       >
-        <span className="text-base sm:text-lg font-semibold text-[#002B5B] group-hover:text-blue-700 transition-colors leading-snug">
+        <span className={`text-base sm:text-lg font-semibold transition-colors duration-300 leading-snug ${isDark ? 'text-white group-hover:text-blue-300' : 'text-[#002B5B] group-hover:text-blue-700'}`}>
           {question}
         </span>
-        <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[#002B5B]/8 flex items-center justify-center group-hover:bg-[#002B5B]/15 transition-colors">
+        <span className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-300 ${isDark ? 'bg-blue-500/10 group-hover:bg-blue-500/20' : 'bg-[#002B5B]/8 group-hover:bg-[#002B5B]/15'}`}>
           {open ? (
-            <Minus className="w-4 h-4 text-[#002B5B]" />
+            <Minus className={`w-4 h-4 transition-colors duration-300 ${isDark ? 'text-blue-300' : 'text-[#002B5B]'}`} />
           ) : (
-            <Plus className="w-4 h-4 text-[#002B5B]" />
+            <Plus className={`w-4 h-4 transition-colors duration-300 ${isDark ? 'text-blue-300' : 'text-[#002B5B]'}`} />
           )}
         </span>
       </button>
@@ -74,23 +83,32 @@ function FAQItem({ question, answer, index }: { question: string; answer: string
             transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
             className="overflow-hidden"
           >
-            <p className="pb-5 text-gray-600 leading-relaxed text-sm sm:text-base pr-12">
+            <p className={`pb-5 leading-relaxed text-sm sm:text-base pr-12 transition-colors duration-300 ${isDark ? 'text-blue-100/70' : 'text-gray-600'}`}>
               {answer}
             </p>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <div className="border-b border-slate-200" />
+      <div className={`border-b transition-colors duration-300 ${isDark ? 'border-white/10' : 'border-slate-200'}`} />
     </motion.div>
   );
 }
 
 export default function FAQ() {
+  const [mounted, setMounted] = useState(false);
+  const { resolvedTheme } = useTheme();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isDark = mounted ? resolvedTheme !== 'light' : true;
+
   return (
     <section
       aria-label="Perguntas Frequentes"
-      className="relative z-10 w-full pt-24 pb-12 sm:pt-32 sm:pb-16 px-6 bg-[#F8FAFC]"
+      className={`relative z-10 w-full pt-24 pb-12 sm:pt-32 sm:pb-16 px-6 transition-colors duration-500 ${isDark ? 'bg-[#00152b]' : 'bg-[#F8FAFC]'}`}
     >
       <div className="max-w-3xl mx-auto">
         {/* Header */}
@@ -101,19 +119,19 @@ export default function FAQ() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <p className="text-[#002B5B]/50 text-xs font-semibold uppercase tracking-[0.2em] mb-3">
+          <p className={`text-xs font-semibold uppercase tracking-[0.2em] mb-3 transition-colors duration-500 ${isDark ? 'text-blue-400/80' : 'text-[#002B5B]/50'}`}>
             Tire suas dúvidas
           </p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#002B5B] font-serif">
+          <h2 className={`text-3xl sm:text-4xl md:text-5xl font-bold font-serif transition-colors duration-500 ${isDark ? 'text-white' : 'text-[#002B5B]'}`}>
             Perguntas Frequentes
           </h2>
-          <p className="text-gray-500 mt-4 text-lg max-w-xl mx-auto">
+          <p className={`mt-4 text-lg max-w-xl mx-auto transition-colors duration-500 ${isDark ? 'text-blue-100/70' : 'text-gray-500'}`}>
             Tudo o que você precisa saber sobre o DADG, eventos, certificados e muito mais.
           </p>
         </motion.div>
 
         {/* Divider top */}
-        <div className="border-b border-slate-200 mb-0" />
+        <div className={`border-b mb-0 transition-colors duration-500 ${isDark ? 'border-white/10' : 'border-slate-200'}`} />
 
         {/* FAQ Items */}
         <div>

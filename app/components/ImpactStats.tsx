@@ -12,27 +12,27 @@ interface StatItem {
   description: string;
 }
 
-const stats: StatItem[] = [
+const defaultStats: StatItem[] = [
   {
     prefix: "+",
-    value: 500,
+    value: 0,
     label: "Alunos Representados",
     description: "Vozes unidas em prol da excelência acadêmica",
   },
   {
     prefix: "+",
-    value: 40,
+    value: 0,
     label: "Eventos Realizados",
     description: "Simpósios, workshops e congressos organizados",
   },
   {
-    value: 6,
+    value: 0,
     label: "Coordenadorias Ativas",
     description: "Departamentos dedicados ao desenvolvimento estudantil",
   },
   {
     prefix: "+",
-    value: 2000,
+    value: 0,
     label: "Certificados Emitidos",
     description: "Reconhecimentos entregues à nossa comunidade",
   },
@@ -64,6 +64,48 @@ function AnimatedCounter({ value, prefix = "", suffix = "" }: { value: number; p
 }
 
 export default function ImpactStats() {
+  const [stats, setStats] = useState<StatItem[]>(defaultStats);
+
+  useEffect(() => {
+    async function fetchStats() {
+      try {
+        const response = await fetch('/api/get/homeStats');
+        if (response.ok) {
+          const data = await response.json();
+          setStats([
+            {
+              prefix: "+",
+              value: data.alunosRepresentados || 500,
+              label: "Alunos Representados",
+              description: "Vozes unidas em prol da excelência acadêmica",
+            },
+            {
+              prefix: "+",
+              value: data.eventosRealizados || 40,
+              label: "Eventos Realizados",
+              description: "Simpósios, workshops e congressos organizados",
+            },
+            {
+              value: data.coordenadoriasAtivas || 6,
+              label: "Coordenadorias Ativas",
+              description: "Departamentos dedicados ao desenvolvimento estudantil",
+            },
+            {
+              prefix: "+",
+              value: data.certificadosEmitidos || 2000,
+              label: "Certificados Emitidos",
+              description: "Reconhecimentos entregues à nossa comunidade",
+            },
+          ]);
+        }
+      } catch (error) {
+        console.error('Failed to fetch home stats', error);
+      }
+    }
+    
+    fetchStats();
+  }, []);
+
   return (
     <section
       aria-label="Números e impacto do DADG IMEPAC"
@@ -181,10 +223,10 @@ export default function ImpactStats() {
               }}
               className="flex flex-col items-center text-center px-2"
             >
-              <dt className="order-2 text-blue-200/80 text-sm leading-snug mt-3 font-medium">
+              <dt className="order-2 text-blue-200/80 text-sm md:text-base leading-snug mt-4 font-medium">
                 {stat.label}
               </dt>
-              <dd className="order-1 text-4xl sm:text-5xl font-bold text-white tabular-nums leading-none">
+              <dd className="order-1 text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-bold text-white tabular-nums leading-none drop-shadow-lg">
                 <AnimatedCounter
                   value={stat.value}
                   prefix={stat.prefix}
@@ -203,3 +245,4 @@ export default function ImpactStats() {
     </section>
   );
 }
+

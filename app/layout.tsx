@@ -7,6 +7,7 @@ import Preloader from "@/components/Preloader";
 import { Inter, Playfair_Display } from "next/font/google";
 import CustomCursor from "./components/CustomCursor";
 import MobileBottomNav from "./components/MobileBottomNav";
+import { ThemeProvider } from "./components/ThemeProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -73,27 +74,29 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const session = await auth0.getSession()
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
       <body className={`${inter.variable} ${playfair.variable} font-sans antialiased`}>
-        <CustomCursor />
-        <Preloader />
-        {/* Componente Client que contém a interatividade */}
-        <MenuDrawer />
-        {/* Bottom nav mobile */}
-        <MobileBottomNav />
-        <div className="main-content pb-16 md:pb-0">
-          <UserProvider tokenVar={session?.tokenSet.idToken || undefined}>
-            {children}
-          </UserProvider>
-        </div>
-        <script dangerouslySetInnerHTML={{
-          __html: `
-            document.addEventListener('contextmenu', event => event.preventDefault());
-            document.addEventListener('dragstart', event => {
-              if (event.target.nodeName === 'IMG') event.preventDefault();
-            });
-          `
-        }} />
+        <ThemeProvider attribute="class" defaultTheme="dark" disableTransitionOnChange>
+          <CustomCursor />
+          <Preloader />
+          {/* Componente Client que contém a interatividade */}
+          <MenuDrawer />
+          {/* Bottom nav mobile */}
+          <MobileBottomNav />
+          <div className="main-content pb-16 md:pb-0">
+            <UserProvider tokenVar={session?.tokenSet.idToken || undefined}>
+              {children}
+            </UserProvider>
+          </div>
+          <script dangerouslySetInnerHTML={{
+            __html: `
+              document.addEventListener('contextmenu', event => event.preventDefault());
+              document.addEventListener('dragstart', event => {
+                if (event.target.nodeName === 'IMG') event.preventDefault();
+              });
+            `
+          }} />
+        </ThemeProvider>
       </body>
     </html>
   );

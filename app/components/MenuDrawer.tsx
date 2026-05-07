@@ -18,8 +18,11 @@ import {
   MessageCircle,
   Bell,
   Menu,
-  ChevronDown
+  ChevronDown,
+  Sun,
+  Moon
 } from "lucide-react";
+import { useTheme } from "next-themes";
 
 export default function MenuDrawer() {
   const [menuAberto, setMenuAberto] = useState(false);
@@ -29,6 +32,7 @@ export default function MenuDrawer() {
   const [windowWidth, setWindowWidth] = useState<number>(1024);
   const [hasNotification, setHasNotification] = useState(true);
   const pathname = usePathname() || '/';
+  const { theme, setTheme } = useTheme();
 
   const headerBackgroundColor =
     pathname.startsWith("/coordenadorias/clam")
@@ -193,6 +197,17 @@ export default function MenuDrawer() {
               Certificados
             </Link>
           </div>
+
+          {/* Toggle Theme */}
+          {mounted && (pathname === '/' || pathname === '/coordenadorias' || pathname === '/certificados') && (
+            <button
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="text-white hover:text-blue-200 transition-colors relative flex items-center justify-center w-8 h-8 rounded-full hover:bg-white/10"
+              aria-label="Alternar tema"
+            >
+              {theme === 'dark' ? <Sun size={isMobile ? 18 : 20} /> : <Moon size={isMobile ? 18 : 20} />}
+            </button>
+          )}
 
           {/* Sino de Notificação */}
           <button

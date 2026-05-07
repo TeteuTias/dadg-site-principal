@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Award, Users, Calendar, ArrowRight, Shield, Activity, HeartHandshake, Building2, BookOpen, MessageCircle, HelpCircle, Mail, MapPin, Instagram, ChevronDown } from 'lucide-react';
@@ -9,6 +9,7 @@ import { motion } from 'framer-motion';
 import ImpactStats from './components/ImpactStats';
 import WaveDivider from './components/WaveDivider';
 import FAQ from './components/FAQ';
+import { useTheme } from 'next-themes';
 
 // Reusable animation variant for sections
 const fadeInUp = {
@@ -17,8 +18,17 @@ const fadeInUp = {
 };
 
 export default function Home() {
+  const [mounted, setMounted] = useState(false);
+  const { resolvedTheme } = useTheme();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isDark = mounted ? resolvedTheme !== 'light' : true;
+
   return (
-    <main className={`min-h-[100dvh] w-full text-gray-800 overflow-x-hidden flex flex-col`}>
+    <main className={`min-h-[100dvh] w-full overflow-x-hidden flex flex-col transition-colors duration-500 ${isDark ? 'bg-[#001021] text-blue-50' : 'bg-white text-gray-800'}`}>
       <UpcomingSchedulePopup />
 
       {/* HERO SECTION */}
@@ -27,7 +37,7 @@ export default function Home() {
         className="relative w-full min-h-[100dvh] pt-28 pb-20 flex flex-col items-center justify-center text-center px-6 overflow-hidden"
       >
         {/* Grid background */}
-        <div className="absolute inset-0 z-0 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]" />
+        <div className={`absolute inset-0 z-0 h-full w-full transition-colors duration-500 ${isDark ? 'bg-[#001021] bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)]' : 'bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)]'} bg-[size:6rem_4rem]`} />
 
         <motion.div
           className="relative z-10 flex flex-col items-center w-full max-w-6xl mx-auto"
@@ -40,7 +50,7 @@ export default function Home() {
         >
           <motion.h1
             variants={fadeInUp}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight text-[#002B5B] font-serif"
+            className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight font-serif transition-colors duration-500 ${isDark ? 'text-white' : 'text-[#002B5B]'}`}
           >
             Diretório Acadêmico <br className="hidden sm:block" />
             <span>Diogo Guimarães</span>
@@ -48,7 +58,7 @@ export default function Home() {
 
           <motion.p
             variants={fadeInUp}
-            className="text-base sm:text-lg md:text-xl text-slate-500 max-w-2xl mb-8 font-light leading-relaxed mx-auto"
+            className={`text-base sm:text-lg md:text-xl max-w-2xl mb-8 font-light leading-relaxed mx-auto transition-colors duration-500 ${isDark ? 'text-blue-100/80' : 'text-slate-500'}`}
           >
             Conectando estudantes de medicina, promovendo a excelência acadêmica e forjando os líderes da saúde do amanhã.
           </motion.p>
@@ -64,14 +74,14 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* Wave: Hero (white) → ImpactStats (#002B5B) */}
-      <WaveDivider bg="#ffffff" fill="#002B5B" />
+      {/* Wave: Hero → ImpactStats */}
+      <WaveDivider bg={isDark ? "#001021" : "#ffffff"} fill="#002B5B" />
 
       {/* IMPACT STATS */}
       <ImpactStats />
 
-      {/* Wave: ImpactStats (#002B5B) → Missão (#F8FAFC) */}
-      <WaveDivider bg="#002B5B" fill="#F8FAFC" flip />
+      {/* Wave: ImpactStats → Missão */}
+      <WaveDivider bg="#002B5B" fill={isDark ? "#00152b" : "#F8FAFC"} flip />
 
       {/* NOSSA MISSÃO */}
       <motion.section 
@@ -79,20 +89,20 @@ export default function Home() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.1 }}
         variants={fadeInUp}
-        className="relative z-10 w-full pt-20 pb-12 sm:pt-28 sm:pb-16 px-6 md:px-12 lg:px-16 bg-[#F8FAFC] overflow-hidden"
+        className={`relative z-10 w-full pt-20 pb-12 sm:pt-28 sm:pb-16 px-6 md:px-12 lg:px-16 overflow-hidden transition-colors duration-500 ${isDark ? 'bg-[#00152b]' : 'bg-[#F8FAFC]'}`}
       >
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           
           {/* Coluna 1: Texto */}
           <div className="text-left">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#002B5B] mb-6 font-serif">
+            <h2 className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-6 font-serif transition-colors duration-500 ${isDark ? 'text-white' : 'text-[#002B5B]'}`}>
               Nossa Missão
             </h2>
-            <div className="w-20 h-1 bg-[#002B5B]/30 mb-8 rounded-full"></div>
-            <p className="text-lg sm:text-xl text-gray-700 leading-relaxed font-light mb-6">
-              O <strong className="font-semibold text-[#002B5B]">Diretório Acadêmico Diogo Guimarães (DADG)</strong> é a representação máxima dos estudantes de medicina da nossa instituição. 
+            <div className={`w-20 h-1 mb-8 rounded-full transition-colors duration-500 ${isDark ? 'bg-blue-400/50' : 'bg-[#002B5B]/30'}`}></div>
+            <p className={`text-lg sm:text-xl leading-relaxed font-light mb-6 transition-colors duration-500 ${isDark ? 'text-blue-100/90' : 'text-gray-700'}`}>
+              O <strong className={`font-semibold transition-colors duration-500 ${isDark ? 'text-blue-300' : 'text-[#002B5B]'}`}>Diretório Acadêmico Diogo Guimarães (DADG)</strong> é a representação máxima dos estudantes de medicina da nossa instituição. 
             </p>
-            <p className="text-lg sm:text-xl text-gray-700 leading-relaxed font-light">
+            <p className={`text-lg sm:text-xl leading-relaxed font-light transition-colors duration-500 ${isDark ? 'text-blue-100/90' : 'text-gray-700'}`}>
               Mais do que uma entidade de classe, somos o ponto de convergência entre a dedicação acadêmica, a vocação para o cuidado humano e a força da voz estudantil.
             </p>
           </div>
@@ -127,18 +137,18 @@ export default function Home() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.1 }}
         variants={fadeInUp}
-        className="relative z-10 w-full pt-16 pb-12 sm:pt-20 sm:pb-16 px-6 bg-[#F8FAFC] overflow-hidden"
+        className={`relative z-10 w-full pt-16 pb-12 sm:pt-20 sm:pb-16 px-6 overflow-hidden transition-colors duration-500 ${isDark ? 'bg-[#00152b]' : 'bg-[#F8FAFC]'}`}
       >
         {/* Elementos Decorativos */}
-        <div className="absolute top-20 right-10 w-48 h-48 bg-[radial-gradient(#002B5B_2px,transparent_2px)] [background-size:16px_16px] opacity-[0.04] z-0 hidden md:block"></div>
-        <div className="absolute bottom-20 left-10 w-32 h-32 bg-[radial-gradient(#002B5B_2px,transparent_2px)] [background-size:16px_16px] opacity-[0.04] z-0 hidden md:block"></div>
+        <div className={`absolute top-20 right-10 w-48 h-48 bg-[radial-gradient(${isDark ? '#ffffff' : '#002B5B'}_2px,transparent_2px)] [background-size:16px_16px] opacity-[0.04] z-0 hidden md:block transition-colors duration-500`}></div>
+        <div className={`absolute bottom-20 left-10 w-32 h-32 bg-[radial-gradient(${isDark ? '#ffffff' : '#002B5B'}_2px,transparent_2px)] [background-size:16px_16px] opacity-[0.04] z-0 hidden md:block transition-colors duration-500`}></div>
 
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-20">
-            <h2 className={`text-3xl sm:text-4xl md:text-5xl font-bold text-[#002B5B] mb-6 font-serif`}>
+            <h2 className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-6 font-serif transition-colors duration-500 ${isDark ? 'text-white' : 'text-[#002B5B]'}`}>
               Os Pilares que nos Sustentam
             </h2>
-            <p className="text-gray-500 max-w-2xl mx-auto text-lg">
+            <p className={`max-w-2xl mx-auto text-lg transition-colors duration-500 ${isDark ? 'text-blue-100/70' : 'text-gray-500'}`}>
               Trabalhamos diariamente fundamentados em três eixos essenciais para transformar a experiência universitária e a formação médica de cada aluno.
             </p>
           </div>
@@ -146,39 +156,39 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 sm:gap-16">
             {/* Pilar 1 */}
             <div className="flex flex-col items-center text-center group">
-              <div className="w-20 h-20 bg-white text-[#002B5B] rounded-2xl flex items-center justify-center mb-8 rotate-3 group-hover:rotate-0 group-hover:bg-[#002B5B] group-hover:text-white transition-all duration-300 shadow-sm border border-blue-100">
+              <div className={`w-20 h-20 rounded-2xl flex items-center justify-center mb-8 rotate-3 group-hover:rotate-0 transition-all duration-300 shadow-sm border ${isDark ? 'bg-[#002B5B] text-blue-300 border-blue-500/30 group-hover:bg-blue-500 group-hover:text-white' : 'bg-white text-[#002B5B] border-blue-100 group-hover:bg-[#002B5B] group-hover:text-white'}`}>
                 <Shield className="w-10 h-10" />
               </div>
-              <h3 className={`text-2xl font-bold text-[#002B5B] mb-4 font-serif`}>
+              <h3 className={`text-2xl font-bold mb-4 font-serif transition-colors duration-500 ${isDark ? 'text-white' : 'text-[#002B5B]'}`}>
                 Forjando a Liderança Estudantil
               </h3>
-              <p className="text-gray-600 leading-relaxed">
+              <p className={`leading-relaxed transition-colors duration-500 ${isDark ? 'text-blue-100/70' : 'text-gray-600'}`}>
                 Empoderamos estudantes para serem agentes ativos na construção da sua própria formação. Promovemos debates críticos e iniciativas sociais, moldando profissionais com visão sistêmica e capacidade de gestão.
               </p>
             </div>
 
             {/* Pilar 2 */}
             <div className="flex flex-col items-center text-center group">
-              <div className="w-20 h-20 bg-white/60 backdrop-blur-sm text-[#002B5B] rounded-2xl flex items-center justify-center mb-8 -rotate-3 group-hover:rotate-0 group-hover:bg-[#002B5B] group-hover:text-white transition-all duration-300 shadow-sm border border-blue-100/50">
+              <div className={`w-20 h-20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-8 -rotate-3 group-hover:rotate-0 transition-all duration-300 shadow-sm border ${isDark ? 'bg-[#002B5B] text-blue-300 border-blue-500/30 group-hover:bg-blue-500 group-hover:text-white' : 'bg-white/60 text-[#002B5B] border-blue-100/50 group-hover:bg-[#002B5B] group-hover:text-white'}`}>
                 <Activity className="w-10 h-10" />
               </div>
-              <h3 className={`text-2xl font-bold text-[#002B5B] mb-4 font-serif`}>
+              <h3 className={`text-2xl font-bold mb-4 font-serif transition-colors duration-500 ${isDark ? 'text-white' : 'text-[#002B5B]'}`}>
                 Compromisso com a Excelência Médica
               </h3>
-              <p className="text-gray-600 leading-relaxed">
+              <p className={`leading-relaxed transition-colors duration-500 ${isDark ? 'text-blue-100/70' : 'text-gray-600'}`}>
                 Complementamos o currículo tradicional fomentando a pesquisa, inovação e pensamento crítico. Por meio de simpósios e workshops, cultivamos um ambiente onde a medicina baseada em evidências é a norma.
               </p>
             </div>
 
             {/* Pilar 3 */}
             <div className="flex flex-col items-center text-center group">
-              <div className="w-20 h-20 bg-white text-[#002B5B] rounded-2xl flex items-center justify-center mb-8 rotate-3 group-hover:rotate-0 group-hover:bg-[#002B5B] group-hover:text-white transition-all duration-300 shadow-sm border border-blue-100">
+              <div className={`w-20 h-20 rounded-2xl flex items-center justify-center mb-8 rotate-3 group-hover:rotate-0 transition-all duration-300 shadow-sm border ${isDark ? 'bg-[#002B5B] text-blue-300 border-blue-500/30 group-hover:bg-blue-500 group-hover:text-white' : 'bg-white text-[#002B5B] border-blue-100 group-hover:bg-[#002B5B] group-hover:text-white'}`}>
                 <HeartHandshake className="w-10 h-10" />
               </div>
-              <h3 className={`text-2xl font-bold text-[#002B5B] mb-4 font-serif`}>
+              <h3 className={`text-2xl font-bold mb-4 font-serif transition-colors duration-500 ${isDark ? 'text-white' : 'text-[#002B5B]'}`}>
                 Rede de Apoio ao Aluno
               </h3>
-              <p className="text-gray-600 leading-relaxed">
+              <p className={`leading-relaxed transition-colors duration-500 ${isDark ? 'text-blue-100/70' : 'text-gray-600'}`}>
                 Somos o seu porto seguro: uma rede de acolhimento focada no bem-estar físico e mental. Defendemos ativamente os direitos discentes e promovemos espaços de integração para tornar a experiência universitária mais humana e justa.
               </p>
             </div>
@@ -186,8 +196,8 @@ export default function Home() {
         </div>
       </motion.section>
 
-      {/* Wave: Pilares (#F8FAFC) → Medicina (white) */}
-      <WaveDivider bg="#F8FAFC" fill="#ffffff" />
+      {/* Wave: Pilares → Medicina */}
+      <WaveDivider bg={isDark ? "#00152b" : "#F8FAFC"} fill={isDark ? "#001021" : "#ffffff"} />
 
       {/* MEDICINA IMEPAC (BENTO GRID) */}
       <motion.section 
@@ -195,17 +205,17 @@ export default function Home() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.1 }}
         variants={fadeInUp}
-        className="relative z-10 w-full pt-16 pb-12 sm:pt-24 sm:pb-16 px-6 bg-white overflow-hidden"
+        className={`relative z-10 w-full pt-16 pb-12 sm:pt-24 sm:pb-16 px-6 overflow-hidden transition-colors duration-500 ${isDark ? 'bg-[#001021]' : 'bg-white'}`}
       >
         {/* Elementos Decorativos */}
-        <div className="absolute bottom-10 right-10 w-48 h-48 bg-[radial-gradient(#002B5B_2px,transparent_2px)] [background-size:16px_16px] opacity-[0.03] z-0 hidden lg:block pointer-events-none"></div>
+        <div className={`absolute bottom-10 right-10 w-48 h-48 bg-[radial-gradient(${isDark ? '#ffffff' : '#002B5B'}_2px,transparent_2px)] [background-size:16px_16px] opacity-[0.03] z-0 hidden lg:block pointer-events-none transition-colors duration-500`}></div>
 
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-16">
-            <h2 className={`text-3xl sm:text-4xl md:text-5xl font-bold text-[#002B5B] mb-6 font-serif`}>
+            <h2 className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-6 font-serif transition-colors duration-500 ${isDark ? 'text-white' : 'text-[#002B5B]'}`}>
               Tradição e Infraestrutura
             </h2>
-            <p className="text-gray-500 max-w-2xl mx-auto text-lg">
+            <p className={`max-w-2xl mx-auto text-lg transition-colors duration-500 ${isDark ? 'text-blue-100/70' : 'text-gray-500'}`}>
               A Medicina IMEPAC Araguari destaca-se por sua estrutura de ponta e profundo compromisso com a saúde pública da região.
             </p>
           </div>
@@ -233,23 +243,23 @@ export default function Home() {
             </div>
 
             {/* Box 2: Campus */}
-            <div className="relative rounded-3xl overflow-hidden group shadow-lg bg-white min-h-[250px] md:min-h-0">
+            <div className={`relative rounded-3xl overflow-hidden group shadow-lg min-h-[250px] md:min-h-0 transition-colors duration-500 ${isDark ? 'bg-[#002B5B]' : 'bg-white'}`}>
               <Image 
                 src="/imepac_campus.jpg" 
                 alt="Campus IMEPAC" 
                 fill 
-                className="object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 mix-blend-multiply"
+                className={`object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 ${isDark ? 'mix-blend-luminosity opacity-40' : 'mix-blend-multiply'}`}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#002B5B]/90 to-transparent"></div>
-              <div className="absolute bottom-0 left-0 p-6 w-full text-white flex flex-col justify-end h-full">
+              <div className={`absolute inset-0 bg-gradient-to-t ${isDark ? 'from-[#001021]/90 to-[#001021]/30' : 'from-[#002B5B]/90 to-transparent'}`}></div>
+              <div className="absolute bottom-0 left-0 p-6 w-full text-white flex flex-col justify-end h-full z-10">
                 <h3 className={`text-xl font-bold mb-2 font-serif`}>Campus Tecnológico</h3>
                 <p className="text-sm text-blue-100">Laboratórios de última geração e espaços projetados para a medicina do futuro.</p>
               </div>
             </div>
 
             {/* Box 3: Tradition */}
-            <div className="relative rounded-3xl overflow-hidden bg-[#002B5B] shadow-lg flex flex-col justify-center p-8 border border-blue-800">
-              <div className="bg-white/10 w-12 h-12 rounded-full flex items-center justify-center mb-6">
+            <div className={`relative rounded-3xl overflow-hidden shadow-lg flex flex-col justify-center p-8 border transition-colors duration-500 ${isDark ? 'bg-white/5 border-white/10' : 'bg-[#002B5B] border-blue-800'}`}>
+              <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-6 ${isDark ? 'bg-blue-500/20' : 'bg-white/10'}`}>
                 <BookOpen className="w-6 h-6 text-blue-300" />
               </div>
               <h3 className={`text-2xl font-bold text-white mb-3 font-serif`}>Reconhecimento</h3>
@@ -261,14 +271,14 @@ export default function Home() {
         </div>
       </motion.section>
 
-      {/* Wave: Medicina (white) → FAQ (#F8FAFC) */}
-      <WaveDivider bg="#ffffff" fill="#F8FAFC" flip />
+      {/* Wave: Medicina → FAQ */}
+      <WaveDivider bg={isDark ? "#001021" : "#ffffff"} fill={isDark ? "#00152b" : "#F8FAFC"} flip />
 
       {/* FAQ */}
       <FAQ />
 
-      {/* Wave: FAQ (#F8FAFC) → Cards (white) */}
-      <WaveDivider bg="#F8FAFC" fill="#ffffff" />
+      {/* Wave: FAQ → Cards */}
+      <WaveDivider bg={isDark ? "#00152b" : "#F8FAFC"} fill={isDark ? "#001021" : "#ffffff"} />
 
       {/* NOVOS CARDS DE ACESSO */}
       <motion.section 
@@ -276,52 +286,52 @@ export default function Home() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.1 }}
         variants={fadeInUp}
-        className="relative z-10 w-full pt-16 pb-12 sm:pt-24 sm:pb-16 px-6 bg-white overflow-hidden"
+        className={`relative z-10 w-full pt-16 pb-12 sm:pt-24 sm:pb-16 px-6 overflow-hidden transition-colors duration-500 ${isDark ? 'bg-[#001021]' : 'bg-white'}`}
       >
         {/* Elemento Decorativo */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] max-w-5xl bg-[radial-gradient(#002B5B_2px,transparent_2px)] [background-size:24px_24px] opacity-[0.02] z-0 pointer-events-none"></div>
+        <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] max-w-5xl bg-[radial-gradient(${isDark ? '#ffffff' : '#002B5B'}_2px,transparent_2px)] [background-size:24px_24px] opacity-[0.02] z-0 pointer-events-none transition-colors duration-500`}></div>
 
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
           {/* Card Ouvidoria */}
-          <div className="bg-white/60 backdrop-blur-md rounded-3xl p-8 border border-white/50 flex flex-col items-center text-center hover:shadow-xl hover:bg-white/80 transition-all duration-300">
-            <div className="w-14 h-14 bg-[#002B5B]/5 border border-[#002B5B]/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-[#002B5B]/10 transition-colors">
-              <MessageCircle className="w-7 h-7 text-[#002B5B]" strokeWidth={1.5} />
+          <div className={`backdrop-blur-md rounded-3xl p-8 border flex flex-col items-center text-center hover:shadow-xl transition-all duration-300 ${isDark ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-white/60 border-white/50 hover:bg-white/80'}`}>
+            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-colors ${isDark ? 'bg-blue-500/20 border-blue-400/20 group-hover:bg-blue-500/30' : 'bg-[#002B5B]/5 border-[#002B5B]/10 group-hover:bg-[#002B5B]/10'}`}>
+              <MessageCircle className={`w-7 h-7 ${isDark ? 'text-blue-300' : 'text-[#002B5B]'}`} strokeWidth={1.5} />
             </div>
-            <h3 className={`text-2xl font-bold text-[#002B5B] mb-4 font-serif`}>Ouvidoria</h3>
-            <p className="text-gray-600 mb-8 flex-grow leading-relaxed">Envie sugestões, reclamações ou dúvidas. Sua voz é importante para o DADG.</p>
-            <Link href="/ouvidoria" className="w-full py-3 px-6 bg-[#002B5B] text-white rounded-xl font-medium hover:bg-blue-900 transition-colors">
+            <h3 className={`text-2xl font-bold mb-4 font-serif transition-colors duration-500 ${isDark ? 'text-white' : 'text-[#002B5B]'}`}>Ouvidoria</h3>
+            <p className={`mb-8 flex-grow leading-relaxed transition-colors duration-500 ${isDark ? 'text-blue-100/70' : 'text-gray-600'}`}>Envie sugestões, reclamações ou dúvidas. Sua voz é importante para o DADG.</p>
+            <Link href="/ouvidoria" className={`w-full py-3 px-6 text-white rounded-xl font-medium transition-colors ${isDark ? 'bg-blue-600 hover:bg-blue-500' : 'bg-[#002B5B] hover:bg-blue-900'}`}>
               Enviar manifestação
             </Link>
           </div>
 
           {/* Card Sobre Nós */}
-          <div className="bg-white/60 backdrop-blur-md rounded-3xl p-8 border border-white/50 flex flex-col items-center text-center hover:shadow-xl hover:bg-white/80 transition-all duration-300">
-            <div className="w-14 h-14 bg-[#002B5B]/5 border border-[#002B5B]/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-[#002B5B]/10 transition-colors">
-              <HelpCircle className="w-7 h-7 text-[#002B5B]" strokeWidth={1.5} />
+          <div className={`backdrop-blur-md rounded-3xl p-8 border flex flex-col items-center text-center hover:shadow-xl transition-all duration-300 ${isDark ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-white/60 border-white/50 hover:bg-white/80'}`}>
+            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-colors ${isDark ? 'bg-blue-500/20 border-blue-400/20 group-hover:bg-blue-500/30' : 'bg-[#002B5B]/5 border-[#002B5B]/10 group-hover:bg-[#002B5B]/10'}`}>
+              <HelpCircle className={`w-7 h-7 ${isDark ? 'text-blue-300' : 'text-[#002B5B]'}`} strokeWidth={1.5} />
             </div>
-            <h3 className={`text-2xl font-bold text-[#002B5B] mb-4 font-serif`}>Sobre Nós</h3>
-            <p className="text-gray-600 mb-8 flex-grow leading-relaxed">Conheça nossa história, missão e valores do Diretório Acadêmico.</p>
-            <Link href="/sobre" className="w-full py-3 px-6 bg-[#002B5B] text-white rounded-xl font-medium hover:bg-blue-900 transition-colors">
+            <h3 className={`text-2xl font-bold mb-4 font-serif transition-colors duration-500 ${isDark ? 'text-white' : 'text-[#002B5B]'}`}>Sobre Nós</h3>
+            <p className={`mb-8 flex-grow leading-relaxed transition-colors duration-500 ${isDark ? 'text-blue-100/70' : 'text-gray-600'}`}>Conheça nossa história, missão e valores do Diretório Acadêmico.</p>
+            <Link href="/sobre" className={`w-full py-3 px-6 text-white rounded-xl font-medium transition-colors ${isDark ? 'bg-blue-600 hover:bg-blue-500' : 'bg-[#002B5B] hover:bg-blue-900'}`}>
               Saiba mais
             </Link>
           </div>
 
           {/* Card Contato */}
-          <div className="bg-white/60 backdrop-blur-md rounded-3xl p-8 border border-white/50 flex flex-col items-center text-center hover:shadow-xl hover:bg-white/80 transition-all duration-300">
-            <div className="w-14 h-14 bg-[#002B5B]/5 border border-[#002B5B]/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-[#002B5B]/10 transition-colors">
-              <Mail className="w-7 h-7 text-[#002B5B]" strokeWidth={1.5} />
+          <div className={`backdrop-blur-md rounded-3xl p-8 border flex flex-col items-center text-center hover:shadow-xl transition-all duration-300 ${isDark ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-white/60 border-white/50 hover:bg-white/80'}`}>
+            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-colors ${isDark ? 'bg-blue-500/20 border-blue-400/20 group-hover:bg-blue-500/30' : 'bg-[#002B5B]/5 border-[#002B5B]/10 group-hover:bg-[#002B5B]/10'}`}>
+              <Mail className={`w-7 h-7 ${isDark ? 'text-blue-300' : 'text-[#002B5B]'}`} strokeWidth={1.5} />
             </div>
-            <h3 className={`text-2xl font-bold text-[#002B5B] mb-4 font-serif`}>Contato</h3>
-            <p className="text-gray-600 mb-8 flex-grow leading-relaxed">Redes sociais e e-mail. Fale conosco e acompanhe nossas novidades.</p>
-            <Link href="/contato" className="w-full py-3 px-6 bg-[#002B5B] text-white rounded-xl font-medium hover:bg-blue-900 transition-colors">
+            <h3 className={`text-2xl font-bold mb-4 font-serif transition-colors duration-500 ${isDark ? 'text-white' : 'text-[#002B5B]'}`}>Contato</h3>
+            <p className={`mb-8 flex-grow leading-relaxed transition-colors duration-500 ${isDark ? 'text-blue-100/70' : 'text-gray-600'}`}>Redes sociais e e-mail. Fale conosco e acompanhe nossas novidades.</p>
+            <Link href="/contato" className={`w-full py-3 px-6 text-white rounded-xl font-medium transition-colors ${isDark ? 'bg-blue-600 hover:bg-blue-500' : 'bg-[#002B5B] hover:bg-blue-900'}`}>
               Entre em contato
             </Link>
           </div>
         </div>
       </motion.section>
 
-      {/* Wave: Cards (white) → Footer (#001f45) */}
-      <WaveDivider bg="#ffffff" fill="#001f45" flip />
+      {/* Wave: Cards → Footer */}
+      <WaveDivider bg={isDark ? "#001021" : "#ffffff"} fill="#001f45" flip />
 
       {/* FOOTER */}
       <footer className="relative z-10 w-full bg-[#001f45] text-white mt-auto">
