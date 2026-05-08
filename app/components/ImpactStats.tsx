@@ -27,8 +27,8 @@ const defaultStats: StatItem[] = [
   },
   {
     value: 0,
-    label: "Coordenadorias Ativas",
-    description: "Departamentos dedicados ao desenvolvimento estudantil",
+    label: "Ligas Acadêmicas Ativas",
+    description: "Grupos focados em ensino, pesquisa e extensão",
   },
   {
     prefix: "+",
