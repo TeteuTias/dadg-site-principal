@@ -91,6 +91,15 @@ export default function UpcomingSchedulePopup() {
     setDismissed(true);
   };
 
+  useEffect(() => {
+    const handleOpen = () => {
+      setDismissed(false);
+      setExpanded(true); // Optional: also expand it when opened from header
+    };
+    window.addEventListener('open-schedule-popup', handleOpen);
+    return () => window.removeEventListener('open-schedule-popup', handleOpen);
+  }, []);
+
   if (dismissed) return null;
 
   return (

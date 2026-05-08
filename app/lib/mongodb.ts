@@ -28,11 +28,16 @@ export async function connectToDatabase(): Promise<Mongoose> {
     }
 
     if (!cached.promise) {
+        const dbName = process.env.MONGODB_DB;
+        if (!dbName) {
+            throw new Error('Please add MONGODB_DB to .env.local');
+        }
         const options = {
             maxPoolSize: process.env.maxPoolSizeValue
                 ? parseInt(process.env.maxPoolSizeValue)
                 : 10,
-            readPreference: 'primary' as const,
+            readPreference: 'primary' as const, // Força leitura na primária
+            dbName, // 🔑 Seleciona o banco correto via env
         };
 
         cached.promise = mongoose.connect(uri, options).then((mongoose) => mongoose);

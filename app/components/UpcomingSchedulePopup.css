@@ -171,7 +171,8 @@
 
 @media (max-width: 640px) {
   .upcoming-popup {
-    top: calc(var(--dadg-header-height, 35px) + 0.75rem);
+    /* Aumentamos o top no mobile para não sobrepor a curva do brasão (que desce ~55px) */
+    top: calc(var(--dadg-header-height, 35px) + 4.5rem);
     right: 0.75rem;
     left: 0.75rem;
     width: auto;

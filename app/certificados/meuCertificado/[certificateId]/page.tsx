@@ -130,7 +130,7 @@ export default function Home({
           }} />
         </div>
         {/* Cabeçalho fixo com o botão de download */}
-        <div className="flex justify-center items-center p-5 bg-blue-900 w-full z-50 flex flex-col">
+        <div className="flex justify-center items-center px-5 pb-5 pt-16 md:pt-20 bg-blue-900 w-full z-50 flex flex-col">
           <div>
             <button
               className="w-fit px-4 py-2 bg-blue-600 text-white rounded bg-[#09427D] font-bold border-2 border-white hover:text-[#09427D] hover:border-[#09427D] hover:bg-white duration-300 ease-in"
@@ -186,7 +186,7 @@ export default function Home({
           }} />
         </div>
         {/* Cabeçalho fixo com o botão de download */}
-        <div className="flex justify-center items-center p-5 bg-blue-900 w-full z-50 flex flex-col">
+        <div className="flex justify-center items-center px-5 pb-5 pt-16 md:pt-20 bg-blue-900 w-full z-50 flex flex-col">
           <button
             onClick={handleDownload}
             className="w-fit px-4 py-2 bg-blue-600 text-white rounded bg-[#09427D] font-bold border-2 border-white hover:text-[#09427D] hover:border-[#09427D] hover:bg-white duration-300 ease-in"
@@ -218,7 +218,7 @@ export default function Home({
         }} />
       </div>
       {/* Cabeçalho fixo com o botão de download */}
-      <div className="flex justify-center items-center p-5 bg-blue-900 w-full z-50 flex flex-col">
+      <div className="flex justify-center items-center px-5 pb-5 pt-16 md:pt-20 bg-blue-900 w-full z-50 flex flex-col">
         <button
           onClick={handleDownload}
           className="w-fit px-4 py-2 bg-blue-600 text-white rounded bg-[#09427D] font-bold border-2 border-white hover:text-[#09427D] hover:border-[#09427D] hover:bg-white duration-300 ease-in"
