@@ -7,7 +7,7 @@ import { ObjectId } from 'bson';
 import Kindred from '@/public/fonts/lib/libFontKindred';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { ICertificateWithEventIdPopulate } from '@/app/lib/models/CertificateModel';
+import { ICertificateWithEventPopulate } from '@/app/lib/models/CertificateModel';
 import { libSourceSerif4 } from '@/public/fonts/lib/libSourceSerif4';
 import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
 
@@ -20,7 +20,7 @@ export default function Home({
   params: Promise<{ certificateId: string }>
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [data, setData] = useState<ICertificateWithEventIdPopulate | null>(null)
+  const [data, setData] = useState<ICertificateWithEventPopulate | null>(null)
   const router = useRouter()
   const [certificateId, setCertificateId] = useState<null | string>(null)
   const handleDownload = async () => {
@@ -95,7 +95,7 @@ export default function Home({
         return;
       }
 
-      const fetchDataJson: { data: ICertificateWithEventIdPopulate, } = await fetchData.json()
+      const fetchDataJson: { data: ICertificateWithEventPopulate, } = await fetchData.json()
       setData({ ...fetchDataJson.data, })
       setIsLoading(false)
 

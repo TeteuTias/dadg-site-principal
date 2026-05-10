@@ -15,6 +15,7 @@ export interface ICertificate {
     frontBottomText?: string;
     eventId: ObjectId;
     isReady?: boolean;
+    onlyImage: boolean;
     verse: {
         showVerse: boolean;
         topperText?: string;
@@ -38,6 +39,7 @@ const CertificateSchema: Schema<ICertificate> = new Schema(
         frontBottomText: { type: String },
         certificateHours: { type: String, required: true },
         certificatePath: { type: String, required: false },
+        onlyImage: { type: Boolean, required: false, default: false },
         isReady: { type: Boolean, required: false, default: false },
         eventId: { type: Schema.Types.ObjectId, required: true, ref: "EventCertificate" },
         verse: {
