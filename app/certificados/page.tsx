@@ -98,7 +98,7 @@ function SearchInterface({ isDark }: { isDark: boolean }) {
           />
           <button
             onClick={handleSearch}
-            className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-6 py-4 rounded-xl font-bold transition-all duration-300 shadow-[0_0_15px_rgba(37,99,235,0.4)] hover:shadow-[0_0_25px_rgba(59,130,246,0.6)]"
+            className={`flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105 shadow-[0_0_15px_rgba(37,99,235,0.3)] hover:shadow-[0_0_25px_rgba(59,130,246,0.5)] ${isDark ? 'bg-blue-600 hover:bg-blue-500 text-white border border-blue-400/30' : 'bg-[#002B5B] hover:bg-[#003B7B] text-white border border-[#002B5B]/30'}`}
           >
             <Search className="w-5 h-5" />
             <span className="hidden sm:block">Buscar</span>
