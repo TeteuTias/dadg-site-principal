@@ -15,7 +15,7 @@ export interface ICertificate {
     frontBottomText?: string;
     eventId: ObjectId;
     isReady?: boolean;
-    onlyImage: boolean;
+    onlyImage?: boolean;
     verse: {
         showVerse: boolean;
         topperText?: string;
