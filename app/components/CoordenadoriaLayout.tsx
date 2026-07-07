@@ -1,8 +1,7 @@
 "use client";
 import React from "react";
-import Image from "next/image";
 import { motion } from "framer-motion";
-import Link from "next/link";
+import { Link } from "wouter";
 import { ChevronLeft } from "lucide-react";
 
 export type ThemeColor = 'blue' | 'green' | 'teal' | 'indigo' | 'slate' | 'red';
@@ -13,6 +12,7 @@ interface CoordenadoriaLayoutProps {
   description: string;
   logoSrc: string;
   themeColor?: ThemeColor;
+  quickLinks?: { label: string; href: string }[];
   children: React.ReactNode;
 }
 
@@ -79,9 +79,17 @@ export function CoordenadoriaLayout({
   description,
   logoSrc,
   themeColor = 'blue',
+  quickLinks = [],
   children
 }: CoordenadoriaLayoutProps) {
   const theme = themeColors[themeColor];
+
+  const handleQuickLinkClick = (href: string) => {
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <main className={`min-h-screen transition-colors duration-500 pt-32 pb-20 ${theme.bg}`}>
@@ -108,11 +116,10 @@ export function CoordenadoriaLayout({
             <div className="absolute inset-1.5 bg-white dark:bg-slate-900 rounded-full z-10" />
             {/* Logo Image */}
             <div className="relative z-20 w-full h-full rounded-full overflow-hidden">
-              <Image 
+              <img 
                 src={logoSrc} 
-                alt={`Logo ${acronym}`} 
-                fill
-                className="object-cover p-1" 
+                alt={`Logo ${acronym}`}
+                className="w-full h-full object-cover p-1" 
               />
             </div>
           </div>
@@ -129,6 +136,25 @@ export function CoordenadoriaLayout({
             </p>
           </div>
         </motion.div>
+
+        {quickLinks.length > 0 && (
+          <nav
+            aria-label="Navegacao rapida"
+            className="sticky top-20 z-30 mb-10 -mx-6 px-6 py-3 backdrop-blur-xl bg-white/80 dark:bg-slate-950/75 border-y border-white/70 dark:border-white/10 shadow-sm"
+          >
+            <div className="flex gap-3 overflow-x-auto pb-1 md:justify-center">
+              {quickLinks.map((link) => (
+                <button
+                  key={link.href}
+                  onClick={() => handleQuickLinkClick(link.href)}
+                  className={`shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition-all duration-300 bg-white/80 dark:bg-white/5 ${theme.text} ${theme.border} ${theme.hoverText} hover:-translate-y-0.5 hover:bg-white dark:hover:bg-white/10`}
+                >
+                  {link.label}
+                </button>
+              ))}
+            </div>
+          </nav>
+        )}
 
         {/* Content Inject */}
         <motion.div 
@@ -149,15 +175,15 @@ export function CoordenadoriaLayout({
   );
 }
 
-export function ContentSection({ title, themeColor = 'blue', children }: { title: string, themeColor?: ThemeColor, children: React.ReactNode }) {
+export function ContentSection({ id, title, themeColor = 'blue', children }: { id?: string, title: string, themeColor?: ThemeColor, children: React.ReactNode }) {
   const theme = themeColors[themeColor];
 
   return (
-    <div className={`p-8 md:p-10 rounded-[2rem] backdrop-blur-md transition-all duration-500 bg-white/60 dark:bg-white/[0.04] border border-white/50 dark:border-white/10 ${theme.borderHover} ${theme.shadow}`}>
+    <section id={id} className={`scroll-mt-36 p-8 md:p-10 rounded-[2rem] backdrop-blur-md transition-all duration-500 bg-white/60 dark:bg-white/[0.04] border border-white/50 dark:border-white/10 ${theme.borderHover} ${theme.shadow}`}>
       <h3 className="text-2xl md:text-3xl font-bold font-serif mb-6 transition-colors duration-500 text-slate-900 dark:text-white">{title}</h3>
       <div className="text-lg leading-relaxed transition-colors duration-500 text-slate-700 dark:text-blue-100/80">
         {children}
       </div>
-    </div>
+    </section>
   );
 }
