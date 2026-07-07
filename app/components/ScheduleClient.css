@@ -27,6 +27,13 @@
     text-transform: capitalize;
 }
 
+.calendar-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
 .calendar-nav-button {
     background: #09427d;
     color: white;
@@ -42,6 +49,28 @@
 .calendar-nav-button:hover {
     background: #1a5ca8;
     transform: translateY(-2px);
+}
+
+.today-button {
+    background: white;
+    color: #09427d;
+    border: 1px solid rgba(9, 66, 125, 0.2);
+}
+
+.today-button:hover {
+    background: rgba(9, 66, 125, 0.08);
+    color: #09427d;
+}
+
+.calendar-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+    gap: 2rem;
+    align-items: start;
+}
+
+.calendar-main {
+    min-width: 0;
 }
 
 .calendar-weekdays {
@@ -132,6 +161,10 @@
     border-top: 2px solid rgba(9, 66, 125, 0.1);
 }
 
+.selected-day-events {
+    margin-bottom: 0;
+}
+
 .events-title {
     font-size: 1.25rem;
     font-weight: 600;
@@ -152,6 +185,21 @@
 .event-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.event-card-highlight {
+    background: linear-gradient(135deg, #09427d 0%, #1a5ca8 100%);
+    border-color: rgba(9, 66, 125, 0.25);
+    box-shadow: 0 12px 24px rgba(9, 66, 125, 0.22);
+}
+
+.event-card-highlight .event-name,
+.event-card-highlight .event-time {
+    color: white;
+}
+
+.event-card-highlight .event-time {
+    opacity: 0.9;
 }
 
 .event-name {
@@ -184,6 +232,111 @@
     border-radius: 12px;
 }
 
+.loading-message.compact,
+.no-events-message.compact {
+    padding: 1rem;
+    margin: 0;
+}
+
+.month-events-panel {
+    position: sticky;
+    top: 1rem;
+    background: rgba(248, 250, 252, 0.85);
+    border: 1px solid rgba(9, 66, 125, 0.1);
+    border-radius: 16px;
+    padding: 1rem;
+    min-width: 0;
+}
+
+.next-event-block {
+    margin-bottom: 1.5rem;
+}
+
+.panel-eyebrow {
+    color: #64748b;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+}
+
+.month-events-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.month-events-heading .events-title {
+    margin-bottom: 0;
+}
+
+.events-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    background: rgba(9, 66, 125, 0.1);
+    color: #09427d;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.month-events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    max-height: 28rem;
+    overflow-y: auto;
+    padding-right: 0.25rem;
+}
+
+.month-event-item {
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: center;
+    width: 100%;
+    text-align: left;
+    background: white;
+    border: 1px solid rgba(9, 66, 125, 0.1);
+    border-radius: 12px;
+    padding: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.month-event-item:hover {
+    border-color: rgba(9, 66, 125, 0.28);
+    transform: translateY(-1px);
+}
+
+.month-event-item.active {
+    background: rgba(9, 66, 125, 0.08);
+    border-color: rgba(9, 66, 125, 0.35);
+}
+
+.month-event-date {
+    color: #09427d;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: capitalize;
+    white-space: nowrap;
+}
+
+.month-event-name {
+    color: #334155;
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.35;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
 @media (max-width: 640px) {
     .calendar-wrapper {
         padding: 1rem;
@@ -201,6 +354,23 @@
 
     .calendar-nav-button {
         width: 100%;
+    }
+
+    .calendar-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
+
+    .calendar-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .month-events-panel {
+        position: static;
+        padding: 0.85rem;
     }
 
     .weekday {
@@ -228,6 +398,10 @@
     .calendar-grid {
         gap: 0.5rem;
     }
+
+    .month-events-list {
+        max-height: none;
+    }
 }
 
 @media (max-width: 480px) {
@@ -246,5 +420,10 @@
 
     .calendar-grid {
         gap: 0.4rem;
+    }
+
+    .month-event-item {
+        grid-template-columns: 1fr;
+        gap: 0.35rem;
     }
 } 
