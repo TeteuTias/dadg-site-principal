@@ -2,11 +2,17 @@
 
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
-import Link from "next/link";
+import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Loader2, FileCheck2, Fingerprint, Copy, Check } from "lucide-react";
-import { ICertificate } from "../lib/models/CertificateModel";
+import * as Accordion from "@radix-ui/react-accordion";
+import { Search, Loader2, FileCheck2, Fingerprint, ChevronDown } from "lucide-react";
 import { useTheme } from "next-themes";
+
+interface ICertificate {
+  _id: string;
+  eventName: string;
+  ownerName: string;
+}
 
 function Loader({ isDark }: { isDark: boolean }) {
   const [mounted, setMounted] = useState(false);
@@ -23,89 +29,6 @@ function Loader({ isDark }: { isDark: boolean }) {
       </div>
     </div>,
     document.body
-  );
-}
-
-function CertificateCard({ certificate, isDark }: { certificate: ICertificate; isDark: boolean }) {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    try {
-      await navigator.clipboard.writeText(String(certificate._id));
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error('Falha ao copiar:', err);
-    }
-  };
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="group relative"
-    >
-      <div className={`absolute -inset-0.5 bg-gradient-to-r ${isDark ? 'from-blue-400/20' : 'from-blue-600/20'} to-transparent rounded-2xl blur opacity-0 group-hover:opacity-100 transition duration-300`}></div>
-      <Link
-        prefetch={true}
-        href={`/certificados/meuCertificado/${String(certificate._id)}`}
-        className={`relative block p-6 rounded-2xl backdrop-blur-md border transition-all duration-300 overflow-hidden ${isDark ? 'bg-white/[0.03] hover:bg-white/[0.08] border-white/10 hover:border-white/25' : 'bg-white/60 hover:bg-white border-blue-100 hover:border-blue-300 shadow-sm'}`}
-      >
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="flex items-start gap-4 flex-1">
-            <div className={`p-3 rounded-xl shrink-0 transition-colors duration-500 ${isDark ? 'bg-blue-500/10' : 'bg-blue-100'}`}>
-              <FileCheck2 className={`w-8 h-8 transition-colors duration-500 ${isDark ? 'text-blue-300' : 'text-blue-600'}`} />
-            </div>
-            <div className="flex-1 min-w-0">
-              <h3 className={`text-xl font-bold font-serif leading-tight mb-2 pr-4 transition-colors duration-500 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                {certificate.eventName}
-              </h3>
-              <div className="flex flex-wrap gap-x-6 gap-y-2">
-                <div>
-                  <p className={`text-[10px] uppercase tracking-wider font-bold mb-0.5 transition-colors duration-500 ${isDark ? 'text-blue-300/60' : 'text-blue-500/80'}`}>Titular</p>
-                  <p className={`text-sm transition-colors duration-500 ${isDark ? 'text-blue-100' : 'text-slate-700'}`}>{certificate.ownerName}</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div>
-                    <p className={`text-[10px] uppercase tracking-wider font-bold mb-0.5 transition-colors duration-500 ${isDark ? 'text-blue-300/60' : 'text-blue-500/80'}`}>Código</p>
-                    <p className={`text-sm font-mono transition-colors duration-500 ${isDark ? 'text-blue-200/80' : 'text-slate-600'}`}>{String(certificate._id)}</p>
-                  </div>
-                  <button
-                    onClick={handleCopy}
-                    className={`p-2 rounded-lg transition-all duration-300 mt-5 ${
-                      copied
-                        ? isDark
-                          ? 'bg-green-500/20 text-green-300'
-                          : 'bg-green-100 text-green-700'
-                        : isDark
-                        ? 'bg-blue-500/10 text-blue-300 hover:bg-blue-500/20'
-                        : 'bg-blue-100 text-blue-600 hover:bg-blue-200'
-                    }`}
-                    title={copied ? 'Copiado!' : 'Copiar código'}
-                    aria-label={copied ? 'Copiado!' : 'Copiar código'}
-                  >
-                    {copied ? (
-                      <Check className="w-5 h-5" />
-                    ) : (
-                      <Copy className="w-5 h-5" />
-                    )}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="shrink-0 sm:ml-auto w-full sm:w-auto">
-            <div className={`w-full sm:w-auto text-center px-4 py-2 text-sm font-bold rounded-lg border transition-colors ${isDark ? 'bg-blue-500/20 text-blue-200 border-blue-400/20 group-hover:bg-blue-600 group-hover:text-white' : 'bg-blue-100 text-blue-700 border-blue-200 group-hover:bg-blue-600 group-hover:text-white'}`}>
-              Visualizar
-            </div>
-          </div>
-        </div>
-      </Link>
-    </motion.div>
   );
 }
 
@@ -174,10 +97,7 @@ function SearchInterface({ isDark }: { isDark: boolean }) {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                handleSearch();
-              }
+              if (e.key === "Enter") handleSearch();
             }}
             className={`flex-1 bg-transparent border-none text-lg sm:text-xl focus:outline-none focus:ring-0 py-4 px-2 transition-colors duration-500 ${isDark ? 'text-white placeholder-blue-200/40' : 'text-slate-900 placeholder-slate-400'}`}
             placeholder="Digite o Nome, CPF ou Código..."
@@ -220,16 +140,135 @@ function SearchInterface({ isDark }: { isDark: boolean }) {
             </div>
             
             {data.map((certificate, i) => (
-              <CertificateCard 
-                key={String(certificate._id)} 
-                certificate={certificate} 
-                isDark={isDark}
-              />
+              <motion.div
+                key={String(certificate._id)}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className="group relative"
+              >
+                <div className={`absolute -inset-0.5 bg-gradient-to-r ${isDark ? 'from-blue-400/20' : 'from-blue-600/20'} to-transparent rounded-2xl blur opacity-0 group-hover:opacity-100 transition duration-300`}></div>
+                <Link
+                  href={`/certificados/meuCertificado/${String(certificate._id)}`}
+                  className={`relative block p-6 rounded-2xl backdrop-blur-md border transition-all duration-300 overflow-hidden ${isDark ? 'bg-white/[0.03] hover:bg-white/[0.08] border-white/10 hover:border-white/25' : 'bg-white/60 hover:bg-white border-blue-100 hover:border-blue-300 shadow-sm'}`}
+                >
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div className="flex items-start gap-4">
+                      <div className={`p-3 rounded-xl shrink-0 transition-colors duration-500 ${isDark ? 'bg-blue-500/10' : 'bg-blue-100'}`}>
+                        <FileCheck2 className={`w-8 h-8 transition-colors duration-500 ${isDark ? 'text-blue-300' : 'text-blue-600'}`} />
+                      </div>
+                      <div>
+                        <h3 className={`text-xl font-bold font-serif leading-tight mb-2 pr-4 transition-colors duration-500 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                          {certificate.eventName}
+                        </h3>
+                        <div className="flex flex-wrap gap-x-6 gap-y-2">
+                          <div>
+                            <p className={`text-[10px] uppercase tracking-wider font-bold mb-0.5 transition-colors duration-500 ${isDark ? 'text-blue-300/60' : 'text-blue-500/80'}`}>Titular</p>
+                            <p className={`text-sm transition-colors duration-500 ${isDark ? 'text-blue-100' : 'text-slate-700'}`}>{certificate.ownerName}</p>
+                          </div>
+                          <div>
+                            <p className={`text-[10px] uppercase tracking-wider font-bold mb-0.5 transition-colors duration-500 ${isDark ? 'text-blue-300/60' : 'text-blue-500/80'}`}>Código</p>
+                            <p className={`text-sm font-mono transition-colors duration-500 ${isDark ? 'text-blue-200/80' : 'text-slate-600'}`}>{String(certificate._id)}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="shrink-0 sm:ml-auto w-full sm:w-auto">
+                      <div className={`w-full sm:w-auto text-center px-4 py-2 text-sm font-bold rounded-lg border transition-colors ${isDark ? 'bg-blue-500/20 text-blue-200 border-blue-400/20 group-hover:bg-blue-600 group-hover:text-white' : 'bg-blue-100 text-blue-700 border-blue-200 group-hover:bg-blue-600 group-hover:text-white'}`}>
+                        Visualizar
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
             ))}
           </motion.div>
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+function CertificateFAQ({ isDark }: { isDark: boolean }) {
+  const faqs = [
+    {
+      value: "nao-encontrado",
+      question: "Meu certificado não foi encontrado. O que fazer?",
+      answer: (
+        <>
+          Verifique se o nome, CPF ou código foi digitado sem erros. Se você participou do evento recentemente, aguarde a disponibilização pela organização. Caso o problema continue, envie sua solicitação pela{" "}
+          <Link href="/ouvidoria" className={`font-semibold underline underline-offset-4 transition-colors ${isDark ? 'text-blue-200 hover:text-white' : 'text-blue-700 hover:text-blue-900'}`}>
+            Ouvidoria
+          </Link>
+          .
+        </>
+      ),
+    },
+    {
+      value: "baixar",
+      question: "Como baixar meu certificado?",
+      answer:
+        "Depois de localizar seu certificado, clique em Visualizar. Na página do certificado, use a opção de download para salvar o arquivo no seu dispositivo.",
+    },
+    {
+      value: "nome-errado",
+      question: "Meu nome está errado no certificado. Como corrigir?",
+      answer:
+        "Confira se você buscou pelo certificado correto. Se o erro estiver no documento emitido, solicite a correção informando seu nome completo, evento e código do certificado.",
+    },
+    {
+      value: "codigo-verificador",
+      question: "Onde encontro o código verificador?",
+      answer:
+        "O código verificador aparece nos dados do certificado e também pode ser usado na busca desta página. Ele confirma a autenticidade do documento emitido pelo DADG.",
+    },
+  ];
+
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.5 }}
+      className="relative z-10 w-full px-4 sm:px-6 mt-16"
+      aria-labelledby="certificados-faq-title"
+    >
+      <div className="max-w-3xl mx-auto">
+        <div className="text-center mb-8">
+          <p className={`text-xs font-semibold uppercase tracking-[0.2em] mb-3 transition-colors duration-500 ${isDark ? 'text-blue-300/70' : 'text-blue-700/70'}`}>
+            Dúvidas frequentes
+          </p>
+          <h2 id="certificados-faq-title" className={`text-3xl sm:text-4xl font-bold font-serif transition-colors duration-500 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+            Ajuda com certificados
+          </h2>
+        </div>
+
+        <Accordion.Root
+          type="single"
+          collapsible
+          className={`rounded-2xl border backdrop-blur-md overflow-hidden transition-colors duration-500 ${isDark ? 'bg-white/[0.03] border-white/10' : 'bg-white/70 border-blue-100 shadow-sm'}`}
+        >
+          {faqs.map((faq) => (
+            <Accordion.Item key={faq.value} value={faq.value} className={`border-b last:border-b-0 transition-colors duration-500 ${isDark ? 'border-white/10' : 'border-slate-200'}`}>
+              <Accordion.Header>
+                <Accordion.Trigger className={`group flex w-full items-center justify-between gap-4 px-5 py-5 text-left transition-colors duration-300 ${isDark ? 'hover:bg-white/[0.04]' : 'hover:bg-blue-50/70'}`}>
+                  <span className={`text-base sm:text-lg font-semibold leading-snug transition-colors duration-300 ${isDark ? 'text-white group-hover:text-blue-200' : 'text-slate-900 group-hover:text-blue-700'}`}>
+                    {faq.question}
+                  </span>
+                  <ChevronDown className={`h-5 w-5 shrink-0 transition-transform duration-300 group-data-[state=open]:rotate-180 ${isDark ? 'text-blue-300' : 'text-blue-700'}`} />
+                </Accordion.Trigger>
+              </Accordion.Header>
+              <Accordion.Content className="overflow-hidden data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">
+                <div className={`px-5 pb-5 pr-12 text-sm sm:text-base leading-relaxed transition-colors duration-300 ${isDark ? 'text-blue-100/75' : 'text-slate-600'}`}>
+                  {faq.answer}
+                </div>
+              </Accordion.Content>
+            </Accordion.Item>
+          ))}
+        </Accordion.Root>
+      </div>
+    </motion.section>
   );
 }
 
@@ -268,6 +307,8 @@ export default function CertificadosPage() {
       <section className="relative z-10 flex-grow px-4 sm:px-6 w-full">
         <SearchInterface isDark={isDark} />
       </section>
+
+      <CertificateFAQ isDark={isDark} />
     </main>
   );
 }
