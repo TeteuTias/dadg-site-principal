@@ -227,10 +227,9 @@ function ViewerControls({
   showViewModes: boolean;
 }) {
   const buttonClass = (isActive: boolean) =>
-    `inline-flex items-center gap-2 rounded-full px-4 py-3 text-sm font-semibold transition ${
-      isActive
-        ? "bg-slate-950 text-white shadow-[0_18px_40px_rgba(4,26,49,0.18)]"
-        : "bg-white text-slate-700 hover:bg-[var(--brand-50)] dark:bg-white/10 dark:text-slate-100 dark:hover:bg-white/18"
+    `inline-flex items-center gap-2 rounded-full px-4 py-3 text-sm font-semibold transition ${isActive
+      ? "bg-slate-950 text-white shadow-[0_18px_40px_rgba(4,26,49,0.18)]"
+      : "bg-white text-slate-700 hover:bg-[var(--brand-50)] dark:bg-white/10 dark:text-slate-100 dark:hover:bg-white/18"
     }`;
 
   return (
@@ -368,30 +367,70 @@ function VerseStage({
           <thead>
             <tr>
               {data.verse?.headers?.map((header, index) => (
-                <th key={`${header}-${index}`} className="text-center text-lg font-bold" style={{ ...data.eventId.styleContainerVerse?.headerStyle }}>
+                <th key={`${header}-${index}`} className="" style={{ ...data.eventId.styleContainerVerse?.headerStyle }}>
                   {header}
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {data.verse?.rows?.map((row, rowIndex) => (
+            {data.verse?.rows?.map((row, rowIndex, allRows) => (
               <tr key={`row-${rowIndex}`}>
-                {row.map((cell, cellIndex) => (
-                  <td
-                    key={`cell-${rowIndex}-${cellIndex}`}
-                    className="text-center"
-                    style={{ ...libSourceSerif4.style, ...data.eventId.styleContainerVerse?.rowsStyle }}
-                  >
-                    {cell}
-                  </td>
-                ))}
+                {row.map((cell, cellIndex) => {
+                  // Lógica de MERGE para a PRIMEIRA COLUNA (cellIndex === 0)
+                  if (cellIndex === 0) {
+                    // 1. Se for igual à linha anterior, ignora (já foi mesclado pela célula acima)
+                    const isDuplicateWithPrevious = rowIndex > 0 && allRows[rowIndex - 1][0] === cell;
+                    if (isDuplicateWithPrevious) {
+                      return null;
+                    }
+
+                    // 2. Conta quantas linhas consecutivas para baixo têm o mesmo valor
+                    let rowSpan = 1;
+                    for (let i = rowIndex + 1; i < allRows.length; i++) {
+                      if (allRows[i][0] === cell) {
+                        rowSpan++;
+                      } else {
+                        break; // Para assim que encontrar um nome diferente
+                      }
+                    }
+
+                    return (
+                      <td
+                        key={`cell-${rowIndex}-${cellIndex}`}
+                        rowSpan={rowSpan}
+                        style={{
+                          textAlign: "center",
+                          verticalAlign: "middle", // Garante que o texto mesclado fique centralizado na altura
+                          ...libSourceSerif4.style,
+                          ...data.eventId.styleContainerVerse?.rowsStyle,
+                        }}
+                      >
+                        {cell}
+                      </td>
+                    );
+                  }
+
+                  // Renderização normal para as OUTRAS COLUNAS (cellIndex > 0)
+                  return (
+                    <td
+                      key={`cell-${rowIndex}-${cellIndex}`}
+                      style={{
+                        ...data.eventId.styleContainerVerse?.rowsStyle,
+                        ...(cellIndex === 1 && cell.toLowerCase() != "total" ? { textAlign: "start" } : { textAlign: "center" }),
+                        ...libSourceSerif4.style,
+                      }}
+                    >
+                      {cell}
+                    </td>
+                  );
+                })}
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-    </div>
+    </div >
   );
 }
 
@@ -724,6 +763,7 @@ export default function Home({
                     data={data}
                   />
                 )}
+                asdf
               </PreviewViewport>
             ) : null}
           </>
