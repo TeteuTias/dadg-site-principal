@@ -6,7 +6,8 @@
     "dev": "next dev --port 3001",
     "build": "next build",
     "start": "next start --port 3001",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit --incremental false"
   },
   "overrides": {
     "xml2js": "^0.5.0",
@@ -59,6 +60,7 @@
     "pdf-lib": "^1.17.1",
     "pdfmake": "^0.2.7",
     "print-js": "^1.6.0",
+    "qrcode": "^1.5.4",
     "react": "^18.2.0",
     "react-canvas-confetti": "^2.0.7",
     "react-dom": "^18.2.0",
@@ -78,6 +80,7 @@
     "@types/node": "^20.11.16",
     "@types/react": "^18.2.52",
     "@types/react-dom": "^18.2.18",
+    "@types/qrcode": "^1.5.6",
     "@types/react-router-dom": "^5.3.3",
     "autoprefixer": "^10.4.17",
     "eslint": "^8.57.0",

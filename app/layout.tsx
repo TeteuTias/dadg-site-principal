@@ -93,7 +93,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       <body className={`${inter.variable} ${playfair.variable} font-sans antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange>
           <UpcomingSchedulePopup />
-          <UserProvider tokenVar={session?.tokenSet.accessToken || undefined}>
+          <UserProvider isAuthenticated={Boolean(session?.user)}>
             <MenuDrawer blogEnabled={blogEnabled} />
             <MobileBottomNav blogEnabled={blogEnabled} />
             <div className="main-content pb-16 md:pb-0 flex flex-col min-h-screen">

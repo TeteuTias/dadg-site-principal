@@ -134,7 +134,6 @@ export default async function EventosPage() {
                 event={event}
                 isSubscribed={userSubscribedEventIds.has(event._id)}
                 isLoggedIn={isLoggedIn}
-                userEmail={typeof session?.user?.email === "string" ? session.user.email : null}
               />
             ))}
           </div>
