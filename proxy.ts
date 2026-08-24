@@ -15,15 +15,33 @@ export async function proxy(req: NextRequest) {
   const isApiMutation = pathname.startsWith("/api/") && !["GET", "HEAD", "OPTIONS"].includes(req.method);
 
   if (isApiMutation && !isAuthRoute) {
+    const requestOrigin = req.headers.get("origin");
+    const allowedOrigins = new Set([
+      req.nextUrl.origin.replace(/\/$/, ""),
+      process.env.APP_BASE_URL?.replace(/\/$/, ""),
+      process.env.SITE_URL?.replace(/\/$/, ""),
+    ].filter((value): value is string => Boolean(value)));
+    if (!requestOrigin || !allowedOrigins.has(requestOrigin.replace(/\/$/, ""))) {
+      return NextResponse.json(
+        { error: "Origem da requisição não autorizada.", code: "INVALID_REQUEST_ORIGIN" },
+        { status: 403, headers: { "Cache-Control": "private, no-store" } },
+      );
+    }
     const isRegistrationRoute = /^\/api\/v1\/events\/.*\/registration/i.test(pathname);
     const limitToApply = isRegistrationRoute ? 3 : Number(RATE_LIMIT);
     const { canAccess, unavailable } = await rateLimit(req, limitToApply)
 
     if (unavailable && !canAccess) {
-      return NextResponse.json({ error: "Serviço de proteção temporariamente indisponível" }, { status: 503 });
+      return NextResponse.json(
+        { error: "Serviço de proteção temporariamente indisponível" },
+        { status: 503, headers: { "Cache-Control": "private, no-store" } },
+      );
     }
     if (!canAccess) {
-      return new Response("Too Many Requests", { status: 429 })
+      return new Response("Too Many Requests", {
+        status: 429,
+        headers: { "Cache-Control": "private, no-store" },
+      })
     }
   }
 

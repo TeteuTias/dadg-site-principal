@@ -1,5 +1,4 @@
 import "server-only";
-import type { NextRequest } from "next/server";
 
 type BackendSession = {
   user?: { email?: string | null } | null;
@@ -16,38 +15,13 @@ export class BackendTimeoutError extends Error {
   }
 }
 
-function isAuth0SessionCookie(name: string) {
-  return (
-    name === "__session" ||
-    name.startsWith("__session__") ||
-    name.startsWith("__session.") ||
-    name === "appSession" ||
-    name.startsWith("appSession.")
-  );
-}
-
 export function applyBackendAuthentication(
   headers: Headers,
-  request: NextRequest,
+  _request: unknown,
   session: BackendSession,
 ) {
   const accessToken = session?.tokenSet?.accessToken;
-
-  if (process.env.AUTH0_AUDIENCE && accessToken) {
-    headers.set("authorization", `Bearer ${accessToken}`);
-  } else {
-    const sessionCookie = request.cookies
-      .getAll()
-      .filter(({ name }) => isAuth0SessionCookie(name))
-      .map(({ name, value }) => `${name}=${value}`)
-      .join("; ");
-
-    if (sessionCookie) headers.set("cookie", sessionCookie);
-  }
-
-  if (session?.user?.email) {
-    headers.set("x-user-email", session.user.email);
-  }
+  if (accessToken) headers.set("authorization", `Bearer ${accessToken}`);
 }
 
 export async function fetchBackend(

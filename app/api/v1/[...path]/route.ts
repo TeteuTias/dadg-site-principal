@@ -36,7 +36,7 @@ async function forwardRequest(request: NextRequest, { params }: RouteContext) {
       cache: "no-store",
     });
 
-    const responseHeaders = new Headers();
+    const responseHeaders = new Headers({ "cache-control": "private, no-store" });
     for (const name of RESPONSE_HEADERS) {
       const value = upstream.headers.get(name);
       if (value) responseHeaders.set(name, value);

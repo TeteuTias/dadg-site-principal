@@ -37,8 +37,7 @@ export default function MenuDrawer({ blogEnabled = true }: { blogEnabled?: boole
   const [hasNotification, setHasNotification] = useState(true);
   const pathname = usePathname() || '/';
   const { theme, setTheme } = useTheme();
-  const { tokenVar } = useUserContext();
-  const isLogged = !!tokenVar;
+  const { isAuthenticated: isLogged, displayName } = useUserContext();
 
   const headerBackgroundColor =
     pathname.startsWith("/coordenadorias/clam")
@@ -319,7 +318,7 @@ export default function MenuDrawer({ blogEnabled = true }: { blogEnabled?: boole
                     AD
                   </div>
                   <div className="flex flex-col">
-                    <span className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Aluno DADG</span>
+                    <span title={displayName} className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate max-w-[150px]">{displayName}</span>
                     <span className="text-xs text-slate-500 dark:text-slate-400 truncate max-w-[120px]">Membro Oficial</span>
                   </div>
                 </div>
@@ -360,7 +359,7 @@ export default function MenuDrawer({ blogEnabled = true }: { blogEnabled?: boole
                       AD
                     </div>
                     <div className="flex flex-col">
-                      <span className="font-bold text-sm text-slate-900 dark:text-white truncate">Aluno DADG</span>
+                      <span title={displayName} className="font-bold text-sm text-slate-900 dark:text-white truncate max-w-[150px]">{displayName}</span>
                       <span className="text-xs text-slate-500 dark:text-slate-400 truncate">Membro Oficial</span>
                     </div>
                   </div>

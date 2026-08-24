@@ -191,7 +191,6 @@ export default function EventDashboard() {
                                     }}
                                     isSubscribed={subscribed}
                                     isLoggedIn={true}
-                                    userEmail={typeof user.email === 'string' ? user.email : null}
                                     onSubscriptionChange={loadDashboard}
                                 />
                             );
