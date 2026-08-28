@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     $setOnInsert: { createdAt: now },
   };
 
-  await ProfileModel.updateOne({ _id: userId }, update, { upsert: true });
+  await ProfileModel.updateOne({ _id: userId.replace("auth0|", "") }, update, { upsert: true });
 
   return NextResponse.json({ ok: true });
 }

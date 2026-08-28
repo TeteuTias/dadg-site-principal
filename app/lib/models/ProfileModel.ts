@@ -1,14 +1,15 @@
-import mongoose, { Schema, Model } from "mongoose";
+import mongoose, { Schema, Model, Types } from "mongoose";
 
 export interface IProfile {
-  _id: string;
+  _id: Types.ObjectId;
   name?: string | null;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-const ProfileSchema: Schema<IProfile> = new Schema<IProfile>(
+const ProfileSchema = new Schema(
   {
+    _id: { type: Schema.Types.ObjectId, required: true },
     name: { type: String, required: false, default: null },
   },
   {
@@ -17,8 +18,6 @@ const ProfileSchema: Schema<IProfile> = new Schema<IProfile>(
     _id: false,
   },
 );
-
-ProfileSchema.set("_id", false);
 
 export const ProfileModel: Model<IProfile> =
   mongoose.models.Profile || mongoose.model<IProfile>("Profile", ProfileSchema);
