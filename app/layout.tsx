@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { UserProvider } from "@/lib/userProvider";
 import { auth0 } from "@/app/src/lib/auth0/Auth0Client";
+
+
 import "./globals.css";
 
 import MenuDrawer from "./components/MenuDrawer";
@@ -78,6 +80,7 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const cookieStore = await cookies();
   const session = await auth0.getSession();
+
   // Default to light mode on first visit
   const theme = cookieStore.get("dadg-theme")?.value === "dark" ? "dark" : "light";
 
