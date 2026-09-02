@@ -7,6 +7,7 @@ export default function PanelPage() {
             <p className="max-w-2xl text-slate-600 dark:text-slate-300">Acesse suas inscrições, histórico de eventos, certificados e artigos salvos.</p>
             <div className="flex flex-wrap gap-3">
                 <Link href="/panel/eventos/inscricoes" className="rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white">Gerenciar eventos</Link>
+                <Link href="/processos-seletivos" className="rounded-xl border border-slate-300 px-5 py-3 font-semibold dark:border-slate-700">Processos seletivos</Link>
                 <Link href="/perfil" className="rounded-xl border border-slate-300 px-5 py-3 font-semibold dark:border-slate-700">Abrir perfil</Link>
             </div>
         </main>

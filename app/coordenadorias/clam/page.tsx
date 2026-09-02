@@ -32,6 +32,26 @@ export default async function CLAMPage() {
           description="Abra cada grupo para navegar pelas ligas vinculadas à CLAM e seguir para a página detalhada de cada uma."
         />
 
+        <Link
+          href="/processos-seletivos"
+          className="glass-panel surface-outline flex flex-col gap-3 rounded-[28px] border border-white/70 p-6 transition-transform duration-300 hover:-translate-y-0.5 dark:border-white/10 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <span>
+            <span className="block text-xs font-semibold uppercase tracking-[0.28em] text-blue-600">
+              Inscricoes
+            </span>
+            <span className="mt-2 block text-2xl font-semibold text-slate-950 dark:text-white">
+              Processos seletivos das ligas
+            </span>
+            <span className="mt-2 block text-sm leading-7 text-slate-600 dark:text-slate-300">
+              Veja os editais abertos, faca sua inscricao e escolha as ligas em que quer concorrer.
+            </span>
+          </span>
+          <span className="inline-flex w-max items-center gap-2 rounded-2xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white">
+            Ver processos seletivos
+          </span>
+        </Link>
+
         <div className="grid gap-5 xl:grid-cols-2">
           {leagueGroups.map((group) => {
             const items = leagues.filter((league) => league.type === group.key);
