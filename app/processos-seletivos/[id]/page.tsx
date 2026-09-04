@@ -7,6 +7,7 @@ import { useUser } from "@auth0/nextjs-auth0";
 import { ArrowLeft, CalendarDays, Loader2, LogIn, Users } from "lucide-react";
 import {
   formatDate,
+  processYear,
   STATUS_LABELS,
   type SelectionProcessDetail,
   type StudentApplicationState,
@@ -101,7 +102,7 @@ export default function SelectionProcessPage() {
       <header className="glass-panel-strong space-y-4 rounded-3xl border border-white/80 p-6 dark:border-white/10 sm:p-8">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-blue-600">CLAM</p>
         <h1 className="text-3xl font-bold text-slate-950 dark:text-white sm:text-4xl">
-          Processo seletivo {new Date(process.registrationStartDate).getFullYear()}
+          Processo seletivo {processYear(process.registrationStartDate)}
         </h1>
 
         <ul className="grid gap-2 text-sm text-slate-600 dark:text-slate-300 sm:grid-cols-2">

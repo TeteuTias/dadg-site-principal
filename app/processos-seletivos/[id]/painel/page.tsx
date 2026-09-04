@@ -9,6 +9,7 @@ import {
   describeError,
   formatCurrency,
   formatDate,
+  processYear,
   STATUS_LABELS,
   type StudentApplicationState,
 } from "../../types";
@@ -140,7 +141,7 @@ export default function SelectionProcessDashboardPage() {
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-blue-600">Minha inscrição</p>
           <h1 className="mt-2 text-3xl font-bold text-slate-950 dark:text-white">
-            Processo seletivo {new Date(state.process.registrationStartDate).getFullYear()}
+            Processo seletivo {processYear(state.process.registrationStartDate)}
           </h1>
           <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{STATUS_LABELS[state.status]}</p>
         </div>

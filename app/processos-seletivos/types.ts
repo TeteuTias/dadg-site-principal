@@ -89,12 +89,20 @@ export function formatCurrency(value: number) {
   return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
+// As datas do processo seletivo sao gravadas a meia-noite UTC. Formatar no fuso
+// local jogaria "2026-01-01" para 31/12/2025 no Brasil, entao tudo aqui e lido
+// em UTC.
 export function formatDate(value: string) {
   return new Date(value).toLocaleDateString("pt-BR", {
     day: "2-digit",
     month: "long",
     year: "numeric",
+    timeZone: "UTC",
   });
+}
+
+export function processYear(value: string) {
+  return new Date(value).getUTCFullYear();
 }
 
 export function formatDateTime(value: string) {

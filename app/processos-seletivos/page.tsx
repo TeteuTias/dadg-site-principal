@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { CalendarDays, GraduationCap, Loader2, RefreshCw, Search, Users } from "lucide-react";
-import { formatDate, type SelectionProcessSummary } from "./types";
+import { formatDate, processYear, type SelectionProcessSummary } from "./types";
 
 function statusBadge(process: SelectionProcessSummary) {
   if (!process.hasStarted) {
@@ -57,7 +57,7 @@ export default function SelectionProcessesPage() {
       const haystack = [
         formatDate(process.registrationStartDate),
         formatDate(process.registrationEndDate),
-        new Date(process.registrationStartDate).getFullYear().toString(),
+        processYear(process.registrationStartDate).toString(),
       ]
         .join(" ")
         .toLowerCase();
@@ -149,7 +149,7 @@ export default function SelectionProcessesPage() {
                   </div>
 
                   <h2 className="text-2xl font-semibold text-slate-950 dark:text-white">
-                    Processo seletivo {new Date(process.registrationStartDate).getFullYear()}
+                    Processo seletivo {processYear(process.registrationStartDate)}
                   </h2>
 
                   <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
