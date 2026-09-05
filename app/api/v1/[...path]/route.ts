@@ -20,7 +20,7 @@ async function forwardRequest(request: NextRequest, { params }: RouteContext) {
   const targetPath = `/api/v1/${path.map(encodeURIComponent).join("/")}${request.nextUrl.search}`;
   const headers = new Headers();
 
-  for (const name of ["accept", "content-type"]) {
+  for (const name of ["accept", "content-type", "idempotency-key"]) {
     const value = request.headers.get(name);
     if (value) headers.set(name, value);
   }

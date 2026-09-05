@@ -147,7 +147,13 @@ export default function SelectionProcessPage() {
           <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
             {state.status === "REGISTRATION_NOT_OPEN"
               ? `As inscrições abrem em ${formatDate(process.registrationStartDate)}.`
-              : state.status === "SOLD_OUT"
+              : state.status === "PAYMENT_PROCESSING"
+                ? "Estamos verificando sua cobrança. Atualize esta página em alguns instantes."
+                : state.status === "PAYMENT_REVIEW_REQUIRED"
+                  ? "Sua cobrança precisa de verificação pela equipe. Entre em contato informando sua inscrição."
+                  : state.status === "PAYMENT_REVERSED"
+                    ? "O pagamento foi revertido e a escolha de ligas foi bloqueada. Procure a equipe se precisar de ajuda."
+                    : state.status === "SOLD_OUT"
                 ? "Todas as vagas deste processo seletivo já foram preenchidas."
                 : "O período de inscrições deste processo seletivo já foi encerrado."}
           </p>

@@ -160,7 +160,7 @@ export default function SelectionProcessDashboardPage() {
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">Pagamento</p>
             <p className="mt-1 text-lg font-bold text-slate-900 dark:text-white">
-              {isPaid ? "Confirmado" : state.ticket.paymentStatus === "CANCELED" ? "Cancelado" : "Pendente"}
+              {isPaid ? "Confirmado" : state.ticket.paymentStatus === "CANCELED" ? "Revertido" : state.ticket.paymentStatus === "REVIEW_REQUIRED" ? "Em revisão" : "Pendente"}
             </p>
           </div>
           <div>
@@ -180,10 +180,9 @@ export default function SelectionProcessDashboardPage() {
 
       {!isPaid && (
         <section className="rounded-[28px] border border-amber-200 bg-amber-50 p-6 dark:border-amber-900/50 dark:bg-amber-950/30">
-          <h2 className="text-lg font-semibold text-amber-800 dark:text-amber-200">Pagamento ainda não confirmado</h2>
+          <h2 className="text-lg font-semibold text-amber-800 dark:text-amber-200">{STATUS_LABELS[state.status]}</h2>
           <p className="mt-1 text-sm text-amber-700 dark:text-amber-300">
-            A escolha das ligas é liberada assim que o Mercado Pago confirmar o pagamento. A confirmação pode
-            levar alguns minutos.
+            {state.status === "PAYMENT_REVIEW_REQUIRED" || state.status === "PAYMENT_REVERSED" ? "A escolha de ligas está bloqueada. Procure a equipe para verificar sua inscrição." : "A escolha das ligas é liberada assim que o Mercado Pago confirmar o pagamento. A confirmação pode levar alguns minutos."}
           </p>
           <Link
             href={`/processos-seletivos/${processId}/inscricao`}
