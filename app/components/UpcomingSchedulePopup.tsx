@@ -115,7 +115,10 @@ export default function UpcomingSchedulePopup() {
   return (
     <aside
       className={cn(
-        "relative fixed bottom-3 right-3 z-[60] max-h-[calc(100vh-6.5rem)] w-[min(86vw,320px)] overflow-hidden rounded-[24px] border border-slate-200 bg-white p-3 shadow-[0_20px_60px_rgba(7,48,89,0.18)] dark:border-slate-800 dark:bg-slate-950",
+        // No mobile o card precisa ficar acima da barra de navegacao fixa
+        // (MobileBottomNav, ~4rem + safe area, z-[1002]). A partir de md a barra
+        // some e o card volta a encostar no rodape.
+        "fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] right-3 z-[1001] max-h-[calc(100vh-11rem)] w-[min(86vw,320px)] overflow-hidden rounded-[24px] border border-slate-200 bg-white p-3 shadow-[0_20px_60px_rgba(7,48,89,0.18)] md:bottom-3 md:max-h-[calc(100vh-6.5rem)] dark:border-slate-800 dark:bg-slate-950",
         expanded ? "space-y-3" : "space-y-0"
       )}
     >
@@ -162,7 +165,7 @@ export default function UpcomingSchedulePopup() {
       </div>
 
       {expanded ? (
-        <div className="max-h-[min(18rem,calc(100vh-10rem))] space-y-3 overflow-y-auto border-t border-[rgba(9,66,125,0.08)] pt-3 pr-1">
+        <div className="max-h-[min(18rem,calc(100vh-15rem))] space-y-3 overflow-y-auto border-t border-[rgba(9,66,125,0.08)] pt-3 pr-1 md:max-h-[min(18rem,calc(100vh-10rem))]">
           <div className="flex items-center justify-between gap-3">
             <p className="text-xs leading-5 text-slate-600 dark:text-slate-300">
               Resumo rapido antes de abrir o calendario.
