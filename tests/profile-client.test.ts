@@ -20,3 +20,10 @@ test('candidate validation rejects invalid civil dates and malformed contact', (
   assert.ok(validateProfileFields({ ...base, phone: '123', contactEmail: 'invalid' }).errors.phone);
   assert.ok(validateProfileFields({ ...base, registrationNumber: '=2+2' }).errors.registrationNumber);
 });
+
+test('RA and phone normalize punctuation and preserve leading zeros', () => {
+  const checked=validateProfileFields({...base,registrationNumber:'00.012-3',phone:'+55 (34) 99999-1234'});
+  assert.equal(checked.data?.registrationNumber,'000123');
+  assert.equal(checked.data?.phone,'5534999991234');
+  for(const registrationNumber of ['abc','---','123ABC','1'.repeat(41)]) assert.ok(validateProfileFields({...base,registrationNumber}).errors.registrationNumber);
+});
