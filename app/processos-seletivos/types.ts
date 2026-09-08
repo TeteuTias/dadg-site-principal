@@ -94,6 +94,7 @@ const CHECKOUT_ERROR_MESSAGES: Record<string, string> = {
   LEAGUES_ALREADY_SELECTED: "Essas ligas já foram registradas na sua inscrição.",
   EXAMS_INVALID_FOR_PROCESS: "Alguma das ligas escolhidas não pertence a este processo seletivo.",
   NOT_AUTHENTICATED: "Entre na sua conta para continuar.",
+  AUTH_SESSION_EXPIRED: "Sua sessão expirou. Entre novamente.",
 };
 
 export function describeError(code: string | undefined, fallback: string) {

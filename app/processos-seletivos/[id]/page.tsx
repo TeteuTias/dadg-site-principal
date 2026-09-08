@@ -9,6 +9,7 @@ import {
   formatDate,
   processYear,
   STATUS_LABELS,
+  describeError,
   type SelectionProcessDetail,
   type StudentApplicationState,
 } from "../types";
@@ -45,7 +46,10 @@ export default function SelectionProcessPage() {
 
       const stateResponse = await fetch(`/api/v1/selective-processes/${processId}/me`, { cache: "no-store" });
       const stateBody = await stateResponse.json().catch(() => ({}));
-      setState(stateResponse.ok && stateBody?.success ? (stateBody.data as StudentApplicationState) : null);
+      if (!stateResponse.ok || !stateBody?.success) {
+        throw new Error(describeError(stateBody?.code || stateBody?.error, "Não foi possível carregar sua inscrição."));
+      }
+      setState(stateBody.data as StudentApplicationState);
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : "Erro ao carregar o processo seletivo.");
     } finally {
@@ -133,7 +137,7 @@ export default function SelectionProcessPage() {
             </p>
           </div>
           <a
-            href={`/auth/login?returnTo=${encodeURIComponent(`/processos-seletivos/${processId}`)}`}
+            href={`/api/auth/login?returnTo=${encodeURIComponent(`/processos-seletivos/${processId}`)}`}
             className="inline-flex w-max items-center gap-2 rounded-2xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white"
           >
             <LogIn className="h-4 w-4" /> Fazer login

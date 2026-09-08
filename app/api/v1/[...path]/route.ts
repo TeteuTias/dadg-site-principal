@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth0 } from "@/app/src/lib/auth0/Auth0Client";
-import { applyBackendAuthentication, backendErrorStatus, fetchBackend } from "@/lib/backend";
+import { applyBackendAuthentication, BackendSessionError, backendErrorStatus, fetchBackend, getBackendIdentity } from "@/lib/backend";
 
 type RouteContext = {
   params: Promise<{ path: string[] }>;
@@ -25,8 +24,15 @@ async function forwardRequest(request: NextRequest, { params }: RouteContext) {
     if (value) headers.set(name, value);
   }
 
-  const session = await auth0.getSession().catch(() => null);
-  applyBackendAuthentication(headers, request, session);
+  try {
+    const identity = await getBackendIdentity();
+    applyBackendAuthentication(headers, identity);
+  } catch (error) {
+    // Este proxy também atende leituras públicas. Se a sessão opcional estiver
+    // expirada, deixa o backend decidir quais rotas realmente exigem login.
+    if (error instanceof BackendSessionError) headers.delete("authorization");
+    else throw error;
+  }
 
   try {
     const upstream = await fetchBackend(targetPath, {

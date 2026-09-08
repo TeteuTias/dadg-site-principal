@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import ProfileGate from '../../ProfileGate';
+import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0";
 import { ArrowLeft, CheckCircle2, Loader2, Lock, LogIn, RefreshCw } from "lucide-react";
@@ -18,6 +19,7 @@ export default function SelectionProcessDashboardPage() {
   const params = useParams<{ id: string }>();
   const processId = params?.id ?? "";
   const { user, isLoading: isUserLoading } = useUser();
+  const router = useRouter();
 
   const [state, setState] = useState<StudentApplicationState | null>(null);
   const [chosenExamIds, setChosenExamIds] = useState<string[]>([]);
@@ -39,7 +41,7 @@ export default function SelectionProcessDashboardPage() {
       const response = await fetch(`/api/v1/selective-processes/${processId}/me`, { cache: "no-store" });
       const body = await response.json().catch(() => ({}));
       if (!response.ok || !body?.success) {
-        throw new Error(describeError(body?.error, "Não foi possível carregar sua inscrição."));
+        throw new Error(describeError(body?.code || body?.error, "Não foi possível carregar sua inscrição."));
       }
       setState(body.data as StudentApplicationState);
       setChosenExamIds([]);
@@ -76,6 +78,7 @@ export default function SelectionProcessDashboardPage() {
       const body = await response.json().catch(() => ({}));
 
       if (!response.ok || !body?.success) {
+        if (response.status === 428 && body.error === 'PROFILE_INCOMPLETE') { router.push(`/perfil?returnTo=${encodeURIComponent(`/processos-seletivos/${processId}/painel`)}`); return; }
         throw new Error(describeError(body?.error, "Não foi possível registrar suas ligas."));
       }
 
@@ -103,7 +106,7 @@ export default function SelectionProcessDashboardPage() {
         <LogIn className="h-12 w-12 text-blue-600" />
         <h1 className="text-3xl font-bold text-slate-950 dark:text-white">Entre para ver sua inscrição</h1>
         <a
-          href={`/auth/login?returnTo=${encodeURIComponent(`/processos-seletivos/${processId}/painel`)}`}
+          href={`/api/auth/login?returnTo=${encodeURIComponent(`/processos-seletivos/${processId}/painel`)}`}
           className="rounded-2xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white"
         >
           Fazer login
@@ -129,7 +132,7 @@ export default function SelectionProcessDashboardPage() {
   const selectedSet = new Set(state.selectedExamIds);
 
   return (
-    <main className="page-shell min-h-screen space-y-8 pb-16 pt-28">
+    <main className="page-shell min-h-screen space-y-8 pb-16 pt-28"><ProfileGate returnTo={`/processos-seletivos/${processId}/painel`}>
       <Link
         href={`/processos-seletivos/${processId}`}
         className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600"
@@ -278,6 +281,6 @@ export default function SelectionProcessDashboardPage() {
           </ul>
         )}
       </section>
-    </main>
+    </ProfileGate></main>
   );
 }

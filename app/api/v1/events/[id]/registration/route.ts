@@ -1,18 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth0 } from "@/app/src/lib/auth0/Auth0Client";
-import { applyBackendAuthentication, backendErrorStatus, fetchBackend, readBackendJson } from "@/lib/backend";
+import { applyBackendAuthentication, BackendSessionError, backendErrorStatus, fetchBackend, getBackendIdentity, readBackendJson } from "@/lib/backend";
 
 export const dynamic = "force-dynamic";
 interface RouteParams { params: Promise<{ id: string }> }
 const headers = { "Cache-Control": "private, no-store" };
 
 async function forward(req: NextRequest, { params }: RouteParams, method: "POST" | "DELETE") {
-  const session = await auth0.getSession();
-  if (!session?.user || !session.tokenSet?.accessToken) return NextResponse.json({ error:"Não autenticado." }, { status:401, headers });
+  let identity;
+  try { identity = await getBackendIdentity(); }
+  catch (error) { if (error instanceof BackendSessionError) return NextResponse.json({ error:"Sua sessão expirou. Entre novamente.", code:error.code }, { status:401, headers }); throw error; }
+  if (!identity) return NextResponse.json({ error:"Não autenticado.", code:"NOT_AUTHENTICATED" }, { status:401, headers });
   const { id } = await params;
   try {
     const backendHeaders = new Headers({ Accept:"application/json" });
-    applyBackendAuthentication(backendHeaders, req, session);
+    applyBackendAuthentication(backendHeaders, identity);
     const response = await fetchBackend(`/api/v1/events/${encodeURIComponent(id)}/registration`, { method, headers:backendHeaders, cache:"no-store" });
     const data = await readBackendJson(response);
     return NextResponse.json(data, { status:response.status, headers });

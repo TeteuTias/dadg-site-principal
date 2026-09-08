@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth0 } from "@/app/src/lib/auth0/Auth0Client";
 import {
   applyBackendAuthentication,
   BACKEND_URL,
+  BackendSessionError,
   backendErrorStatus,
   fetchBackend,
+  getBackendIdentity,
 } from "@/lib/backend";
 
 export const dynamic = "force-dynamic";
@@ -30,9 +31,13 @@ async function proxyRequest(req: NextRequest, params: { slug: string[] }) {
   headers.set("Content-Type", "application/json");
 
   // Se houver sessão (usuário logado), envia a autenticação
-  const session = await auth0.getSession();
-  if (session?.user) {
-    applyBackendAuthentication(headers, req, session);
+  try {
+    applyBackendAuthentication(headers, await getBackendIdentity());
+  } catch (error) {
+    if (!(error instanceof BackendSessionError)) throw error;
+    if (req.method !== "GET" && req.method !== "HEAD") {
+      return NextResponse.json({ error: "Sua sessão expirou. Entre novamente.", code: error.code }, { status: 401 });
+    }
   }
 
   const options: RequestInit = {

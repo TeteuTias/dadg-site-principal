@@ -1,9 +1,10 @@
 import "server-only";
+import { auth0 } from "@/app/src/lib/auth0/Auth0Client";
 
-type BackendSession = {
-  user?: { email?: string | null } | null;
-  tokenSet?: { accessToken?: string | null } | null;
-} | null;
+export type BackendIdentity = {
+  user: { email?: string | null; name?: string | null; picture?: string | null };
+  accessToken: string;
+};
 
 export const BACKEND_URL = (process.env.BACKEND_URL || "http://localhost:3000").replace(/\/$/, "");
 export const BACKEND_TIMEOUT_MS = 10_000;
@@ -15,13 +16,35 @@ export class BackendTimeoutError extends Error {
   }
 }
 
+export class BackendSessionError extends Error {
+  readonly code: "AUTH_SESSION_EXPIRED";
+
+  constructor() {
+    super("The authenticated session could not provide an access token");
+    this.name = "BackendSessionError";
+    this.code = "AUTH_SESSION_EXPIRED";
+  }
+}
+
+export async function getBackendIdentity(): Promise<BackendIdentity | null> {
+  const session = await auth0.getSession().catch(() => null);
+  if (!session?.user) return null;
+
+  try {
+    const { token } = await auth0.getAccessToken();
+    if (!token) throw new BackendSessionError();
+    return { user: session.user, accessToken: token };
+  } catch (error) {
+    if (error instanceof BackendSessionError) throw error;
+    throw new BackendSessionError();
+  }
+}
+
 export function applyBackendAuthentication(
   headers: Headers,
-  _request: unknown,
-  session: BackendSession,
+  identity: BackendIdentity | null,
 ) {
-  const accessToken = session?.tokenSet?.accessToken;
-  if (accessToken) headers.set("authorization", `Bearer ${accessToken}`);
+  if (identity) headers.set("authorization", `Bearer ${identity.accessToken}`);
 }
 
 export async function fetchBackend(
