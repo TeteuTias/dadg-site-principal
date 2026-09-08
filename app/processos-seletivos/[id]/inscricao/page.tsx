@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import ProfileGate from '../../ProfileGate';
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -115,6 +116,7 @@ export default function SelectionProcessCheckoutPage() {
       });
       const body = await response.json().catch(() => ({}));
       if (!response.ok || !body?.success) {
+        if (response.status === 428 && body.error === 'PROFILE_INCOMPLETE') { router.push(`/perfil?returnTo=${encodeURIComponent(`/processos-seletivos/${processId}/inscricao`)}`); return; }
         if (body?.error === "ALREADY_ENROLLED") {
           await load();
           throw new Error("O pagamento anterior foi aprovado. A quantidade paga foi mantida.");
@@ -168,7 +170,7 @@ export default function SelectionProcessCheckoutPage() {
   const maxExams = Math.min(4, state?.process.maxExamsPerApplication ?? 1, state?.process.exams.length ?? 0);
 
   return (
-    <main className="page-shell min-h-screen space-y-8 pb-16 pt-28">
+    <main className="page-shell min-h-screen space-y-8 pb-16 pt-28"><ProfileGate returnTo={`/processos-seletivos/${processId}/inscricao`}>
       <Link
         href={`/processos-seletivos/${processId}`}
         className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600"
@@ -386,6 +388,6 @@ export default function SelectionProcessCheckoutPage() {
           </section>
           </AlertDialog.Content></div></AlertDialog.Portal></AlertDialog.Root>
       )}
-    </main>
+    </ProfileGate></main>
   );
 }

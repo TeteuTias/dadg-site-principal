@@ -9,6 +9,7 @@ import LocalQrCode from "@/app/components/profile/LocalQrCode";
 import PersonalDataPanel, { type OwnProfile, type PrivacyNotice } from "@/app/components/profile/PersonalDataPanel";
 import { InfoCard, PageHero } from "@/app/components/site-sections";
 import { useUserContext } from "@/lib/userProvider";
+import { profileReturnTo } from '@/lib/profile/return-to';
 
 interface EventHistory { participationId:string;eventId:string;eventName:string;eventDescription:string;eventType:string;status:string;isOpen:boolean;enrolledAt:string;certificateId:string|null;qrToken:string|null;checkedIn:boolean;checkedInAt:string|null;certificateReleased:boolean }
 interface Account { email:string;picture:string;suggestedName:string }
@@ -18,8 +19,7 @@ type Tab="dados"|"eventos"|"artigos";
 function safeReturnTo() {
   if(typeof window==="undefined")return null;
   const value=new URLSearchParams(window.location.search).get("returnTo");
-  if(!value||!value.startsWith("/eventos")||value.startsWith("//"))return null;
-  try{const parsed=new URL(value,window.location.origin);return parsed.origin===window.location.origin?`${parsed.pathname}${parsed.search}${parsed.hash}`:null;}catch{return null;}
+  return profileReturnTo(value, window.location.origin);
 }
 export default function PerfilPage(){
   const bookmarksStarted=useRef(false); const tabRefs=useRef<Record<string,HTMLButtonElement|null>>({});

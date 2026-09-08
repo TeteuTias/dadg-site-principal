@@ -23,6 +23,8 @@ export type OwnProfile = {
   cpf: string | null;
   cpfMasked: string;
   period: number | null;
+  registrationNumber?: string; birthDate?: string; phone?: string; contactEmail?: string;
+  clamMissingFields?: string[];
   complete: boolean;
   privacyNoticeRequired: boolean;
   updatedAt: string | null;
@@ -54,9 +56,11 @@ export default function PersonalDataPanel({
     name: profile.name || (!profile.exists ? account.suggestedName : "") || "",
     cpf: profile.cpf ? formatCpf(profile.cpf) : "",
     period: profile.period ? String(profile.period) : "",
+    registrationNumber: profile.registrationNumber || '', birthDate: profile.birthDate || '',
+    phone: profile.phone || '', contactEmail: profile.contactEmail || account.email || '',
   });
   const [editing, setEditing] = useState(
-    !profile.complete || profile.privacyNoticeRequired,
+    !profile.complete || profile.privacyNoticeRequired || Boolean(returnTo?.startsWith('/processos-seletivos') && profile.clamMissingFields?.length),
   );
   const [form, setForm] = useState(initial);
   const [accepted, setAccepted] = useState(false);
@@ -69,11 +73,15 @@ export default function PersonalDataPanel({
     name: useRef<HTMLInputElement>(null),
     cpf: useRef<HTMLInputElement>(null),
     period: useRef<HTMLSelectElement>(null),
+    registrationNumber: useRef<HTMLInputElement>(null),
+    birthDate: useRef<HTMLInputElement>(null),
+    phone: useRef<HTMLInputElement>(null),
+    contactEmail: useRef<HTMLInputElement>(null),
     privacyAccepted: useRef<HTMLInputElement>(null),
   };
   useEffect(() => {
     setForm(initial());
-    setEditing(!profile.complete || profile.privacyNoticeRequired);
+    setEditing(!profile.complete || profile.privacyNoticeRequired || Boolean(returnTo?.startsWith('/processos-seletivos') && profile.clamMissingFields?.length));
     setAccepted(false);
   }, [profile]);
   const startEditing = () => {
@@ -92,7 +100,7 @@ export default function PersonalDataPanel({
     setStatus("idle");
   };
   const focusFirst = (next: Record<string, string>) => {
-    for (const key of ["name", "cpf", "period", "privacyAccepted"] as const) {
+    for (const key of ["name", "cpf", "period", "registrationNumber", "birthDate", "phone", "contactEmail", "privacyAccepted"] as const) {
       if (next[key]) {
         refs[key].current?.focus();
         break;
@@ -103,7 +111,7 @@ export default function PersonalDataPanel({
   async function save(event: FormEvent) {
     event.preventDefault();
     if (status === "saving") return;
-    const checked = validateProfileFields(form);
+    const checked = validateProfileFields(form, Boolean(returnTo?.startsWith('/processos-seletivos')));
     const next: Record<string, string> = { ...checked.errors };
     if (profile.privacyNoticeRequired && !accepted)
       next.privacyAccepted = "Leia e aceite o aviso de privacidade vigente.";
@@ -168,6 +176,10 @@ export default function PersonalDataPanel({
               value={account.email || "Não informado"}
             />
             <Read label="CPF" value={profile.cpfMasked} />
+            <Read label="Matrícula / RA" value={profile.registrationNumber || 'Não informado'} />
+            <Read label="Nascimento" value={profile.birthDate?.split('-').reverse().join('/') || 'Não informado'} />
+            <Read label="Telefone" value={profile.phone || 'Não informado'} />
+            <Read label="E-mail de contato" value={profile.contactEmail || 'Não informado'} />
             <Read
               label="Período"
               value={
@@ -193,7 +205,7 @@ export default function PersonalDataPanel({
               {message}
               {returnTo ? (
                 <a href={returnTo} className="ml-2 underline">
-                  Continuar para o evento
+                  Continuar para a inscrição
                 </a>
               ) : null}
             </div>
@@ -279,6 +291,10 @@ export default function PersonalDataPanel({
               ))}
             </select>
           </Field>
+          <div className="sm:col-span-2"><h2 className="font-semibold">Dados para inscrições na CLAM</h2><p className="mt-1 text-sm text-slate-600 dark:text-slate-300">Informe seus dados de candidato para as listas de provas e o contato dos organizadores.</p></div>
+          {([['registrationNumber', 'Matrícula / RA', 'text'], ['birthDate', 'Data de nascimento', 'date'], ['phone', 'Telefone com DDD', 'tel'], ['contactEmail', 'E-mail de contato', 'email']] as const).map(([field, label, type]) => (
+            <Field key={field} label={label} error={errors[field]}><input ref={refs[field]} disabled={status === 'saving'} aria-invalid={Boolean(errors[field])} className={inputClass} type={type} value={form[field]} maxLength={field === 'registrationNumber' ? 40 : 254} onChange={e => setForm(previous => ({ ...previous, [field]: e.target.value }))} /></Field>
+          ))}
         </div>
         {status === "error" ? (
           <div
