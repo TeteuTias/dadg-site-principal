@@ -4,6 +4,8 @@ export type ProfileSummary = {
   privacyNoticeRequired: boolean;
 };
 
+export function onlyDigits(value: string) { return value.replace(/\D/g, ""); }
+
 export function normalizeCpf(value: string) {
   return value.replace(/\D/g, "").slice(0, 11);
 }
@@ -47,11 +49,11 @@ export function validateProfileFields(input: {
   const period = Number(input.period);
   if (!Number.isInteger(period) || period < 1 || period > 12)
     errors.period = "Selecione um período entre 1 e 12.";
-  const registrationNumber = input.registrationNumber?.trim();
+  const registrationNumber = input.registrationNumber === undefined ? undefined : onlyDigits(input.registrationNumber);
   const birthDate = input.birthDate?.trim();
   const phone = input.phone?.replace(/\D/g, '');
   const contactEmail = input.contactEmail?.trim();
-  if (registrationNumber && !/^[A-Za-z0-9.-]{1,40}$/.test(registrationNumber)) errors.registrationNumber = 'Use até 40 letras, números, pontos ou hífens.';
+  if (input.registrationNumber?.trim() && (!/^[0-9.\s-]+$/.test(input.registrationNumber) || !/^\d{1,40}$/.test(registrationNumber || ''))) errors.registrationNumber = 'Informe a matrícula / RA com até 40 dígitos.';
   const civil = birthDate ? new Date(birthDate + 'T12:00:00Z') : null;
   if (birthDate && (!/^\d{4}-\d{2}-\d{2}$/.test(birthDate) || !civil || !Number.isFinite(civil.getTime()) || civil.toISOString().slice(0, 10) !== birthDate || birthDate < '1900-01-01' || birthDate > new Date().toISOString().slice(0, 10))) errors.birthDate = 'Informe uma data de nascimento válida.';
   if (phone && !/^\d{10,13}$/.test(phone)) errors.phone = 'Informe o telefone com DDD.';

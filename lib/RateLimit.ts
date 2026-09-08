@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { createHash } from "crypto";
 import { MongoClient } from "mongodb";
+import { ensureRateLimitIndex } from "./rate-limit-index";
 // 
 interface RateLimitDocument {
     _id: string;
@@ -17,30 +18,28 @@ interface TrafficLog {
 }
 
 // 1. Variável global para manter a conexão viva entre as invocações Serverless
-let cachedClient: MongoClient | null = null;
-let indexesReady = false;
+let clientPromise: Promise<MongoClient> | null = null;
 
-async function getMongoClient() {
-    if (cachedClient) return cachedClient;
-
-    const mongodbUri = process.env.MONGODB_URI;
-    if (!mongodbUri) {
-        throw new Error("MONGODB_URI is not defined in environment variables");
+async function getMongoClient(): Promise<MongoClient> {
+    if (!clientPromise) {
+        clientPromise = (async () => {
+            const mongodbUri = process.env.MONGODB_URI;
+            if (!mongodbUri) throw new Error("MONGODB_URI is not defined in environment variables");
+            const client = new MongoClient(mongodbUri);
+            try {
+                await client.connect();
+                await ensureRateLimitIndex(client.db("proxy").collection("rateLimit"));
+                return client;
+            } catch (error) {
+                await client.close().catch(() => undefined);
+                throw error;
+            }
+        })().catch(error => {
+            clientPromise = null;
+            throw error;
+        });
     }
-
-    const client = new MongoClient(mongodbUri);
-    await client.connect();
-    cachedClient = client;
-
-    if (!indexesReady) {
-        await client.db("proxy").collection("rateLimit").createIndex(
-            { createdAt: 1 },
-            { expireAfterSeconds: 300, name: "rate_limit_ttl" },
-        );
-        indexesReady = true;
-    }
-
-    return client;
+    return clientPromise;
 }
 
 export async function rateLimit(req: NextRequest, limit: number): Promise<{ canAccess: boolean; count?: number; unavailable?: boolean }> {

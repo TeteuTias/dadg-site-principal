@@ -13,6 +13,7 @@ import {
 import { InfoCard } from "@/app/components/site-sections";
 import {
   formatCpf,
+  onlyDigits,
   validateProfileFields,
   type ProfileSummary,
 } from "@/lib/profile/client";
@@ -56,8 +57,8 @@ export default function PersonalDataPanel({
     name: profile.name || (!profile.exists ? account.suggestedName : "") || "",
     cpf: profile.cpf ? formatCpf(profile.cpf) : "",
     period: profile.period ? String(profile.period) : "",
-    registrationNumber: profile.registrationNumber || '', birthDate: profile.birthDate || '',
-    phone: profile.phone || '', contactEmail: profile.contactEmail || account.email || '',
+    registrationNumber: onlyDigits(profile.registrationNumber || ''), birthDate: profile.birthDate || '',
+    phone: onlyDigits(profile.phone || ''), contactEmail: profile.contactEmail || account.email || '',
   });
   const [editing, setEditing] = useState(
     !profile.complete || profile.privacyNoticeRequired || Boolean(returnTo?.startsWith('/processos-seletivos') && profile.clamMissingFields?.length),
@@ -293,7 +294,7 @@ export default function PersonalDataPanel({
           </Field>
           <div className="sm:col-span-2"><h2 className="font-semibold">Dados para inscrições na CLAM</h2><p className="mt-1 text-sm text-slate-600 dark:text-slate-300">Informe seus dados de candidato para as listas de provas e o contato dos organizadores.</p></div>
           {([['registrationNumber', 'Matrícula / RA', 'text'], ['birthDate', 'Data de nascimento', 'date'], ['phone', 'Telefone com DDD', 'tel'], ['contactEmail', 'E-mail de contato', 'email']] as const).map(([field, label, type]) => (
-            <Field key={field} label={label} error={errors[field]}><input ref={refs[field]} disabled={status === 'saving'} aria-invalid={Boolean(errors[field])} className={inputClass} type={type} value={form[field]} maxLength={field === 'registrationNumber' ? 40 : 254} onChange={e => setForm(previous => ({ ...previous, [field]: e.target.value }))} /></Field>
+            <Field key={field} label={label} error={errors[field]}><input ref={refs[field]} disabled={status === 'saving'} aria-invalid={Boolean(errors[field])} className={inputClass} type={type} inputMode={field === 'registrationNumber' || field === 'phone' ? 'numeric' : undefined} value={form[field]} maxLength={field === 'registrationNumber' || field === 'phone' ? undefined : 254} onChange={e => setForm(previous => ({ ...previous, [field]: field === 'registrationNumber' || field === 'phone' ? onlyDigits(e.target.value) : e.target.value }))} /></Field>
           ))}
         </div>
         {status === "error" ? (
