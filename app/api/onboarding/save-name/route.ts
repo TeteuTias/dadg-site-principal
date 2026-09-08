@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import mongoose from "mongoose";
 
 import { auth0 } from "@/app/src/lib/auth0/Auth0Client";
 import { connectToDatabase } from "@/app/lib/mongodb";
@@ -30,14 +31,17 @@ export async function POST(request: NextRequest) {
 
   await connectToDatabase();
 
-  const now = new Date();
-  const update = {
-    name,
-    updatedAt: now,
-    $setOnInsert: { createdAt: now },
-  };
+  const profileId = userId.replace("auth0|", "");
+  if (!mongoose.isValidObjectId(profileId)) {
+    return NextResponse.json({ ok: false, error: "Sessão inválida" }, { status: 401 });
+  }
 
-  await ProfileModel.updateOne({ _id: userId.replace("auth0|", "") }, update, { upsert: true });
+  const now = new Date();
+  await ProfileModel.updateOne(
+    { _id: profileId },
+    { $set: { name, updatedAt: now }, $setOnInsert: { createdAt: now } },
+    { upsert: true },
+  );
 
   return NextResponse.json({ ok: true });
 }

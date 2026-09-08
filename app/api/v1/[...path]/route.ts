@@ -24,14 +24,19 @@ async function forwardRequest(request: NextRequest, { params }: RouteContext) {
     if (value) headers.set(name, value);
   }
 
+  let sessionError: BackendSessionError | null = null;
   try {
     const identity = await getBackendIdentity();
     applyBackendAuthentication(headers, identity);
   } catch (error) {
-    // Este proxy também atende leituras públicas. Se a sessão opcional estiver
-    // expirada, deixa o backend decidir quais rotas realmente exigem login.
-    if (error instanceof BackendSessionError) headers.delete("authorization");
-    else throw error;
+    // Este proxy também atende leituras públicas. Se a sessão estiver expirada,
+    // segue sem Authorization, mas guarda a causa: quando o backend recusar por
+    // falta de credencial, respondemos com AUTH_SESSION_EXPIRED em vez de
+    // mascarar a falha como "não autenticado".
+    if (error instanceof BackendSessionError) {
+      sessionError = error;
+      headers.delete("authorization");
+    } else throw error;
   }
 
   try {
@@ -41,6 +46,13 @@ async function forwardRequest(request: NextRequest, { params }: RouteContext) {
       body: SAFE_METHODS.has(request.method) ? undefined : await request.arrayBuffer(),
       cache: "no-store",
     });
+
+    if (sessionError && upstream.status === 401) {
+      return NextResponse.json(
+        { error: "Sua sessão expirou. Entre novamente.", code: sessionError.code },
+        { status: 401, headers: { "cache-control": "private, no-store" } },
+      );
+    }
 
     const responseHeaders = new Headers({ "cache-control": "private, no-store" });
     for (const name of RESPONSE_HEADERS) {

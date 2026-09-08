@@ -33,7 +33,20 @@ export default function PerfilPage(){
     try{
       const [profileResponse,settingsResponse]=await Promise.all([fetch("/api/perfil/proxy",{cache:"no-store"}),fetch("/api/settings",{cache:"no-store"})]);
       const profile=await profileResponse.json();
-      if(profileResponse.status===401){window.location.href="/api/auth/login?returnTo=/perfil";return;}
+      if(profileResponse.status===401){
+        // Um unico reenvio ao login. Se o 401 persistir depois de autenticar, o
+        // problema esta na validacao do token no backend: mostrar o motivo em
+        // vez de entrar em ciclo infinito de redirecionamento.
+        if(!sessionStorage.getItem("perfil:auth-retry")){
+          sessionStorage.setItem("perfil:auth-retry","1");
+          window.location.href="/api/auth/login?returnTo=/perfil";
+          return;
+        }
+        sessionStorage.removeItem("perfil:auth-retry");
+        const detail=[profile.code,profile.reason].filter(Boolean).join(" / ");
+        throw new Error(`Sua sessao foi aceita, mas o servidor recusou a credencial${detail?` (${detail})`:""}. Saia e entre novamente; se persistir, avise a coordenacao.`);
+      }
+      sessionStorage.removeItem("perfil:auth-retry");
       if(!profileResponse.ok)throw new Error(profile.error||"Não foi possível carregar o perfil.");
       setData(profile); const settings=settingsResponse.ok?await settingsResponse.json():{blogEnabled:true}; setBlogEnabled(settings.blogEnabled!==false);
       updateProfileSummary({displayName:profile.profile?.name?.trim()||"Aluno DADG",complete:Boolean(profile.profile?.complete),privacyNoticeRequired:Boolean(profile.profile?.privacyNoticeRequired)});
