@@ -1,24 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth0 } from "@/app/src/lib/auth0/Auth0Client";
 import {
   applyBackendAuthentication,
+  BackendSessionError,
   backendErrorStatus,
   fetchBackend,
+  getBackendIdentity,
   readBackendJson,
 } from "@/lib/backend";
 
 export const dynamic = "force-dynamic";
 const headers = { "Cache-Control": "private, no-store" };
-export async function GET(request: NextRequest) {
-  const session = await auth0.getSession();
-  if (!session?.user || !session.tokenSet?.accessToken)
+export async function GET(_request: NextRequest) {
+  let identity;
+  try {
+    identity = await getBackendIdentity();
+  } catch (error) {
+    if (error instanceof BackendSessionError)
+      return NextResponse.json(
+        { error: "Sua sessão expirou. Entre novamente.", code: error.code },
+        { status: 401, headers },
+      );
+    throw error;
+  }
+  if (!identity)
     return NextResponse.json(
-      { error: "Não autenticado" },
+      { error: "Não autenticado", code: "NOT_AUTHENTICATED" },
       { status: 401, headers },
     );
   try {
     const backendHeaders = new Headers();
-    applyBackendAuthentication(backendHeaders, request, session);
+    applyBackendAuthentication(backendHeaders, identity);
     const response = await fetchBackend("/api/v1/user/profile/summary", {
       headers: backendHeaders,
       cache: "no-store",

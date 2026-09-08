@@ -41,7 +41,7 @@ export default function SelectionProcessDashboardPage() {
       const response = await fetch(`/api/v1/selective-processes/${processId}/me`, { cache: "no-store" });
       const body = await response.json().catch(() => ({}));
       if (!response.ok || !body?.success) {
-        throw new Error(describeError(body?.error, "Não foi possível carregar sua inscrição."));
+        throw new Error(describeError(body?.code || body?.error, "Não foi possível carregar sua inscrição."));
       }
       setState(body.data as StudentApplicationState);
       setChosenExamIds([]);
@@ -106,7 +106,7 @@ export default function SelectionProcessDashboardPage() {
         <LogIn className="h-12 w-12 text-blue-600" />
         <h1 className="text-3xl font-bold text-slate-950 dark:text-white">Entre para ver sua inscrição</h1>
         <a
-          href={`/auth/login?returnTo=${encodeURIComponent(`/processos-seletivos/${processId}/painel`)}`}
+          href={`/api/auth/login?returnTo=${encodeURIComponent(`/processos-seletivos/${processId}/painel`)}`}
           className="rounded-2xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white"
         >
           Fazer login
