@@ -309,7 +309,7 @@ function StandardFrontStage({ stageId, imageSrc, alt, onAssetLoad, onAssetError,
             <div className="relative flex w-full flex-col items-center justify-center space-y-5" style={{ ...data.eventId.styleContainer }}>
               <p style={{ ...libSourceSerif4.style, ...data.eventId.styleFrontTopperText }}>{data.frontTopperText ?? ""}</p>
               <p style={{ ...libSourceSerif4.style, ...data.eventId.styleNameText }}>{data.ownerName.toUpperCase()}</p>
-              <p className="font-thin">Codigo de verificacao: {String(data._id)}</p>
+              <p className="font-light text-2xl">Codigo de verificacao: {String(data._id)}</p>
               <p className="whitespace-pre-line" style={{ ...libSourceSerif4.style, ...data.eventId.styleFrontBottomText, whiteSpace: "pre-wrap" }}>
                 {(data.frontBottomText ?? "")
                   .replace(/\\n/g, "\n")
