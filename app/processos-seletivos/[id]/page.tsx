@@ -106,7 +106,7 @@ export default function SelectionProcessPage() {
       <header className="glass-panel-strong space-y-4 rounded-3xl border border-white/80 p-6 dark:border-white/10 sm:p-8">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-blue-600">CLAM</p>
         <h1 className="text-3xl font-bold text-slate-950 dark:text-white sm:text-4xl">
-          Processo seletivo {processYear(process.registrationStartDate)}
+          {process.title?.trim() || `Processo seletivo CLAM ${processYear(process.registrationStartDate)}`}
         </h1>
 
         <ul className="grid gap-2 text-sm text-slate-600 dark:text-slate-300 sm:grid-cols-2">
@@ -181,7 +181,8 @@ export default function SelectionProcessPage() {
                 key={exam.id}
                 className="rounded-[22px] border border-white/70 bg-white/80 px-4 py-4 dark:border-white/10 dark:bg-slate-900/72"
               >
-                <p className="font-semibold text-slate-900 dark:text-white">{exam.name}</p>
+                {exam.acronym && <p className="text-xs font-black uppercase tracking-[0.18em] text-blue-600 dark:text-blue-300">{exam.acronym}</p>}
+                <p className={`${exam.acronym ? "mt-1 " : ""}font-semibold text-slate-900 dark:text-white`}>{exam.name}</p>
                 <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                   Prova em {formatDate(exam.examStartDate)}
                 </p>

@@ -1,5 +1,6 @@
 export type SelectionProcessSummary = {
   id: string;
+  title?: string;
   registrationStartDate: string;
   registrationEndDate: string;
   maxExamsPerApplication: number;
@@ -15,6 +16,7 @@ export type SelectionProcessSummary = {
 export type SelectionProcessExam = {
   id: string;
   name: string;
+  acronym?: string;
   examStartDate: string;
   examEndDate: string;
 };

@@ -55,6 +55,7 @@ export default function SelectionProcessesPage() {
       if (!term) return true;
 
       const haystack = [
+        process.title || "",
         formatDate(process.registrationStartDate),
         formatDate(process.registrationEndDate),
         processYear(process.registrationStartDate).toString(),
@@ -86,7 +87,7 @@ export default function SelectionProcessesPage() {
             type="search"
             value={search}
             onChange={(event) => setSearch(event.target.value)}
-            placeholder="Buscar por período ou ano"
+            placeholder="Buscar por título, período ou ano"
             className="w-full rounded-2xl border border-white/70 bg-white/80 py-3 pl-11 pr-4 text-sm text-slate-800 outline-none focus:ring-2 focus:ring-blue-600 dark:border-white/10 dark:bg-slate-900/70 dark:text-slate-100"
           />
         </label>
@@ -149,7 +150,7 @@ export default function SelectionProcessesPage() {
                   </div>
 
                   <h2 className="text-2xl font-semibold text-slate-950 dark:text-white">
-                    Processo seletivo {processYear(process.registrationStartDate)}
+                    {process.title?.trim() || `Processo seletivo CLAM ${processYear(process.registrationStartDate)}`}
                   </h2>
 
                   <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
