@@ -2,19 +2,23 @@
 
 import QRCode from "qrcode";
 import { useEffect, useRef, useState } from "react";
+import { TICKET_QR_OPTIONS } from "@/lib/profile/ticket";
 
-export default function LocalQrCode({ value }: { value: string }) {
+export default function LocalQrCode({
+  value,
+  label = "QR Code pessoal",
+}: {
+  value: string;
+  label?: string;
+}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [error, setError] = useState(false);
   useEffect(() => {
     if (!canvasRef.current) return;
     setError(false);
-    QRCode.toCanvas(canvasRef.current, value, {
-      width: 180,
-      margin: 2,
-      color: { dark: "#ffffff", light: "#0f172a" },
-      errorCorrectionLevel: "M",
-    }).catch(() => setError(true));
+    QRCode.toCanvas(canvasRef.current, value, TICKET_QR_OPTIONS).catch(() =>
+      setError(true),
+    );
   }, [value]);
   if (error)
     return (
@@ -26,7 +30,7 @@ export default function LocalQrCode({ value }: { value: string }) {
     <canvas
       ref={canvasRef}
       role="img"
-      aria-label="QR Code do ingresso"
+      aria-label={label}
       className="rounded-lg"
     />
   );

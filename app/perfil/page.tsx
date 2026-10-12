@@ -45,7 +45,21 @@ interface EventHistory {
   qrToken: string | null;
   checkedIn: boolean;
   checkedInAt: string | null;
+  checkedOut?: boolean;
+  checkedOutAt?: string | null;
+  stages?: EventStage[];
+  attendedStages?: number;
+  totalStages?: number;
+  minAttendancePercent?: number;
   certificateReleased: boolean;
+}
+interface EventStage {
+  id: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  checkedIn: boolean;
+  checkedOut: boolean;
 }
 interface Account {
   email: string;
@@ -254,6 +268,21 @@ export default function PerfilPage() {
                 ? "completo"
                 : "incompleto"}
             </span>
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab("eventos");
+                requestAnimationFrame(() =>
+                  document
+                    .getElementById("meu-qr-code")
+                    ?.scrollIntoView({ behavior: "smooth", block: "center" }),
+                );
+              }}
+              className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white px-5 py-2 text-sm font-semibold text-blue-700 dark:border-blue-800 dark:bg-slate-900 dark:text-blue-300"
+            >
+              <QrCode size={16} />
+              Meu QR Code
+            </button>
             <a
               href="/api/auth/logout"
               className="inline-flex items-center gap-2 rounded-full bg-slate-950 px-5 py-2 text-sm font-semibold text-white dark:bg-slate-800"
@@ -377,6 +406,11 @@ export default function PerfilPage() {
               events={data.events}
               active={active}
               onCancel={cancelSuccess}
+              attendanceQr={data.profile.attendanceQr ?? null}
+              displayName={displayName}
+              profileComplete={
+                data.profile.complete && !data.profile.privacyNoticeRequired
+              }
             />
           ) : null}
           {activeTab === "artigos" ? (
@@ -423,6 +457,13 @@ function TabButton({
     </button>
   );
 }
+function formatTime(value?: string | null) {
+  if (!value) return "";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime())
+    ? ""
+    : ` às ${date.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}`;
+}
 function Stat({ value, label }: { value: number; label: string }) {
   return (
     <div className="rounded-xl bg-slate-100 p-2 dark:bg-slate-800">
@@ -433,17 +474,81 @@ function Stat({ value, label }: { value: number; label: string }) {
     </div>
   );
 }
+function PersonalQrCard({
+  token,
+  name,
+  complete,
+}: {
+  token: string | null;
+  name: string;
+  complete: boolean;
+}) {
+  return (
+    <section
+      id="meu-qr-code"
+      aria-labelledby="meu-qr-code-title"
+      className="rounded-2xl border border-white/90 bg-white/90 p-5 shadow-sm dark:border-white/10 dark:bg-slate-900/80"
+    >
+      <h2
+        id="meu-qr-code-title"
+        className="flex items-center gap-2 text-2xl font-bold text-slate-900 dark:text-white"
+      >
+        <QrCode className="text-blue-600" />
+        Meu QR Code
+      </h2>
+      {token ? (
+        <div className="mt-4 flex flex-col items-center gap-5 sm:flex-row sm:items-start">
+          <div className="rounded-xl bg-white p-2 shadow-inner">
+            <LocalQrCode value={token} label={`QR Code pessoal de ${name}`} />
+          </div>
+          <div className="space-y-3 text-sm text-slate-600 dark:text-slate-300">
+            <p className="font-semibold text-slate-900 dark:text-white">
+              {name}
+            </p>
+            <p>
+              Apresente este código na entrada e na saída dos eventos em que
+              você está inscrito. Ele é o mesmo para todos os eventos.
+            </p>
+            <p className="rounded-lg bg-amber-50 px-3 py-2 text-xs font-medium text-amber-800">
+              Uso pessoal: não compartilhe nem envie imagens deste código.
+            </p>
+          </div>
+        </div>
+      ) : (
+        <p
+          role="status"
+          className="mt-3 text-sm text-slate-600 dark:text-slate-300"
+        >
+          {complete
+            ? "Seu QR Code está temporariamente indisponível. Tente novamente mais tarde ou procure a organização no evento."
+            : "Complete seus dados pessoais e o aceite de privacidade para gerar seu QR Code."}
+        </p>
+      )}
+    </section>
+  );
+}
 function EventsPanel({
   events,
   active,
   onCancel,
+  attendanceQr,
+  displayName,
+  profileComplete,
 }: {
   events: EventHistory[];
   active: EventHistory[];
   onCancel: (id: string) => void;
+  attendanceQr: string | null;
+  displayName: string;
+  profileComplete: boolean;
 }) {
   return (
     <div className="space-y-9">
+      <PersonalQrCard
+        token={attendanceQr}
+        name={displayName}
+        complete={profileComplete}
+      />
       {active.length ? (
         <section>
           <h2 className="mb-4 flex items-center gap-2 text-2xl font-bold text-slate-900 dark:text-white">
@@ -531,7 +636,8 @@ function EventHistoryCard({
 }) {
   const [canceling, setCanceling] = useState(false);
   const [error, setError] = useState("");
-  const [showQr, setShowQr] = useState(false);
+  const confirmed =
+    !event.participationStatus || event.participationStatus === "CONFIRMED";
   const cancel = async () => {
     if (!confirm("Tem certeza que deseja cancelar sua inscrição neste evento?"))
       return;
@@ -594,29 +700,56 @@ function EventHistoryCard({
           {event.checkedIn ? (
             <p className="mt-1.5 flex items-center gap-1 text-xs font-semibold text-emerald-600">
               <MapPin size={12} />
-              Presença confirmada
+              Entrada registrada
+              {formatTime(event.checkedInAt)}
+            </p>
+          ) : null}
+          {event.checkedOut ? (
+            <p className="mt-1 flex items-center gap-1 text-xs font-semibold text-emerald-600">
+              <LogOut size={12} />
+              Saída registrada
+              {formatTime(event.checkedOutAt)}
+            </p>
+          ) : null}
+          {confirmed && event.isOpen && !event.checkedIn ? (
+            <p className="mt-1.5 flex items-center gap-1 text-xs text-slate-500">
+              <QrCode size={12} />
+              Use seu QR Code pessoal na entrada e na saída.
             </p>
           ) : null}
         </div>
       </div>
-      {event.qrToken && event.isOpen ? (
-        <div className="mt-4">
-          <button
-            type="button"
-            onClick={() => setShowQr((value) => !value)}
-            className="flex w-full items-center justify-center gap-2 rounded-xl border border-blue-200 py-2.5 text-sm font-semibold text-blue-600 dark:border-blue-800"
-          >
-            <QrCode size={16} />
-            {showQr ? "Ocultar QR Code do ingresso" : "Ver QR Code do ingresso"}
-          </button>
-          {showQr ? (
-            <div className="mt-3 flex flex-col items-center gap-2 rounded-xl bg-slate-900 p-4">
-              <p className="text-xs text-slate-300">
-                Apresente este código na entrada do evento
-              </p>
-              <LocalQrCode value={event.qrToken} />
-            </div>
-          ) : null}
+      {confirmed && (event.stages?.length || 0) > 1 ? (
+        <div className="mt-4 rounded-xl bg-slate-50 p-3 text-xs dark:bg-slate-800/60">
+          <p className="font-semibold text-slate-700 dark:text-slate-200">
+            Presença: {event.attendedStages || 0} de {event.totalStages} etapas
+            {event.minAttendancePercent && event.minAttendancePercent < 100
+              ? ` (mínimo de ${event.minAttendancePercent}% para o certificado)`
+              : ""}
+          </p>
+          <ul className="mt-2 space-y-1">
+            {(event.stages || []).map((stage) => (
+              <li
+                key={stage.id}
+                className="flex items-center justify-between gap-2 text-slate-600 dark:text-slate-300"
+              >
+                <span className="truncate">{stage.description}</span>
+                <span
+                  className={
+                    stage.checkedIn && stage.checkedOut
+                      ? "shrink-0 font-semibold text-emerald-600"
+                      : "shrink-0 text-slate-500"
+                  }
+                >
+                  {stage.checkedIn && stage.checkedOut
+                    ? "Presença registrada"
+                    : stage.checkedIn
+                      ? "Falta a saída"
+                      : "Sem registro"}
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
       ) : null}
       {event.paymentUrl ? (

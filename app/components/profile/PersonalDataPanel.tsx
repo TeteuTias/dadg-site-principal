@@ -29,6 +29,8 @@ export type OwnProfile = {
   complete: boolean;
   privacyNoticeRequired: boolean;
   updatedAt: string | null;
+  /** QR Code pessoal de presença, assinado pelo backend. */
+  attendanceQr?: string | null;
 };
 export type PrivacyNotice = {
   version: string;

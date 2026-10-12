@@ -26,7 +26,9 @@ export async function proxy(req: NextRequest) {
     }
     const isRegistrationRoute = /^\/api\/v1\/events\/.*\/registration/i.test(pathname);
     const limitToApply = isRegistrationRoute ? 3 : Number(RATE_LIMIT);
-    const { canAccess, unavailable } = await rateLimit(req, limitToApply)
+    // Aluno logado é limitado pela própria conta; sem sessão, o limite continua por IP.
+    const subject = (await auth0.getSession(req).catch(() => null))?.user?.sub;
+    const { canAccess, unavailable } = await rateLimit(req, limitToApply, subject)
 
     if (unavailable && !canAccess) {
       return NextResponse.json(

@@ -43,7 +43,11 @@ async function getMongoClient(): Promise<MongoClient> {
     return clientPromise;
 }
 
-export async function rateLimit(req: NextRequest, limit: number): Promise<{ canAccess: boolean; count?: number; unavailable?: boolean }> {
+/**
+ * `subject` identifica o aluno logado. Com ele o limite é por conta, não por IP:
+ * numa rede compartilhada (Wi-Fi da faculdade) todos dividiriam o mesmo limite.
+ */
+export async function rateLimit(req: NextRequest, limit: number, subject?: string): Promise<{ canAccess: boolean; count?: number; unavailable?: boolean }> {
     let ip = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip');
 
     if (!ip) {
@@ -58,13 +62,14 @@ export async function rateLimit(req: NextRequest, limit: number): Promise<{ canA
     if (ip.includes(',')) ip = ip.split(',')[0].trim();
 
     const path = req.nextUrl.pathname;
+    const who = subject ? `user:${subject}` : ip;
     const now = new Date();
     const minuteWindow = now.toISOString().substring(0, 16);
 
     // O hash gerado será uma String, e é perfeito para ser o _id
     const ipHex = createHash('sha256').update(ip).digest('hex');
     const id = `${minuteWindow}-` + createHash('sha256')
-        .update(`${ip}:${req.nextUrl.origin}:${path}`)
+        .update(`${who}:${req.nextUrl.origin}:${path}`)
         .digest('hex');
     try {
         // 2. Chama a conexão via cache
@@ -113,7 +118,7 @@ export async function rateLimit(req: NextRequest, limit: number): Promise<{ canA
             db.collection<TrafficLog>("trafficLogs").findOneAndUpdate(
                 {
                     _id: `${minuteWindow}-` + createHash('sha256')
-                        .update(`${ip}:${req.nextUrl.origin}:${path}`)
+                        .update(`${who}:${req.nextUrl.origin}:${path}`)
                         .digest('hex'),
                 }, // AQUI NAO É UM OBJECT_ID
                 {
