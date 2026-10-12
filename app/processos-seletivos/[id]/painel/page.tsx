@@ -144,7 +144,7 @@ export default function SelectionProcessDashboardPage() {
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-blue-600">Minha inscrição</p>
           <h1 className="mt-2 text-3xl font-bold text-slate-950 dark:text-white">
-            Processo seletivo {processYear(state.process.registrationStartDate)}
+            {state.process.title?.trim() || `Processo seletivo CLAM ${processYear(state.process.registrationStartDate)}`}
           </h1>
           <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{STATUS_LABELS[state.status]}</p>
         </div>
@@ -260,7 +260,8 @@ export default function SelectionProcessDashboardPage() {
                   >
                     <span className="flex items-start justify-between gap-3">
                       <span>
-                        <span className="block font-semibold text-slate-900 dark:text-white">{exam.name}</span>
+                        {exam.acronym && <span className="block text-xs font-black uppercase tracking-[0.18em] text-blue-600 dark:text-blue-300">{exam.acronym}</span>}
+                        <span className={`${exam.acronym ? "mt-1 " : ""}block font-semibold text-slate-900 dark:text-white`}>{exam.name}</span>
                         <span className="mt-1 block text-xs text-slate-500 dark:text-slate-400">
                           Prova em {formatDate(exam.examStartDate)}
                         </span>
