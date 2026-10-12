@@ -13,6 +13,7 @@ import {
   FileText,
   LayoutGrid,
   Calendar,
+  ClipboardList,
   Mail,
   HelpCircle,
   MessageCircle,
@@ -278,6 +279,7 @@ export default function MenuDrawer({ blogEnabled = true }: { blogEnabled?: boole
           <NavItem href="/certificados" icon={FileText} label="Certificados" />
           <NavItem href="/mural" icon={LayoutGrid} label="Mural" />
           <NavItem href="/eventos" icon={Calendar} label="Eventos" badge={hasNotification ? "1" : null} />
+          <NavItem href="/processos-seletivos" icon={ClipboardList} label="Processos seletivos" />
           {blogEnabled && <NavItem href="/blog" icon={BookOpen} label="Blog" />}
 
           {/* Submenu de Coordenadorias */}
