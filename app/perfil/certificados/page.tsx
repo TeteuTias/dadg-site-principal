@@ -122,7 +122,7 @@ export default function MyCertificates() {
             pattern="[a-fA-F0-9]{24}"
             value={code}
             onChange={(e) => setCode(e.target.value)}
-            className="block w-full rounded border p-3 text-slate-900"
+            className="block w-full rounded border bg-white p-3 text-slate-900 dark:border-white/10 dark:bg-slate-900/70 dark:text-slate-100"
           />
         </label>
         <label className="block">
@@ -133,7 +133,7 @@ export default function MyCertificates() {
             maxLength={1000}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            className="block w-full rounded border p-3 text-slate-900"
+            className="block w-full rounded border bg-white p-3 text-slate-900 dark:border-white/10 dark:bg-slate-900/70 dark:text-slate-100"
           />
         </label>
         <button

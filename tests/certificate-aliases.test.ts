@@ -19,11 +19,26 @@ test("visualizador legado encaminha ao DTO público do backend sem consulta loca
     { params: Promise.resolve({ certificateId: "507f1f77bcf86cd799439011" }) },
   );
   assert.equal(response.status, 200);
-  assert.equal(
-    target,
-    "/api/v1/certificates/507f1f77bcf86cd799439011/download",
-  );
+  // No backend, "/download" é a busca em lista; o visualizador precisa do certificado único.
+  assert.equal(target, "/api/v1/certificates/507f1f77bcf86cd799439011");
   assert.equal((await response.json()).data.ownerCpf, undefined);
+});
+
+test("busca pública encaminha à lista paginada do backend", async () => {
+  let target = "";
+  const route = loadIsolated("app/api/get/myCertificate/[search]/route.ts", {
+    "@/lib/public-backend": {
+      publicBackend: async (path: string) => {
+        target = path;
+        return Response.json({ data: [] });
+      },
+    },
+  });
+  await route.GET(
+    { nextUrl: { search: "?page=2" } },
+    { params: Promise.resolve({ search: "ana maria" }) },
+  );
+  assert.equal(target, "/api/v1/certificates/ana%20maria/download?page=2");
 });
 
 test("configuração ausente de taxa mantém leitura e bloqueia mutações sem banco",async()=>{
