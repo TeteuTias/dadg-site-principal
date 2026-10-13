@@ -35,7 +35,7 @@ export default function MenuDrawer({ blogEnabled = true }: { blogEnabled?: boole
   const [coordenadoriasSubmenuOpen, setCoordenadoriasSubmenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [windowWidth, setWindowWidth] = useState<number>(1024);
-  const [hasNotification, setHasNotification] = useState(false);
+  const [upcoming, setUpcoming] = useState(0);
   const pathname = usePathname() || '/';
   const { theme, setTheme } = useTheme();
   const { isAuthenticated: isLogged, displayName } = useUserContext();
@@ -55,6 +55,13 @@ export default function MenuDrawer({ blogEnabled = true }: { blogEnabled?: boole
 
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  // A agenda (UpcomingSchedulePopup) avisa quantos eventos há nas próximas duas semanas.
+  useEffect(() => {
+    const onUpcoming = (event: Event) => setUpcoming((event as CustomEvent<number>).detail);
+    window.addEventListener("schedule-upcoming", onUpcoming);
+    return () => window.removeEventListener("schedule-upcoming", onUpcoming);
   }, []);
 
   useEffect(() => {
@@ -197,15 +204,15 @@ export default function MenuDrawer({ blogEnabled = true }: { blogEnabled?: boole
               <Link href="/certificados" style={{ color: "white", textDecoration: "none", fontSize: headerFontSize, transition: "color 0.2s hover:text-blue-200" }}>Certificados</Link>
             </div>
 
-            <button aria-label="Abrir programação"
+            <button aria-label={upcoming > 0 ? `Abrir programação: ${upcoming} nas próximas duas semanas` : "Abrir programação"}
               onClick={() => {
                 window.dispatchEvent(new Event('open-schedule-popup'));
-                setHasNotification(false);
+                setUpcoming(0);
               }}
               className="text-white hover:text-blue-200 transition-colors relative flex items-center justify-center w-8 h-8 rounded-full hover:bg-white/10"
             >
               <Bell size={isMobile ? 18 : 20} />
-              {hasNotification && (
+              {upcoming > 0 && (
                 <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-400 rounded-full shadow-[0_0_0_2px_rgba(0,43,91,1)]" style={{ boxShadow: `0 0 0 2px ${headerBackgroundColor}` }}></span>
               )}
             </button>
@@ -278,7 +285,7 @@ export default function MenuDrawer({ blogEnabled = true }: { blogEnabled?: boole
           {!isLogged && <NavItem href="/criar-conta" icon={User} label="Criar conta" />}
           <NavItem href="/certificados" icon={FileText} label="Certificados" />
           <NavItem href="/mural" icon={LayoutGrid} label="Mural" />
-          <NavItem href="/eventos" icon={Calendar} label="Eventos" badge={hasNotification ? "1" : null} />
+          <NavItem href="/eventos" icon={Calendar} label="Eventos" badge={upcoming || null} />
           <NavItem href="/processos-seletivos" icon={ClipboardList} label="Processos seletivos" />
           {blogEnabled && <NavItem href="/blog" icon={BookOpen} label="Blog" />}
 

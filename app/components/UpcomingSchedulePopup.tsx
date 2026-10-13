@@ -75,7 +75,8 @@ export default function UpcomingSchedulePopup() {
   }, []);
 
   useEffect(() => {
-    if (dismissed || !expanded || hasLoaded) return;
+    // Busca ao carregar, mesmo fechado: o sino precisa saber se há programação.
+    if (hasLoaded) return;
 
     const fetchUpcoming = async () => {
       setLoading(true);
@@ -100,7 +101,7 @@ export default function UpcomingSchedulePopup() {
     };
 
     fetchUpcoming();
-  }, [dismissed, expanded, hasLoaded, range.end, range.start]);
+  }, [hasLoaded, range.end, range.start]);
 
   const items = useMemo(() => {
     return events
@@ -109,6 +110,10 @@ export default function UpcomingSchedulePopup() {
       .filter(({ date }) => date >= range.start && date <= range.end)
       .sort((a, b) => a.date.getTime() - b.date.getTime());
   }, [events, range.end, range.start]);
+
+  useEffect(() => {
+    if (hasLoaded) window.dispatchEvent(new CustomEvent("schedule-upcoming", { detail: items.length }));
+  }, [hasLoaded, items.length]);
 
   if (dismissed) return null;
 
@@ -127,18 +132,18 @@ export default function UpcomingSchedulePopup() {
           type="button"
           onClick={() => setExpanded((value) => !value)}
           className="flex flex-1 items-start gap-3 text-left"
-          aria-label={expanded ? "Recolher programacao" : "Expandir programacao"}
+          aria-label={expanded ? "Recolher programação" : "Expandir programação"}
         >
           <div className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-[var(--brand-50)] text-[var(--brand-800)]">
             <CalendarRange className="h-4 w-4" />
           </div>
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-500 dark:text-slate-400">
-              Programacao
+              Programação
             </p>
-            <p className="mt-1 text-sm font-semibold text-slate-950 dark:text-white">Proximas duas semanas</p>
+            <p className="mt-1 text-sm font-semibold text-slate-950 dark:text-white">Próximas duas semanas</p>
             <p className="mt-1 text-xs text-slate-600 dark:text-slate-300">
-              {format(range.start, "dd 'de' MMM", { locale: ptBR })} ate{" "}
+              {format(range.start, "dd 'de' MMM", { locale: ptBR })} até{" "}
               {format(range.end, "dd 'de' MMM", { locale: ptBR })}
             </p>
           </div>
@@ -168,7 +173,7 @@ export default function UpcomingSchedulePopup() {
         <div className="max-h-[min(18rem,calc(100vh-15rem))] space-y-3 overflow-y-auto border-t border-[rgba(9,66,125,0.08)] pt-3 pr-1 md:max-h-[min(18rem,calc(100vh-10rem))]">
           <div className="flex items-center justify-between gap-3">
             <p className="text-xs leading-5 text-slate-600 dark:text-slate-300">
-              Resumo rapido antes de abrir o calendario.
+              Resumo rápido antes de abrir o calendário.
             </p>
             <Link
               href="/eventos"
@@ -189,7 +194,7 @@ export default function UpcomingSchedulePopup() {
             </div>
           ) : items.length === 0 ? (
             <div className="rounded-[20px] border border-dashed border-slate-200 bg-slate-50 px-4 py-5 text-center text-sm font-medium text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
-              Sem eventos nas proximas 2 semanas.
+              Sem eventos nas próximas 2 semanas.
             </div>
           ) : (
             <ul className="space-y-3">
