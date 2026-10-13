@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, LoaderCircle } from "lucide-react";
 import { PageHero } from "@/app/components/site-sections";
@@ -35,6 +35,10 @@ export default function MyCertificates() {
   const [feedback, setFeedback] = useState("");
   const [failed, setFailed] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<{ message: string; page: number } | null>(null);
+  const loadInFlight = useRef(false);
+  const submitInFlight = useRef(false);
   const [auto, setAuto] = useState(false);
   const [busy, setBusy] = useState(false);
   const [page, setPage] = useState(1);
@@ -46,24 +50,42 @@ export default function MyCertificates() {
   };
 
   async function load(p = 1) {
-    const response = await fetch(`/api/v1/user/certificates?page=${p}`);
-    const body = await response.json().catch(() => ({}));
-    if (!response.ok)
-      throw new Error(body.error || "Entre na conta e complete seu perfil.");
-    setItems((previous) => (p === 1 ? body.data : [...previous, ...body.data]));
-    setClaims(body.claims);
-    setAuto(body.automaticEnabled);
-    setMore(body.hasMore);
-    setPage(p);
+    // Bloqueia inclusive dois cliques antes de o React atualizar o botão.
+    if (loadInFlight.current) return;
+    loadInFlight.current = true;
+    setLoading(true);
+    setLoadError(null);
+    try {
+      const response = await fetch(`/api/v1/user/certificates?page=${p}`);
+      const body = await response.json().catch(() => ({}));
+      if (!response.ok)
+        throw new Error(body.error || "Entre na conta e complete seu perfil.");
+      if (!Array.isArray(body.data) || !Array.isArray(body.claims))
+        throw new Error("Não foi possível consultar seus certificados. Tente novamente.");
+      setItems((previous) => (p === 1 ? body.data : [...previous, ...body.data]));
+      setClaims(body.claims);
+      setAuto(body.automaticEnabled === true);
+      setMore(body.hasMore === true);
+      setPage(p);
+      setLoaded(true);
+    } catch (error) {
+      setLoadError({
+        message: error instanceof Error ? error.message : "Falha de conexão.",
+        page: p,
+      });
+    } finally {
+      loadInFlight.current = false;
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
-    void load()
-      .catch(fail)
-      .finally(() => setLoaded(true));
+    void load();
   }, []);
 
   async function submit(path: string, body?: unknown) {
+    if (submitInFlight.current || loadInFlight.current) return;
+    submitInFlight.current = true;
     setBusy(true);
     setFailed(false);
     setFeedback("");
@@ -89,6 +111,7 @@ export default function MyCertificates() {
     } catch (error) {
       fail(error);
     } finally {
+      submitInFlight.current = false;
       setBusy(false);
     }
   }
@@ -111,7 +134,7 @@ export default function MyCertificates() {
         description="Certificados vinculados à sua conta. Os históricos podem ser vinculados sem criar inscrições antigas."
         actions={
           auto ? (
-            <button type="button" disabled={busy} onClick={() => void submit("link")} className={primaryButton}>
+            <button type="button" disabled={busy || loading} onClick={() => void submit("link")} className={primaryButton}>
               Procurar correspondências verificadas
             </button>
           ) : undefined
@@ -119,6 +142,21 @@ export default function MyCertificates() {
       />
 
       <section className="page-shell space-y-6">
+        {loadError ? (
+          <div role="alert" className="rounded-[26px] border border-red-200 bg-red-50 px-5 py-4 text-sm font-medium text-red-700 dark:border-red-900/50 dark:bg-red-950/30 dark:text-red-300">
+            <p>{loadError.message}</p>
+            <button
+              type="button"
+              disabled={busy || loading}
+              onClick={() => {
+                if (!submitInFlight.current) void load(loadError.page);
+              }}
+              className="mt-3 font-semibold underline disabled:opacity-70"
+            >
+              Tentar novamente
+            </button>
+          </div>
+        ) : null}
         {feedback ? (
           <p
             role={failed ? "alert" : "status"}
@@ -132,7 +170,7 @@ export default function MyCertificates() {
           </p>
         ) : null}
 
-        {!loaded ? (
+        {!loaded && loading ? (
           <div
             role="status"
             aria-live="polite"
@@ -141,7 +179,7 @@ export default function MyCertificates() {
             <LoaderCircle className="mr-3 h-5 w-5 animate-spin text-[var(--brand-800)]" />
             Carregando certificados...
           </div>
-        ) : items.length === 0 ? (
+        ) : !loaded ? null : items.length === 0 ? (
           <div className="rounded-[26px] border border-dashed border-[rgba(9,66,125,0.18)] bg-white px-5 py-10 text-center text-sm font-medium text-slate-500 dark:bg-slate-900/68 dark:text-slate-400">
             Nenhum certificado vinculado à sua conta ainda.
           </div>
@@ -173,10 +211,14 @@ export default function MyCertificates() {
         {more ? (
           <button
             type="button"
-            onClick={() => void load(page + 1).catch(fail)}
-            className="mx-auto flex h-12 items-center justify-center gap-2 rounded-full border border-[rgba(9,66,125,0.14)] bg-white px-6 text-sm font-semibold text-slate-800 shadow-[0_18px_40px_rgba(7,48,89,0.08)] transition-colors hover:border-[var(--brand-800)] dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-100"
+            disabled={loading || busy}
+            onClick={() => {
+              if (!submitInFlight.current) void load(page + 1);
+            }}
+            className="mx-auto flex h-12 items-center justify-center gap-2 rounded-full border border-[rgba(9,66,125,0.14)] bg-white px-6 text-sm font-semibold text-slate-800 shadow-[0_18px_40px_rgba(7,48,89,0.08)] transition-colors hover:border-[var(--brand-800)] disabled:opacity-70 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-100"
           >
-            Carregar mais
+            {loading ? <LoaderCircle className="h-4 w-4 animate-spin" /> : null}
+            {loading ? "Carregando..." : "Carregar mais"}
           </button>
         ) : null}
       </section>
@@ -203,6 +245,7 @@ export default function MyCertificates() {
           <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200">
             Código do certificado
             <input
+              disabled={busy}
               required
               pattern="[a-fA-F0-9]{24}"
               title="Código verificador com 24 caracteres"
@@ -215,6 +258,7 @@ export default function MyCertificates() {
           <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200">
             Informações para conferência
             <textarea
+              disabled={busy}
               required
               minLength={10}
               maxLength={1000}
@@ -224,8 +268,8 @@ export default function MyCertificates() {
               className={inputClass}
             />
           </label>
-          <button disabled={busy} className={primaryButton}>
-            Enviar solicitação
+          <button disabled={busy || loading} className={primaryButton}>
+            {busy ? "Enviando..." : "Enviar solicitação"}
             <ArrowRight className="h-4 w-4" />
           </button>
         </form>
@@ -233,7 +277,11 @@ export default function MyCertificates() {
         <div className={panel}>
           <p className={eyebrow}>Acompanhamento</p>
           <h2 className="mt-2 text-xl font-semibold text-slate-950 dark:text-white">Minhas solicitações</h2>
-          {claims.length === 0 ? (
+          {!loaded ? (
+            <p role="status" className="mt-5 text-sm text-slate-600 dark:text-slate-300">
+              {loading ? "Carregando solicitações..." : "Não foi possível carregar suas solicitações."}
+            </p>
+          ) : claims.length === 0 ? (
             <p className="mt-5 text-sm text-slate-600 dark:text-slate-300">Nenhuma solicitação enviada.</p>
           ) : (
             <ul className="mt-5 space-y-3">

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { addDays, endOfDay, format, startOfDay } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -35,6 +35,8 @@ export default function UpcomingSchedulePopup() {
   const [loading, setLoading] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
   const [unavailable, setUnavailable] = useState(false);
+  const requestInFlight = useRef(false);
+  const loadedSuccessfully = useRef(false);
 
   const range = useMemo(() => {
     const now = new Date();
@@ -74,34 +76,41 @@ export default function UpcomingSchedulePopup() {
     return () => window.removeEventListener("open-schedule-popup", handleTogglePopup);
   }, []);
 
+  const fetchUpcoming = useCallback(async () => {
+    if (requestInFlight.current || loadedSuccessfully.current) return;
+    requestInFlight.current = true;
+    setLoading(true);
+
+    try {
+      const res = await fetch(
+        `/api/get/eventsByDate?start=${encodeURIComponent(range.start.toISOString())}&end=${encodeURIComponent(range.end.toISOString())}`
+      );
+
+      if (!res.ok) throw new Error("Erro ao buscar eventos");
+
+      const data = await res.json();
+      if (data.unavailable === true) throw new Error("Agenda indisponível");
+      setEvents((data.items || []) as CalendarEvent[]);
+      setUnavailable(false);
+      loadedSuccessfully.current = true;
+    } catch {
+      setEvents([]);
+      setUnavailable(true);
+    } finally {
+      setLoading(false);
+      setHasLoaded(true);
+      requestInFlight.current = false;
+    }
+  }, [range.end, range.start]);
+
   useEffect(() => {
-    // Busca ao carregar, mesmo fechado: o sino precisa saber se há programação.
-    if (hasLoaded) return;
+    // Pré-carrega para o sino; uma falha permite tentar novamente ao abrir.
+    void fetchUpcoming();
+  }, [fetchUpcoming]);
 
-    const fetchUpcoming = async () => {
-      setLoading(true);
-
-      try {
-        const res = await fetch(
-          `/api/get/eventsByDate?start=${encodeURIComponent(range.start.toISOString())}&end=${encodeURIComponent(range.end.toISOString())}`
-        );
-
-        if (!res.ok) throw new Error("Erro ao buscar eventos");
-
-        const data = await res.json();
-        setEvents((data.items || []) as CalendarEvent[]);
-        setUnavailable(data.unavailable === true);
-      } catch {
-        setEvents([]);
-        setUnavailable(true);
-      } finally {
-        setLoading(false);
-        setHasLoaded(true);
-      }
-    };
-
-    fetchUpcoming();
-  }, [hasLoaded, range.end, range.start]);
+  useEffect(() => {
+    if (!dismissed && expanded) void fetchUpcoming();
+  }, [dismissed, expanded, fetchUpcoming]);
 
   const items = useMemo(() => {
     return events
@@ -190,7 +199,10 @@ export default function UpcomingSchedulePopup() {
             </div>
           ) : unavailable ? (
             <div className="rounded-[20px] border border-dashed border-slate-200 bg-slate-50 px-4 py-5 text-center text-sm font-medium text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
-              Programação indisponível no momento.
+              <p role="status">Programação indisponível no momento.</p>
+              <button type="button" onClick={() => void fetchUpcoming()} className="mt-3 font-semibold text-blue-600 underline dark:text-blue-300">
+                Tentar novamente
+              </button>
             </div>
           ) : items.length === 0 ? (
             <div className="rounded-[20px] border border-dashed border-slate-200 bg-slate-50 px-4 py-5 text-center text-sm font-medium text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">

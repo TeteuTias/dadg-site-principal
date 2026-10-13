@@ -36,6 +36,7 @@ export default function MenuDrawer({ blogEnabled = true }: { blogEnabled?: boole
   const [mounted, setMounted] = useState(false);
   const [windowWidth, setWindowWidth] = useState<number>(1024);
   const [upcoming, setUpcoming] = useState(0);
+  const [hasNotification, setHasNotification] = useState(false);
   const pathname = usePathname() || '/';
   const { theme, setTheme } = useTheme();
   const { isAuthenticated: isLogged, displayName } = useUserContext();
@@ -59,7 +60,11 @@ export default function MenuDrawer({ blogEnabled = true }: { blogEnabled?: boole
 
   // A agenda (UpcomingSchedulePopup) avisa quantos eventos há nas próximas duas semanas.
   useEffect(() => {
-    const onUpcoming = (event: Event) => setUpcoming((event as CustomEvent<number>).detail);
+    const onUpcoming = (event: Event) => {
+      const count = (event as CustomEvent<number>).detail;
+      setUpcoming(count);
+      setHasNotification(count > 0);
+    };
     window.addEventListener("schedule-upcoming", onUpcoming);
     return () => window.removeEventListener("schedule-upcoming", onUpcoming);
   }, []);
@@ -207,12 +212,12 @@ export default function MenuDrawer({ blogEnabled = true }: { blogEnabled?: boole
             <button aria-label={upcoming > 0 ? `Abrir programação: ${upcoming} nas próximas duas semanas` : "Abrir programação"}
               onClick={() => {
                 window.dispatchEvent(new Event('open-schedule-popup'));
-                setUpcoming(0);
+                setHasNotification(false);
               }}
               className="text-white hover:text-blue-200 transition-colors relative flex items-center justify-center w-8 h-8 rounded-full hover:bg-white/10"
             >
               <Bell size={isMobile ? 18 : 20} />
-              {upcoming > 0 && (
+              {hasNotification && (
                 <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-400 rounded-full shadow-[0_0_0_2px_rgba(0,43,91,1)]" style={{ boxShadow: `0 0 0 2px ${headerBackgroundColor}` }}></span>
               )}
             </button>
