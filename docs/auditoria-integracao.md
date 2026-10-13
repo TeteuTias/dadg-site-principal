@@ -9,7 +9,7 @@ Branch `codex/auditoria-integracao`, base `14ed0c9`. Requer a branch homônima d
 - `/perfil/certificados`: biblioteca pessoal, solicitação manual e botão de correspondências quando autorizado no backend.
 - Busca pública paginada sem armazenar resultados pessoais em localStorage; aliases de consulta, PDF, scan, eventos e ligas centralizados no backend. Rotas administrativas locais antigas respondem 410.
 - Estatísticas reais; ouvidoria com categorias compartilhadas e falha de envio explícita; mural com tratamento de indisponibilidade, data e sem redirecionar todos os avisos a certificados.
-- Painel de acesso rápido na home (cartão da área do aluno conforme a sessão e quatro serviços, abaixo da capa), "Processos seletivos" no menu lateral, navegação por teclado, foco do menu, link para pular conteúdo, agenda sem abertura automática, ajustes de movimento, metadados, sitemap, robots e páginas de erro.
+- Painel de acesso rápido na home (cartão da área do aluno conforme a sessão e quatro serviços, abaixo da capa), "Processos seletivos" no menu lateral, navegação por teclado, foco do menu, link para pular conteúdo, agenda fechada até o clique no sino (a bolinha acende quando há programação nas próximas duas semanas), ajustes de movimento, metadados, sitemap e robots. Páginas de erro, de "não encontrada" e "Meus certificados" seguem o padrão visual do site.
 - Dependências atualizadas e CI de lint, tipos, testes, auditoria e build.
 
 ## Configuração
