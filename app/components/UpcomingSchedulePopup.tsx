@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { addDays, endOfDay, format, startOfDay } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -35,6 +35,8 @@ export default function UpcomingSchedulePopup() {
   const [loading, setLoading] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
   const [unavailable, setUnavailable] = useState(false);
+  const requestInFlight = useRef(false);
+  const loadedSuccessfully = useRef(false);
 
   const range = useMemo(() => {
     const now = new Date();
@@ -74,33 +76,41 @@ export default function UpcomingSchedulePopup() {
     return () => window.removeEventListener("open-schedule-popup", handleTogglePopup);
   }, []);
 
+  const fetchUpcoming = useCallback(async () => {
+    if (requestInFlight.current || loadedSuccessfully.current) return;
+    requestInFlight.current = true;
+    setLoading(true);
+
+    try {
+      const res = await fetch(
+        `/api/get/eventsByDate?start=${encodeURIComponent(range.start.toISOString())}&end=${encodeURIComponent(range.end.toISOString())}`
+      );
+
+      if (!res.ok) throw new Error("Erro ao buscar eventos");
+
+      const data = await res.json();
+      if (data.unavailable === true) throw new Error("Agenda indisponível");
+      setEvents((data.items || []) as CalendarEvent[]);
+      setUnavailable(false);
+      loadedSuccessfully.current = true;
+    } catch {
+      setEvents([]);
+      setUnavailable(true);
+    } finally {
+      setLoading(false);
+      setHasLoaded(true);
+      requestInFlight.current = false;
+    }
+  }, [range.end, range.start]);
+
   useEffect(() => {
-    if (dismissed || !expanded || hasLoaded) return;
+    // Pré-carrega para o sino; uma falha permite tentar novamente ao abrir.
+    void fetchUpcoming();
+  }, [fetchUpcoming]);
 
-    const fetchUpcoming = async () => {
-      setLoading(true);
-
-      try {
-        const res = await fetch(
-          `/api/get/eventsByDate?start=${encodeURIComponent(range.start.toISOString())}&end=${encodeURIComponent(range.end.toISOString())}`
-        );
-
-        if (!res.ok) throw new Error("Erro ao buscar eventos");
-
-        const data = await res.json();
-        setEvents((data.items || []) as CalendarEvent[]);
-        setUnavailable(data.unavailable === true);
-      } catch {
-        setEvents([]);
-        setUnavailable(true);
-      } finally {
-        setLoading(false);
-        setHasLoaded(true);
-      }
-    };
-
-    fetchUpcoming();
-  }, [dismissed, expanded, hasLoaded, range.end, range.start]);
+  useEffect(() => {
+    if (!dismissed && expanded) void fetchUpcoming();
+  }, [dismissed, expanded, fetchUpcoming]);
 
   const items = useMemo(() => {
     return events
@@ -109,6 +119,10 @@ export default function UpcomingSchedulePopup() {
       .filter(({ date }) => date >= range.start && date <= range.end)
       .sort((a, b) => a.date.getTime() - b.date.getTime());
   }, [events, range.end, range.start]);
+
+  useEffect(() => {
+    if (hasLoaded) window.dispatchEvent(new CustomEvent("schedule-upcoming", { detail: items.length }));
+  }, [hasLoaded, items.length]);
 
   if (dismissed) return null;
 
@@ -127,18 +141,18 @@ export default function UpcomingSchedulePopup() {
           type="button"
           onClick={() => setExpanded((value) => !value)}
           className="flex flex-1 items-start gap-3 text-left"
-          aria-label={expanded ? "Recolher programacao" : "Expandir programacao"}
+          aria-label={expanded ? "Recolher programação" : "Expandir programação"}
         >
           <div className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-[var(--brand-50)] text-[var(--brand-800)]">
             <CalendarRange className="h-4 w-4" />
           </div>
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-500 dark:text-slate-400">
-              Programacao
+              Programação
             </p>
-            <p className="mt-1 text-sm font-semibold text-slate-950 dark:text-white">Proximas duas semanas</p>
+            <p className="mt-1 text-sm font-semibold text-slate-950 dark:text-white">Próximas duas semanas</p>
             <p className="mt-1 text-xs text-slate-600 dark:text-slate-300">
-              {format(range.start, "dd 'de' MMM", { locale: ptBR })} ate{" "}
+              {format(range.start, "dd 'de' MMM", { locale: ptBR })} até{" "}
               {format(range.end, "dd 'de' MMM", { locale: ptBR })}
             </p>
           </div>
@@ -168,7 +182,7 @@ export default function UpcomingSchedulePopup() {
         <div className="max-h-[min(18rem,calc(100vh-15rem))] space-y-3 overflow-y-auto border-t border-[rgba(9,66,125,0.08)] pt-3 pr-1 md:max-h-[min(18rem,calc(100vh-10rem))]">
           <div className="flex items-center justify-between gap-3">
             <p className="text-xs leading-5 text-slate-600 dark:text-slate-300">
-              Resumo rapido antes de abrir o calendario.
+              Resumo rápido antes de abrir o calendário.
             </p>
             <Link
               href="/eventos"
@@ -185,11 +199,14 @@ export default function UpcomingSchedulePopup() {
             </div>
           ) : unavailable ? (
             <div className="rounded-[20px] border border-dashed border-slate-200 bg-slate-50 px-4 py-5 text-center text-sm font-medium text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
-              Programação indisponível no momento.
+              <p role="status">Programação indisponível no momento.</p>
+              <button type="button" onClick={() => void fetchUpcoming()} className="mt-3 font-semibold text-blue-600 underline dark:text-blue-300">
+                Tentar novamente
+              </button>
             </div>
           ) : items.length === 0 ? (
             <div className="rounded-[20px] border border-dashed border-slate-200 bg-slate-50 px-4 py-5 text-center text-sm font-medium text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
-              Sem eventos nas proximas 2 semanas.
+              Sem eventos nas próximas 2 semanas.
             </div>
           ) : (
             <ul className="space-y-3">

@@ -35,6 +35,7 @@ export default function MenuDrawer({ blogEnabled = true }: { blogEnabled?: boole
   const [coordenadoriasSubmenuOpen, setCoordenadoriasSubmenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [windowWidth, setWindowWidth] = useState<number>(1024);
+  const [upcoming, setUpcoming] = useState(0);
   const [hasNotification, setHasNotification] = useState(false);
   const pathname = usePathname() || '/';
   const { theme, setTheme } = useTheme();
@@ -55,6 +56,17 @@ export default function MenuDrawer({ blogEnabled = true }: { blogEnabled?: boole
 
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  // A agenda (UpcomingSchedulePopup) avisa quantos eventos há nas próximas duas semanas.
+  useEffect(() => {
+    const onUpcoming = (event: Event) => {
+      const count = (event as CustomEvent<number>).detail;
+      setUpcoming(count);
+      setHasNotification(count > 0);
+    };
+    window.addEventListener("schedule-upcoming", onUpcoming);
+    return () => window.removeEventListener("schedule-upcoming", onUpcoming);
   }, []);
 
   useEffect(() => {
@@ -197,7 +209,7 @@ export default function MenuDrawer({ blogEnabled = true }: { blogEnabled?: boole
               <Link href="/certificados" style={{ color: "white", textDecoration: "none", fontSize: headerFontSize, transition: "color 0.2s hover:text-blue-200" }}>Certificados</Link>
             </div>
 
-            <button aria-label="Abrir programação"
+            <button aria-label={upcoming > 0 ? `Abrir programação: ${upcoming} nas próximas duas semanas` : "Abrir programação"}
               onClick={() => {
                 window.dispatchEvent(new Event('open-schedule-popup'));
                 setHasNotification(false);
@@ -278,7 +290,7 @@ export default function MenuDrawer({ blogEnabled = true }: { blogEnabled?: boole
           {!isLogged && <NavItem href="/criar-conta" icon={User} label="Criar conta" />}
           <NavItem href="/certificados" icon={FileText} label="Certificados" />
           <NavItem href="/mural" icon={LayoutGrid} label="Mural" />
-          <NavItem href="/eventos" icon={Calendar} label="Eventos" badge={hasNotification ? "1" : null} />
+          <NavItem href="/eventos" icon={Calendar} label="Eventos" badge={upcoming || null} />
           <NavItem href="/processos-seletivos" icon={ClipboardList} label="Processos seletivos" />
           {blogEnabled && <NavItem href="/blog" icon={BookOpen} label="Blog" />}
 

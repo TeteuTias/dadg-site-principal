@@ -244,11 +244,6 @@ export default function PerfilPage() {
 
   return (
     <main className="space-y-9 pt-28 pb-12">
-      <div className="page-shell">
-        <Link className="underline font-semibold" href="/perfil/certificados">
-          Meus certificados e solicitações de vínculo
-        </Link>
-      </div>
       <PageHero
         eyebrow="Meu perfil"
         title={displayName}
@@ -283,6 +278,13 @@ export default function PerfilPage() {
               <QrCode size={16} />
               Meu QR Code
             </button>
+            <Link
+              href="/perfil/certificados"
+              className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white px-5 py-2 text-sm font-semibold text-blue-700 dark:border-blue-800 dark:bg-slate-900 dark:text-blue-300"
+            >
+              <Award size={16} />
+              Meus certificados
+            </Link>
             <a
               href="/api/auth/logout"
               className="inline-flex items-center gap-2 rounded-full bg-slate-950 px-5 py-2 text-sm font-semibold text-white dark:bg-slate-800"
