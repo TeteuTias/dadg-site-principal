@@ -145,7 +145,7 @@ export default function PersonalDataPanel({
         setStatus("error");
         setMessage(
           data.code === "CPF_ALREADY_IN_USE"
-            ? "Este CPF já está associado a um perfil."
+            ? "Este CPF já está associado a outra conta. Se ele é seu, fale com o DADG pela Ouvidoria do site para resolvermos."
             : data.error || "Não foi possível salvar o perfil.",
         );
         focusFirst(backendFields);
