@@ -43,7 +43,7 @@ test("busca pública encaminha à lista paginada do backend", async () => {
 
 test("configuração ausente de taxa mantém leitura e bloqueia mutações sem banco",async()=>{
  const previous=process.env.RATE_LIMIT;delete process.env.RATE_LIMIT;let called=false;
- try{const {NextRequest}=await import("next/server");const route=loadIsolated("proxy.ts",{"./app/src/lib/auth0/Auth0Client":{auth0:{}},"./lib/RateLimit":{rateLimit:async()=>{called=true;return {canAccess:true};}}});
+ try{const {NextRequest,NextResponse}=await import("next/server");const route=loadIsolated("proxy.ts",{"./app/src/lib/auth0/Auth0Client":{auth0:{middleware:async()=>NextResponse.next()}},"./lib/RateLimit":{rateLimit:async()=>{called=true;return {canAccess:true};}}});
  assert.equal((await route.proxy(new NextRequest("https://fixture.invalid/api/get/homeStats"))).status,200);
  assert.equal((await route.proxy(new NextRequest("https://fixture.invalid/api/ouvidoria",{method:"POST"}))).status,503);assert.equal(called,false);}
  finally{if(previous===undefined)delete process.env.RATE_LIMIT;else process.env.RATE_LIMIT=previous;}
