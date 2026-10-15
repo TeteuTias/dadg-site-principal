@@ -45,25 +45,19 @@ export async function proxy(req: NextRequest) {
   }
 
   if (pathname.startsWith("/panel")) {
-    const session = await auth0.getSession()
+    const session = await auth0.getSession(req)
     if (!session) {
-      return NextResponse.redirect(new URL(`/auth/login?returnTo=${encodeURIComponent(pathname)}`, req.url));
+      return NextResponse.redirect(new URL(`/api/auth/login?returnTo=${encodeURIComponent(pathname)}`, req.url));
     }
-    return await auth0.middleware(req)
   }
 
-  // Suporte ao fluxo de login/logout do Auth0 no frontend
-  if (isAuthRoute) {
-    return await auth0.middleware(req)
-  }
-
-  return NextResponse.next()
+  // O SDK precisa processar todas as requisições cobertas pelo matcher para
+  // manter a sessão rolante e persistir renovações do access token.
+  return await auth0.middleware(req)
 }
 
 export const config = {
   matcher: [
-    '/panel/:path*',
-    '/auth/:path*',
-    '/api/:path*',
+    '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
   ],
 }

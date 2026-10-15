@@ -32,6 +32,7 @@ export default function MyCertificates() {
   const [claims, setClaims] = useState<Claim[]>([]);
   const [code, setCode] = useState("");
   const [message, setMessage] = useState("");
+  const [evidenceEmail, setEvidenceEmail] = useState("");
   const [feedback, setFeedback] = useState("");
   const [failed, setFailed] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -106,6 +107,7 @@ export default function MyCertificates() {
       if (path === "claims") {
         setCode("");
         setMessage("");
+        setEvidenceEmail("");
       }
       await load();
     } catch (error) {
@@ -228,7 +230,7 @@ export default function MyCertificates() {
           className={`${panel} space-y-5`}
           onSubmit={(event) => {
             event.preventDefault();
-            void submit("claims", { certificateId: code.trim(), message });
+            void submit("claims", { certificateId: code.trim(), message, evidenceEmail: evidenceEmail.trim() });
           }}
         >
           <div>
@@ -267,6 +269,21 @@ export default function MyCertificates() {
               onChange={(event) => setMessage(event.target.value)}
               className={inputClass}
             />
+          </label>
+          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200">
+            E-mail que você usava nas inscrições (opcional)
+            <input
+              disabled={busy}
+              type="email"
+              maxLength={254}
+              value={evidenceEmail}
+              onChange={(event) => setEvidenceEmail(event.target.value)}
+              className={inputClass}
+              autoComplete="email"
+            />
+            <span className="mt-1 block text-xs font-normal text-slate-500 dark:text-slate-400">
+              Ajuda a organização a conferir que o certificado é seu.
+            </span>
           </label>
           <button disabled={busy || loading} className={primaryButton}>
             {busy ? "Enviando..." : "Enviar solicitação"}
