@@ -44,6 +44,7 @@ export default function MyCertificates() {
   const [busy, setBusy] = useState(false);
   const [page, setPage] = useState(1);
   const [more, setMore] = useState(false);
+  const [total, setTotal] = useState<number | null>(null);
 
   const fail = (error: unknown) => {
     setFailed(true);
@@ -67,6 +68,7 @@ export default function MyCertificates() {
       setClaims(body.claims);
       setAuto(body.automaticEnabled === true);
       setMore(body.hasMore === true);
+      setTotal(typeof body.total === "number" ? body.total : null);
       setPage(p);
       setLoaded(true);
     } catch (error) {
@@ -139,6 +141,20 @@ export default function MyCertificates() {
             <button type="button" disabled={busy || loading} onClick={() => void submit("link")} className={primaryButton}>
               Procurar correspondências verificadas
             </button>
+          ) : undefined
+        }
+        aside={
+          loaded ? (
+            <div className="glass-panel surface-outline rounded-[28px] border border-white/70 p-5 dark:border-white/10">
+              <p className={eyebrow}>Total vinculado</p>
+              {/* Total do backend; sem ele (versão antiga), a contagem do que já foi carregado. */}
+              <p className="mt-2 text-4xl font-semibold tabular-nums text-slate-950 dark:text-white">
+                {total ?? `${items.length}${more ? "+" : ""}`}
+              </p>
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                {(total ?? items.length) === 1 ? "certificado" : "certificados"}
+              </p>
+            </div>
           ) : undefined
         }
       />

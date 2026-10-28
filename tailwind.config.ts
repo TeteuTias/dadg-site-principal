@@ -19,6 +19,11 @@ const config = {
       },
     },
     extend: {
+      // O Tailwind 3 só gera opacidades da escala padrão (múltiplos de 5); classes como
+      // `dark:bg-slate-900/72` eram descartadas e os cards ficavam brancos no modo escuro.
+      opacity: Object.fromEntries(
+        [6, 12, 16, 18, 28, 56, 68, 72, 76, 78, 82, 84, 86, 88, 92].map((v) => [v, String(v / 100)]),
+      ),
       fontFamily: {
         sans: ["var(--font-inter)", "sans-serif"],
         serif: ["var(--font-playfair)", "serif"],
