@@ -6,6 +6,13 @@ type RouteContext = {
 };
 
 const SAFE_METHODS = new Set(["GET", "HEAD", "OPTIONS"]);
+// O vínculo automático percorre todos os certificados do CPF de uma vez; os 10 s
+// padrão do proxy não bastam para quem tem muitos.
+const SLOW_ROUTES_TIMEOUT_MS = 45_000;
+const isSlowRoute = (method: string, path: string[]) =>
+  method === "POST" && path.join("/") === "user/certificates/link";
+// Teto da função no Vercel acima do timeout acima.
+export const maxDuration = 60;
 const RESPONSE_HEADERS = [
   "cache-control",
   "content-disposition",
@@ -40,12 +47,16 @@ async function forwardRequest(request: NextRequest, { params }: RouteContext) {
   }
 
   try {
-    const upstream = await fetchBackend(targetPath, {
-      method: request.method,
-      headers,
-      body: SAFE_METHODS.has(request.method) ? undefined : await request.arrayBuffer(),
-      cache: "no-store",
-    });
+    const upstream = await fetchBackend(
+      targetPath,
+      {
+        method: request.method,
+        headers,
+        body: SAFE_METHODS.has(request.method) ? undefined : await request.arrayBuffer(),
+        cache: "no-store",
+      },
+      isSlowRoute(request.method, path) ? SLOW_ROUTES_TIMEOUT_MS : undefined,
+    );
 
     if (sessionError && upstream.status === 401) {
       return NextResponse.json(
