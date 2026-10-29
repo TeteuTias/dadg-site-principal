@@ -24,6 +24,19 @@ const eyebrow = "text-xs font-semibold uppercase tracking-[0.28em] text-slate-50
 const panel = "glass-panel surface-outline rounded-[32px] border border-white/70 p-6 sm:p-7 dark:border-white/10";
 const inputClass =
   "mt-2 w-full rounded-2xl border border-white/70 bg-white/85 px-4 py-3 text-sm text-slate-800 outline-none focus:ring-2 focus:ring-blue-600 dark:border-white/10 dark:bg-slate-900/70 dark:text-slate-100";
+// Vínculo automático ao abrir a página: uma vez por sessão do navegador.
+const AUTO_LINK_KEY = "dadg:auto-link";
+
+function linkFeedback(result: { linked?: unknown; review?: unknown }) {
+  const linked = Number(result.linked) || 0;
+  const review = Number(result.review) || 0;
+  const parts = [
+    linked ? `${linked} certificado(s) vinculado(s) à sua conta.` : "",
+    review ? `${review} aguardando revisão do DADG.` : "",
+  ].filter(Boolean);
+  return parts.length ? parts.join(" ") : "Nenhum certificado novo encontrado.";
+}
+
 const primaryButton =
   "inline-flex items-center justify-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[var(--brand-900)] disabled:opacity-70 dark:bg-blue-600 dark:hover:bg-blue-500";
 
@@ -40,6 +53,7 @@ export default function MyCertificates() {
   const [loadError, setLoadError] = useState<{ message: string; page: number } | null>(null);
   const loadInFlight = useRef(false);
   const submitInFlight = useRef(false);
+  const autoLinkStarted = useRef(false);
   const [auto, setAuto] = useState(false);
   const [busy, setBusy] = useState(false);
   const [page, setPage] = useState(1);
@@ -86,7 +100,19 @@ export default function MyCertificates() {
     void load();
   }, []);
 
-  async function submit(path: string, body?: unknown) {
+  useEffect(() => {
+    if (!auto || !loaded || autoLinkStarted.current) return;
+    autoLinkStarted.current = true;
+    try {
+      if (sessionStorage.getItem(AUTO_LINK_KEY)) return;
+      sessionStorage.setItem(AUTO_LINK_KEY, "1");
+    } catch {
+      // Sem sessionStorage (aba privada), roda a cada abertura da página.
+    }
+    void submit("link", undefined, true);
+  }, [auto, loaded]);
+
+  async function submit(path: string, body?: unknown, quiet = false) {
     if (submitInFlight.current || loadInFlight.current) return;
     submitInFlight.current = true;
     setBusy(true);
@@ -101,11 +127,9 @@ export default function MyCertificates() {
       const result = await response.json().catch(() => ({}));
       if (!response.ok)
         throw new Error(result.error || "Não foi possível concluir. Tente novamente.");
-      setFeedback(
-        path === "link"
-          ? `${result.linked} certificado(s) vinculado(s).`
-          : "Solicitação enviada para revisão.",
-      );
+      // Em segundo plano só avisa quando achou algo.
+      if (quiet && !result.linked && !result.review) return;
+      setFeedback(path === "link" ? linkFeedback(result) : "Solicitação enviada para revisão.");
       if (path === "claims") {
         setCode("");
         setMessage("");
@@ -113,7 +137,7 @@ export default function MyCertificates() {
       }
       await load();
     } catch (error) {
-      fail(error);
+      if (!quiet) fail(error);
     } finally {
       submitInFlight.current = false;
       setBusy(false);
@@ -135,11 +159,12 @@ export default function MyCertificates() {
       <PageHero
         eyebrow="Área do aluno"
         title="Meus certificados"
-        description="Certificados vinculados à sua conta. Os históricos podem ser vinculados sem criar inscrições antigas."
+        description="Os certificados com seus dados são vinculados à sua conta automaticamente, sem criar inscrições antigas."
         actions={
           auto ? (
             <button type="button" disabled={busy || loading} onClick={() => void submit("link")} className={primaryButton}>
-              Procurar correspondências verificadas
+              {busy ? <LoaderCircle className="h-4 w-4 animate-spin" /> : null}
+              Procurar novamente
             </button>
           ) : undefined
         }
