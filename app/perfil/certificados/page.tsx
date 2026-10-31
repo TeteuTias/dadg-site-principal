@@ -11,6 +11,8 @@ type Claim = {
   certificateId: string;
   status: string;
   reason?: string;
+  // Pedido do aluno para tirar o certificado da conta; aberto até o DADG decidir.
+  removal?: { requestedAt?: string; resolvedAt?: string; decision?: string };
 };
 
 const STATUS: Record<string, { label: string; className: string }> = {
@@ -18,7 +20,20 @@ const STATUS: Record<string, { label: string; className: string }> = {
   APPROVED: { label: "Aprovado", className: "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300" },
   REJECTED: { label: "Não aprovado", className: "bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-300" },
   REVOKED: { label: "Vínculo removido", className: "bg-slate-100 text-slate-600 dark:bg-white/10 dark:text-slate-300" },
+  REMOVAL_OPEN: { label: "Remoção em análise", className: "bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300" },
+  REMOVAL_REMOVED: { label: "Removido da conta", className: "bg-slate-100 text-slate-600 dark:bg-white/10 dark:text-slate-300" },
+  REMOVAL_KEPT: { label: "Mantido na conta", className: "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300" },
 };
+
+const isRemovalOpen = (claim: Claim) => Boolean(claim.removal?.requestedAt && !claim.removal.resolvedAt);
+
+// Um pedido de remoção muda o rótulo do vínculo enquanto está aberto e depois de decidido.
+function claimStatusKey(claim: Claim) {
+  if (isRemovalOpen(claim)) return "REMOVAL_OPEN";
+  if (claim.removal?.decision === "REMOVED") return "REMOVAL_REMOVED";
+  if (claim.removal?.decision === "KEPT") return "REMOVAL_KEPT";
+  return claim.status;
+}
 
 const eyebrow = "text-xs font-semibold uppercase tracking-[0.28em] text-slate-500 dark:text-slate-400";
 const panel = "glass-panel surface-outline rounded-[32px] border border-white/70 p-6 sm:p-7 dark:border-white/10";
@@ -59,6 +74,10 @@ export default function MyCertificates() {
   const [page, setPage] = useState(1);
   const [more, setMore] = useState(false);
   const [total, setTotal] = useState<number | null>(null);
+  // Certificado com o formulário de "Não é meu" aberto.
+  const [removing, setRemoving] = useState<string | null>(null);
+  const [removalMessage, setRemovalMessage] = useState("");
+  const openRemovals = new Set(claims.filter(isRemovalOpen).map((claim) => claim.certificateId));
 
   const fail = (error: unknown) => {
     setFailed(true);
@@ -129,11 +148,21 @@ export default function MyCertificates() {
         throw new Error(result.error || "Não foi possível concluir. Tente novamente.");
       // Em segundo plano só avisa quando achou algo.
       if (quiet && !result.linked && !result.review) return;
-      setFeedback(path === "link" ? linkFeedback(result) : "Solicitação enviada para revisão.");
+      setFeedback(
+        path === "link"
+          ? linkFeedback(result)
+          : path === "removal"
+            ? "Pedido de remoção enviado para análise do DADG."
+            : "Solicitação enviada para revisão.",
+      );
       if (path === "claims") {
         setCode("");
         setMessage("");
         setEvidenceEmail("");
+      }
+      if (path === "removal") {
+        setRemoving(null);
+        setRemovalMessage("");
       }
       await load();
     } catch (error) {
@@ -227,28 +256,97 @@ export default function MyCertificates() {
             Nenhum certificado vinculado à sua conta ainda.
           </div>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2">
-            {items.map((certificate) => (
-              <Link
-                key={certificate._id}
-                href={`/certificados/meuCertificado/${certificate._id}`}
-                className="block rounded-[26px] border border-white/70 bg-white p-5 shadow-[0_18px_40px_rgba(7,48,89,0.08)] transition-transform duration-300 hover:-translate-y-1 dark:border-white/10 dark:bg-slate-900/80"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className={eyebrow}>Certificado</p>
-                    <h2 className="mt-2 text-lg font-semibold text-slate-950 dark:text-white">{certificate.eventName}</h2>
+          <>
+            <p
+              role="note"
+              className="rounded-[26px] border border-amber-200 bg-amber-50 px-5 py-4 text-sm leading-7 text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-100"
+            >
+              Os certificados são vinculados à sua conta automaticamente, a partir dos dados das planilhas dos
+              eventos. Por enquanto, em casos raros, pode aparecer aqui um certificado de outra pessoa com o mesmo
+              nome. Se algum não for seu, use <strong>Não é meu</strong> no certificado para pedir a remoção.
+            </p>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {items.map((certificate) => {
+                const pending = openRemovals.has(certificate._id);
+                const asking = removing === certificate._id;
+                return (
+                  <div
+                    key={certificate._id}
+                    className="rounded-[26px] border border-white/70 bg-white p-5 shadow-[0_18px_40px_rgba(7,48,89,0.08)] dark:border-white/10 dark:bg-slate-900/80"
+                  >
+                    <Link href={`/certificados/meuCertificado/${certificate._id}`} className="block">
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <p className={eyebrow}>Certificado</p>
+                          <h2 className="mt-2 text-lg font-semibold text-slate-950 dark:text-white">{certificate.eventName}</h2>
+                        </div>
+                        <span className="inline-flex flex-none items-center gap-2 rounded-full bg-[var(--brand-50)] px-3 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-800)] dark:bg-white/10 dark:text-blue-100">
+                          Abrir
+                          <ArrowRight className="h-4 w-4" />
+                        </span>
+                      </div>
+                      <p className={`mt-5 ${eyebrow}`}>Titular</p>
+                      <p className="mt-2 text-sm font-medium text-slate-800 dark:text-slate-100">{certificate.ownerName}</p>
+                    </Link>
+
+                    {pending ? (
+                      <p className={`mt-4 inline-block rounded-full px-3 py-1 text-xs font-semibold ${STATUS.REMOVAL_OPEN.className}`}>
+                        {STATUS.REMOVAL_OPEN.label}
+                      </p>
+                    ) : asking ? (
+                      <form
+                        className="mt-4 space-y-3 border-t border-slate-200 pt-4 dark:border-white/10"
+                        onSubmit={(event) => {
+                          event.preventDefault();
+                          void submit("removal", { certificateId: certificate._id, message: removalMessage.trim() });
+                        }}
+                      >
+                        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200">
+                          Quer contar algo? (opcional)
+                          <textarea
+                            disabled={busy}
+                            maxLength={1000}
+                            rows={2}
+                            value={removalMessage}
+                            onChange={(event) => setRemovalMessage(event.target.value)}
+                            className={inputClass}
+                          />
+                        </label>
+                        <div className="flex flex-wrap gap-3">
+                          <button disabled={busy || loading} className={primaryButton}>
+                            {busy ? "Enviando..." : "Enviar pedido"}
+                          </button>
+                          <button
+                            type="button"
+                            disabled={busy}
+                            onClick={() => {
+                              setRemoving(null);
+                              setRemovalMessage("");
+                            }}
+                            className="text-sm font-semibold text-slate-600 underline dark:text-slate-300"
+                          >
+                            Cancelar
+                          </button>
+                        </div>
+                      </form>
+                    ) : (
+                      <button
+                        type="button"
+                        disabled={busy || loading}
+                        onClick={() => {
+                          setRemoving(certificate._id);
+                          setRemovalMessage("");
+                        }}
+                        className="mt-4 text-sm font-semibold text-slate-600 underline disabled:opacity-70 dark:text-slate-300"
+                      >
+                        Não é meu
+                      </button>
+                    )}
                   </div>
-                  <span className="inline-flex flex-none items-center gap-2 rounded-full bg-[var(--brand-50)] px-3 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-800)] dark:bg-white/10 dark:text-blue-100">
-                    Abrir
-                    <ArrowRight className="h-4 w-4" />
-                  </span>
-                </div>
-                <p className={`mt-5 ${eyebrow}`}>Titular</p>
-                <p className="mt-2 text-sm font-medium text-slate-800 dark:text-slate-100">{certificate.ownerName}</p>
-              </Link>
-            ))}
-          </div>
+                );
+              })}
+            </div>
+          </>
         )}
 
         {more ? (
@@ -344,7 +442,7 @@ export default function MyCertificates() {
           ) : (
             <ul className="mt-5 space-y-3">
               {claims.map((claim) => {
-                const status = STATUS[claim.status] || { label: claim.status, className: STATUS.REVOKED.className };
+                const status = STATUS[claimStatusKey(claim)] || { label: claim.status, className: STATUS.REVOKED.className };
                 return (
                   <li
                     key={claim._id}
