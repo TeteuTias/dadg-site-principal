@@ -198,7 +198,7 @@ export function FormLogin({ authRequest, loginHint, erroInicial, google, cadastr
         <input type="hidden" name="authRequest" value={authRequest} />
         {res?.erro || (!res && erroInicial) ? <Aviso tom="erro">{res?.erro ?? erroInicial}</Aviso> : null}
         {res?.ok ? <Aviso tom="ok">{res.ok}</Aviso> : null}
-        <Campo autoFocus={!loginHint} rotulo="E-mail" nome="email" type="email" inputMode="email" autoComplete="username" autoCapitalize="none" spellCheck={false} required defaultValue={loginHint} erro={login.res?.campos?.email} />
+        <Campo autoFocus={!loginHint} rotulo="E-mail" nome="email" type="email" inputMode="email" autoComplete="username" autoCapitalize="none" autoCorrect="off" spellCheck={false} required defaultValue={loginHint} erro={login.res?.campos?.email} />
         <CampoSenha
           rotulo="Senha"
           nome="senha"
@@ -272,7 +272,7 @@ export function FormCadastro({ authRequest, regras }: { authRequest?: string; re
         <Campo rotulo="Nome" nome="nome" autoComplete="given-name" required autoFocus erro={res?.campos?.nome} />
         <Campo rotulo="Sobrenome" nome="sobrenome" autoComplete="family-name" required erro={res?.campos?.sobrenome} />
       </div>
-      <Campo rotulo="E-mail" nome="email" type="email" inputMode="email" autoComplete="email" autoCapitalize="none" spellCheck={false} required erro={res?.campos?.email} />
+      <Campo rotulo="E-mail" nome="email" type="email" inputMode="email" autoComplete="email" autoCapitalize="none" autoCorrect="off" spellCheck={false} required erro={res?.campos?.email} />
       <CampoSenha rotulo="Senha" nome="senha" autoComplete="new-password" required value={senha} onChange={(e) => setSenha(e.target.value)} erro={res?.campos?.senha} ajuda={<Checklist senha={senha} regras={regras} />} />
       <CampoSenha rotulo="Confirme a senha" nome="confirmar" autoComplete="new-password" required erro={res?.campos?.confirmar} />
       <p className="text-xs leading-relaxed text-slate-500 dark:text-slate-400">
@@ -332,7 +332,7 @@ export function FormEsqueci({ authRequest }: { authRequest?: string }) {
     <form onSubmit={enviar((fd) => executar(() => esqueciSenha(fd)))} className="grid gap-4" noValidate>
       {authRequest ? <input type="hidden" name="authRequest" value={authRequest} /> : null}
       {res?.erro ? <Aviso tom="erro">{res.erro}</Aviso> : null}
-      <Campo rotulo="E-mail da conta" nome="email" type="email" inputMode="email" autoComplete="email" autoCapitalize="none" spellCheck={false} required autoFocus erro={res?.campos?.email} />
+      <Campo rotulo="E-mail da conta" nome="email" type="email" inputMode="email" autoComplete="email" autoCapitalize="none" autoCorrect="off" spellCheck={false} required autoFocus erro={res?.campos?.email} />
       <Botao ocupado={ocupado} carregando="Enviando…">Enviar link</Botao>
       {voltar ? (
         <p className="mt-2 text-center text-sm"><Link href={voltar} className={LINK}>Voltar para entrar</Link></p>

@@ -3,6 +3,7 @@ import test from "node:test";
 import { destinoPermitido } from "../lib/zitadel/destino";
 import { checarSenha, senhaOk, REGRAS_PADRAO } from "../lib/zitadel/senha";
 import { criarLimitador, LIMITES } from "../lib/zitadel/limite";
+import { loadIsolated } from "./helpers/isolated";
 
 test("logout só redireciona para os sites do DADG/CIEPS", () => {
   assert.equal(destinoPermitido("https://www.dadg.com.br/perfil", true), "https://www.dadg.com.br/perfil");
@@ -59,4 +60,25 @@ test("limites configurados: esqueci a senha 3 por e-mail", () => {
   const l = criarLimitador(() => 0);
   for (let i = 0; i < 3; i++) assert.equal(l.consumir(LIMITES.esqueci("1.1.1.1", "A@x.com")), true);
   assert.equal(l.consumir(LIMITES.esqueci("2.2.2.2", "a@x.com")), false);
+});
+
+// fluxo.ts é server-only: carrega isolado, só com as funções puras.
+const fluxo = loadIsolated("lib/zitadel/fluxo.ts", {
+  "server-only": {},
+  "./api": { zitadel: {}, ZitadelError: class {} },
+  "./senha": { REGRAS_PADRAO: {} },
+}) as unknown as { userIdValido: (v: unknown) => boolean; normalizarEmail: (v: string) => string };
+
+test("userIdValido aceita IDs auth0|hex e recusa o resto", () => {
+  assert.equal(fluxo.userIdValido("auth0|6a0000000000000000000001"), true);
+  assert.equal(fluxo.userIdValido("340123456789012345"), true);
+  assert.equal(fluxo.userIdValido(""), false);
+  assert.equal(fluxo.userIdValido("a b"), false);
+  assert.equal(fluxo.userIdValido("../x"), false);
+  assert.equal(fluxo.userIdValido(`auth0|${"a".repeat(64)}`), false);
+  assert.equal(fluxo.userIdValido(undefined), false);
+});
+
+test("normalizarEmail tira espaços e maiúsculas", () => {
+  assert.equal(fluxo.normalizarEmail("  Fulano@Gmail.COM "), "fulano@gmail.com");
 });

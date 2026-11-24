@@ -87,7 +87,7 @@ export const zitadel = {
     chamar("DELETE", `/v2/sessions/${id(sessao.sessionId)}`, "encerrar sessão", { sessionToken: sessao.sessionToken }),
 
   buscarPorEmail: (email: string) =>
-    chamar<{ result?: Array<{ userId: string }> }>("POST", "/v2/users", "buscar usuário", { queries: [{ loginNameQuery: { loginName: email } }] })
+    chamar<{ result?: Array<{ userId: string }> }>("POST", "/v2/users", "buscar usuário", { queries: [{ emailQuery: { emailAddress: email, method: "TEXT_QUERY_METHOD_EQUALS_IGNORE_CASE" } }] })
       .then((r) => r.result?.[0]?.userId ?? null),
   lerUsuario: (userId: string) =>
     chamar<{ user: { userId: string; human?: { profile?: { givenName?: string; familyName?: string; displayName?: string }; email?: { email?: string; isVerified?: boolean } } } }>(

@@ -3,7 +3,7 @@
 import { headers } from "next/headers";
 import { zitadel, ZitadelError } from "@/lib/zitadel/api";
 import { guardarPedido, guardarSessao, lerEstado, salvarEstado } from "@/lib/zitadel/cookie";
-import { ERRO_PEDIDO, emailValido, finalizar, lerConfig, lerRegras, mensagem, pedidoValido, texto, type Resultado } from "@/lib/zitadel/fluxo";
+import { ERRO_PEDIDO, emailValido, finalizar, lerConfig, lerRegras, mensagem, normalizarEmail, pedidoValido, texto, userIdValido, type Resultado } from "@/lib/zitadel/fluxo";
 import { LIMITES, limitador } from "@/lib/zitadel/limite";
 import { senhaOk } from "@/lib/zitadel/senha";
 
@@ -39,7 +39,7 @@ async function seguir(authRequest: string | undefined, sessao: { sessionId: stri
 }
 
 export async function entrar(fd: FormData): Promise<Resultado> {
-  const email = texto(fd, "email");
+  const email = normalizarEmail(texto(fd, "email"));
   const senha = String(fd.get("senha") ?? "");
   const authRequest = pedidoDe(fd);
   const campos: Record<string, string> = {};
@@ -88,7 +88,7 @@ export async function entrarComGoogle(authRequestBruto: string): Promise<Resulta
 export async function cadastrar(fd: FormData): Promise<Resultado> {
   const givenName = texto(fd, "nome");
   const familyName = texto(fd, "sobrenome");
-  const email = texto(fd, "email").toLowerCase();
+  const email = normalizarEmail(texto(fd, "email"));
   const senha = String(fd.get("senha") ?? "");
   const confirmar = String(fd.get("confirmar") ?? "");
   const authRequest = pedidoDe(fd);
@@ -123,7 +123,8 @@ export async function cadastrar(fd: FormData): Promise<Resultado> {
 }
 
 export async function verificarEmail(userId: string, codigo: string): Promise<Resultado> {
-  if (!userId || !codigo.trim()) return { campos: { codigo: "Informe o código que enviamos por e-mail." } };
+  if (!userIdValido(userId)) return { erro: "Link incompleto. Volte ao site e entre de novo." };
+  if (!codigo.trim()) return { campos: { codigo: "Informe o código que enviamos por e-mail." } };
   try {
     await zitadel.verificarEmail(userId, codigo.trim());
   } catch (e) {
@@ -145,7 +146,7 @@ export async function verificarEmail(userId: string, codigo: string): Promise<Re
 }
 
 export async function reenviarCodigo(userId: string): Promise<Resultado> {
-  if (!userId) return { erro: "Link incompleto. Volte ao site e entre de novo." };
+  if (!userIdValido(userId)) return { erro: "Link incompleto. Volte ao site e entre de novo." };
   if (!limitador.consumir(LIMITES.reenviar(await ipCliente(), userId))) return { erro: ERRO_LIMITE };
   try {
     await zitadel.reenviarEmail(userId);
@@ -157,7 +158,7 @@ export async function reenviarCodigo(userId: string): Promise<Resultado> {
 }
 
 export async function esqueciSenha(fd: FormData): Promise<Resultado> {
-  const email = texto(fd, "email");
+  const email = normalizarEmail(texto(fd, "email"));
   if (!emailValido(email)) return { campos: { email: "Informe um e-mail válido." } };
   await guardarPedido(pedidoDe(fd)).catch(() => undefined);
   const OK = { ok: "Se existir uma conta com esse e-mail, enviamos um link para criar uma nova senha. Confira também a caixa de spam." };
@@ -178,7 +179,7 @@ export async function novaSenha(fd: FormData): Promise<Resultado> {
   const codigo = texto(fd, "code");
   const senha = String(fd.get("senha") ?? "");
   const confirmar = String(fd.get("confirmar") ?? "");
-  if (!userId || !codigo) return { erro: "Link incompleto. Peça um novo e-mail em “Esqueci minha senha”." };
+  if (!userIdValido(userId) || !codigo) return { erro: "Link incompleto. Peça um novo e-mail em “Esqueci minha senha”." };
   const regras = await lerRegras();
   const campos: Record<string, string> = {};
   if (!senhaOk(senha, regras)) campos.senha = "A senha não atende a todas as regras.";

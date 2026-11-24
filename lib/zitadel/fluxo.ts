@@ -18,6 +18,9 @@ export function mensagem(e: unknown, padrao = "Algo deu errado. Tente de novo.")
   return padrao;
 }
 
+/** IDs do Zitadel podem ser "auth0|<hex>" (mantêm os IDs antigos do Auth0). */
+export const userIdValido = (v: unknown): v is string => typeof v === "string" && /^[A-Za-z0-9_|-]{1,64}$/.test(v);
+
 export const pedidoValido = (v: unknown): v is string => typeof v === "string" && /^[A-Za-z0-9_-]{1,200}$/.test(v);
 
 /** prompt vem como "login" (OIDC) ou "PROMPT_LOGIN" (API v2). */
@@ -93,5 +96,7 @@ export async function lerConfig() {
   }
 }
 
+/** A busca no Zitadel diferencia maiúsculas; o celular capitaliza sozinho. */
+export const normalizarEmail = (v: string) => v.trim().toLowerCase();
 export const emailValido = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 export const texto = (fd: FormData, nome: string) => String(fd.get(nome) ?? "").trim();
