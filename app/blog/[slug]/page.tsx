@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, CalendarDays, User } from "lucide-react";
 import BlogCommentSection from "@/app/components/BlogCommentSection";
-import { auth0 } from "@/app/src/lib/auth0/Auth0Client";
+import { getSession } from "@/lib/auth";
 import { fetchBackend, readBackendJson } from "@/lib/backend";
 import type { BlogPostData } from "@/app/components/BlogCard";
 
@@ -31,7 +31,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     return notFound();
   }
 
-  const session = await auth0.getSession();
+  const session = await getSession();
   const isLoggedIn = !!session?.user;
 
   const publishDate = new Date(post.publishedAt || post.createdAt).toLocaleDateString("pt-BR", {

@@ -10,9 +10,7 @@ test("limite de inscrição é por aluno logado e por IP só sem sessão", async
     const calls: Array<{ limit: number; subject?: string }> = [];
     let session: { user: { sub: string } } | null = { user: { sub: "auth0|aluno" } };
     const route = loadIsolated("proxy.ts", {
-      "./app/src/lib/auth0/Auth0Client": {
-        auth0: { getSession: async () => session, middleware: async () => NextResponse.next() },
-      },
+      "./lib/auth": { getSession: async () => session, manterSessao: async () => NextResponse.next() },
       "./lib/RateLimit": {
         rateLimit: async (_req: unknown, limit: number, subject?: string) => {
           calls.push({ limit, subject });
@@ -44,18 +42,16 @@ test("limite de inscrição é por aluno logado e por IP só sem sessão", async
   }
 });
 
-test("painel sem sessão vai ao login do SDK e as demais rotas passam pelo Auth0", async () => {
+test("painel sem sessão vai ao login e as demais rotas passam pela renovação da sessão", async () => {
   const { NextRequest, NextResponse } = await import("next/server");
   let session: { user: { sub: string } } | null = null;
   const handled: string[] = [];
   const route = loadIsolated("proxy.ts", {
-    "./app/src/lib/auth0/Auth0Client": {
-      auth0: {
-        getSession: async () => session,
-        middleware: async (req: InstanceType<typeof NextRequest>) => {
-          handled.push(req.nextUrl.pathname);
-          return NextResponse.next();
-        },
+    "./lib/auth": {
+      getSession: async () => session,
+      manterSessao: async (req: InstanceType<typeof NextRequest>) => {
+        handled.push(req.nextUrl.pathname);
+        return NextResponse.next();
       },
     },
     "./lib/RateLimit": { rateLimit: async () => ({ canAccess: true }) },

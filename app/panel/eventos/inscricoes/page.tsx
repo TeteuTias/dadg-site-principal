@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
-import { useUser } from '@auth0/nextjs-auth0';
+import { useUser } from "@/lib/userProvider";
 import { CalendarDays, Loader2, LogIn, RefreshCw, UserRound } from 'lucide-react';
 import EventCard from '@/app/components/EventCard';
 

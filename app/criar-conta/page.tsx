@@ -1,7 +1,7 @@
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { PageHero } from "@/app/components/site-sections";
 
-const SIGNUP = "/api/auth/login?screen_hint=signup&returnTo=%2Fperfil";
+const SIGNUP = "/api/auth/login?prompt=create&returnTo=%2Fperfil";
 const LOGIN = "/api/auth/login?returnTo=%2Fperfil";
 
 // Os certificados antigos são encontrados pelo e-mail, pelo CPF e pelo nome da época:

@@ -3,7 +3,7 @@ import Link from "next/link";
 import ScheduleClient from "@/app/components/ScheduleClient";
 import { PageHero } from "@/app/components/site-sections";
 import EventCard from "@/app/components/EventCard";
-import { auth0 } from "@/app/src/lib/auth0/Auth0Client";
+import { getSession } from "@/lib/auth";
 import { fetchBackend, readBackendJson } from "@/lib/backend";
 
 export const dynamic = "force-dynamic";
@@ -49,7 +49,7 @@ export default async function EventosPage() {
   }
 
   // 2. Buscar inscrições do usuário logado
-  const session = await auth0.getSession();
+  const session = await getSession();
   if (session?.user) {
     try {
       const identity = await getBackendIdentity();

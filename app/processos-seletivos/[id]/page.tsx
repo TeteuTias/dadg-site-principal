@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { useUser } from "@auth0/nextjs-auth0";
+import { useUser } from "@/lib/userProvider";
 import { ArrowLeft, CalendarDays, Loader2, LogIn, Users } from "lucide-react";
 import {
   formatDate,

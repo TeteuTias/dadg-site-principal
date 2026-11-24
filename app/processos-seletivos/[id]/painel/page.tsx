@@ -4,7 +4,7 @@ import Link from "next/link";
 import ProfileGate from '../../ProfileGate';
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { useUser } from "@auth0/nextjs-auth0";
+import { useUser } from "@/lib/userProvider";
 import { ArrowLeft, CheckCircle2, Loader2, Lock, LogIn, RefreshCw } from "lucide-react";
 import {
   describeError,

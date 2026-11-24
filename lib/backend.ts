@@ -1,5 +1,5 @@
 import "server-only";
-import { auth0 } from "@/app/src/lib/auth0/Auth0Client";
+import { getAccessToken, getSession } from "@/lib/auth";
 
 export type BackendIdentity = {
   user: { email?: string | null; name?: string | null; picture?: string | null };
@@ -27,11 +27,11 @@ export class BackendSessionError extends Error {
 }
 
 export async function getBackendIdentity(): Promise<BackendIdentity | null> {
-  const session = await auth0.getSession().catch(() => null);
+  const session = await getSession().catch(() => null);
   if (!session?.user) return null;
 
   try {
-    const { token } = await auth0.getAccessToken();
+    const { token } = await getAccessToken();
     if (!token) throw new BackendSessionError();
     return { user: session.user, accessToken: token };
   } catch (error) {

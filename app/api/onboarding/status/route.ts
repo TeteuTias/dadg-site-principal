@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { auth0 } from "@/app/src/lib/auth0/Auth0Client";
+import { getSession } from "@/lib/auth";
 import { getUserNeedsOnboarding } from "@/app/lib/onboarding/getUserNeedsOnboarding";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(_request: NextRequest) {
-  const session = await auth0.getSession();
+  const session = await getSession();
   if (!session?.user) return NextResponse.json({ needsOnboarding: true }, { status: 200 });
 
   const userId = typeof session.user.sub === "string" ? session.user.sub : null;

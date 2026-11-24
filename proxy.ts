@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth0 } from "./app/src/lib/auth0/Auth0Client";
+import { getSession, manterSessao } from "./lib/auth";
 import { rateLimit } from "./lib/RateLimit";
 
 const RATE_LIMIT = Number(process.env.RATE_LIMIT);
@@ -27,7 +27,7 @@ export async function proxy(req: NextRequest) {
     const isRegistrationRoute = /^\/api\/v1\/events\/.*\/registration/i.test(pathname);
     const limitToApply = isRegistrationRoute ? 3 : Number(RATE_LIMIT);
     // Aluno logado é limitado pela própria conta; sem sessão, o limite continua por IP.
-    const subject = (await auth0.getSession(req).catch(() => null))?.user?.sub;
+    const subject = (await getSession(req).catch(() => null))?.user?.sub;
     const { canAccess, unavailable } = await rateLimit(req, limitToApply, subject)
 
     if (unavailable && !canAccess) {
@@ -45,15 +45,14 @@ export async function proxy(req: NextRequest) {
   }
 
   if (pathname.startsWith("/panel")) {
-    const session = await auth0.getSession(req)
+    const session = await getSession(req).catch(() => null)
     if (!session) {
       return NextResponse.redirect(new URL(`/api/auth/login?returnTo=${encodeURIComponent(pathname)}`, req.url));
     }
   }
 
-  // O SDK precisa processar todas as requisições cobertas pelo matcher para
-  // manter a sessão rolante e persistir renovações do access token.
-  return await auth0.middleware(req)
+  // Renova o access token antes de vencer e grava o cookie (Server Components não gravam).
+  return await manterSessao(req)
 }
 
 export const config = {

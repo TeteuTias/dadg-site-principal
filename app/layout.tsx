@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { UserProvider } from "@/lib/userProvider";
-import { auth0 } from "@/app/src/lib/auth0/Auth0Client";
+import { getSession } from "@/lib/auth";
 
 
 import "./globals.css";
@@ -80,7 +80,7 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const cookieStore = await cookies();
-  const session = await auth0.getSession();
+  const session = await getSession();
 
   // Default to light mode on first visit
   const theme = cookieStore.get("dadg-theme")?.value === "dark" ? "dark" : "light";
@@ -98,7 +98,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <a href="#conteudo" className="sr-only focus:not-sr-only focus:fixed focus:top-0 focus:z-[2000] bg-white p-3 text-blue-900">Pular para o conteúdo</a>
         <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange>
           <ForaDoEntrar><UpcomingSchedulePopup /></ForaDoEntrar>
-          <UserProvider isAuthenticated={Boolean(session?.user)}>
+          <UserProvider isAuthenticated={Boolean(session?.user)} user={session?.user ?? null}>
             <ForaDoEntrar>
               <MenuDrawer blogEnabled={blogEnabled} />
               <MobileBottomNav blogEnabled={blogEnabled} />

@@ -38,13 +38,13 @@ MongoDB Atlas
 ### Variáveis de Ambiente (`.env.local`)
 
 ```env
-# Auth0
-AUTH0_DOMAIN=dev-qd3gyqp1h6nacnx8.us.auth0.com
-AUTH0_CLIENT_ID=vDinq9GGzcTShCYjKg8DG88YQvGvxg0y
-AUTH0_CLIENT_SECRET=<secret>
-AUTH0_SECRET=<random>
-AUTH0_BASE_URL=http://localhost:3001   # ← muda em produção
-AUTH0_AUDIENCE=https://api.dadg.com.br
+# Login (Zitadel, OIDC)
+OIDC_ISSUER=https://www.login.dadg.com.br   # sem barra no fim: é exatamente o "iss" dos tokens
+OIDC_CLIENT_ID=<client id do app no Zitadel>
+OIDC_CLIENT_SECRET=<secret>
+OIDC_AUDIENCE=<ID do projeto no Zitadel>
+SESSION_SECRET=<64 caracteres hexadecimais>
+APP_BASE_URL=http://localhost:3001   # ← muda em produção
 
 # Backend API URL — OBRIGATÓRIO
 BACKEND_URL=http://localhost:3000
@@ -81,15 +81,15 @@ RATE_LIMIT=15
 
 ## 🔐 Autenticação
 
-O sistema usa **Auth0** via o arquivo `proxy.ts` (middleware global do Next.js).
+O login é feito pelo servidor do DADG (Zitadel, OIDC), com o módulo `lib/auth` e o `proxy.ts` (middleware global do Next.js).
 
-| Rota Auth0 | Função |
+| Rota | Função |
 |---|---|
-| `/api/auth/login` | Inicia o fluxo de login |
-| `/api/auth/logout` | Encerra a sessão |
-| `/api/auth/callback` | Callback do Auth0 após login |
+| `/api/auth/login` | Inicia o login (`?returnTo=/caminho`, `?prompt=create` abre o cadastro) |
+| `/api/auth/logout` | Revoga o refresh token, apaga a sessão e sai do servidor de login |
+| `/api/auth/callback` | Retorno do servidor de login |
 
-O middleware em `proxy.ts` intercepta essas rotas e delega ao `auth0.middleware()`.
+O módulo fica em `lib/auth` (`getSession`, `getAccessToken`). A sessão é um cookie cifrado (`dadg_site_session.0`, `.1`, ...); o `proxy.ts` renova o access token antes de vencer.
 
 ---
 
@@ -107,7 +107,7 @@ O middleware em `proxy.ts` intercepta essas rotas e delega ao `auth0.middleware(
 ### Proxy do Perfil
 
 A página `/perfil` chama `/api/perfil/proxy` (rota interna do Next.js) que:
-1. Pega o `accessToken` da sessão Auth0 (cookie HttpOnly)
+1. Pega o `accessToken` da sessão (cookie HttpOnly cifrado)
 2. Repassa para `GET {BACKEND_URL}/api/v1/user/profile` com `Authorization: Bearer <token>`
 3. Retorna o perfil + histórico de eventos + links de certificados
 
@@ -136,7 +136,7 @@ app/
 │   └── page.tsx              # ⭐ Página de perfil do usuário
 └── ...
 
-proxy.ts                      # Middleware global: Auth0 + Rate Limit
+proxy.ts                      # Middleware global: sessão + Rate Limit
 ```
 
 ---
@@ -147,13 +147,13 @@ proxy.ts                      # Middleware global: Auth0 + Rate Limit
 → Normal se o backend não tiver eventos com `statusDetails.status: "PUBLISHED_OPEN"` no mês atual.
 
 ### `/perfil` redireciona para login
-→ Esperado! O usuário precisa estar logado via Auth0.
+→ Esperado! O usuário precisa estar logado.
 
 ### Erro 502 no perfil após login
 → Backend não está rodando. Verifique se `http://localhost:3000` responde.
 
 ### Login retorna 500
-→ Verifique `AUTH0_BASE_URL=http://localhost:3001` no `.env.local`.
+→ Verifique `APP_BASE_URL=http://localhost:3001` e as variáveis `OIDC_*` no `.env.local` (o redirect `http://localhost:3001/api/auth/callback` precisa estar cadastrado no app do Zitadel).
 
 ---
 

@@ -5,7 +5,7 @@ import ProfileGate from '../../ProfileGate';
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useUser } from "@auth0/nextjs-auth0";
+import { useUser } from "@/lib/userProvider";
 import { ArrowLeft, CreditCard, Loader2, LogIn, ShieldCheck } from "lucide-react";
 import {
   STATUS_LABELS,
