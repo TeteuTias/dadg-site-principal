@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useTransition, type ComponentProps, type FormEvent, type ReactNode } from "react";
+import { useRef, useState, useTransition, type ComponentProps, type FormEvent, type ReactNode } from "react";
 import { Check, Eye, EyeOff, Loader2 } from "lucide-react";
 import type { Resultado } from "@/lib/zitadel/fluxo";
 import { checarSenha, type Regras } from "@/lib/zitadel/senha";
@@ -9,25 +9,33 @@ import { cadastrar, continuarComo, entrar, entrarComGoogle, esqueciSenha, novaSe
 
 const ERRO_REDE = "Não foi possível falar com o servidor de login agora. Tente de novo em instantes.";
 
-/** Roda uma Server Action; se ela devolver `ir`, leva o navegador para lá (mantendo o botão em "carregando"). */
+/**
+ * Roda uma Server Action; se ela devolver `ir`, leva o navegador para lá (mantendo o botão em "carregando").
+ * Um envio por vez: a trava é síncrona, então Enter repetido ou duplo clique antes do re-render são ignorados.
+ */
 function useAcao() {
   const [pendente, iniciar] = useTransition();
   const [navegando, setNavegando] = useState(false);
   const [res, setRes] = useState<Resultado>();
-  const executar = (acao: () => Promise<Resultado>) =>
+  const trava = useRef(false);
+  const executar = (acao: () => Promise<Resultado>) => {
+    if (trava.current) return;
+    trava.current = true;
     iniciar(async () => {
       try {
         const r = await acao();
         if (r.ir) {
           setNavegando(true);
           window.location.assign(r.ir);
-          return;
+          return; // segue travado: a página vai sair
         }
         setRes(r);
       } catch {
         setRes({ erro: ERRO_REDE });
       }
+      trava.current = false;
     });
+  };
   return { executar, res, ocupado: pendente || navegando };
 }
 

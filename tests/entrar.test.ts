@@ -104,3 +104,13 @@ test("pré-carregamento não pode deslogar", () => {
   assert.equal(ehPrefetch(new Headers({ "sec-purpose": "prefetch;prerender" })), true);
   assert.equal(ehPrefetch(new Headers({ accept: "text/html" })), false);
 });
+
+test("pedido já finalizado (400 code 9) é reconhecido; outros erros não", () => {
+  const { ZitadelError } = loadIsolated("lib/zitadel/api.ts", { "server-only": {} }) as unknown as {
+    ZitadelError: new (status: number, code: number | undefined, message: string) => { jaFinalizado: boolean };
+  };
+  assert.equal(new ZitadelError(400, 9, "").jaFinalizado, true);
+  assert.equal(new ZitadelError(400, 3, "").jaFinalizado, false);
+  assert.equal(new ZitadelError(500, 9, "").jaFinalizado, false);
+  assert.equal(new ZitadelError(400, undefined, "").jaFinalizado, false);
+});

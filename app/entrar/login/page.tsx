@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { zitadel, sessaoValida, type AuthRequest } from "@/lib/zitadel/api";
+import { zitadel, sessaoValida, ZitadelError, type AuthRequest } from "@/lib/zitadel/api";
 import { lerEstado } from "@/lib/zitadel/cookie";
-import { ERRO_PEDIDO, finalizar, lerConfig, origemDoPedido, pedidoValido, siteDoPedido, temPrompt } from "@/lib/zitadel/fluxo";
+import { ERRO_PEDIDO, REDIRECIONANDO, finalizar, lerConfig, origemDoPedido, pedidoValido, siteDoPedido, temPrompt } from "@/lib/zitadel/fluxo";
 import { Aviso, ContinuarComo, FormLogin } from "../Formularios";
 import { Moldura } from "../Moldura";
 
@@ -48,7 +49,16 @@ export default async function LoginPage({ searchParams }: Props) {
   const erroGoogle = q.erro === "google" ? "Não foi possível entrar com o Google. Tente de novo ou use seu e-mail e senha." : undefined;
 
   // SSO: sessões deste navegador que o servidor de login ainda aceita.
-  const { sessoes } = await lerEstado();
+  const { sessoes, authRequest: pedidoNoCookie } = await lerEstado();
+  const redirecionando = (
+    <Moldura titulo="Entrando" site={site} voltar={voltar}>
+      <Aviso tom="info">{REDIRECIONANDO}</Aviso>
+    </Moldura>
+  );
+  // Action que grava cookie faz o Next renderizar esta página de novo na mesma requisição.
+  // Se a action já finalizou este pedido (tirou-o do cookie), não finalizar de novo: o navegador já está indo.
+  if ((await headers()).has("next-action") && pedidoNoCookie !== authRequest && sessoes.length) return redirecionando;
+
   const validas = forcarLogin
     ? []
     : (
@@ -68,8 +78,9 @@ export default async function LoginPage({ searchParams }: Props) {
     let destino: string | undefined;
     try {
       destino = await finalizar(authRequest, validas[0]);
-    } catch {
-      // cai na escolha de conta abaixo
+    } catch (e) {
+      if (e instanceof ZitadelError && e.jaFinalizado) return redirecionando;
+      // senão, cai na escolha de conta abaixo
     }
     if (destino) redirect(destino); // fora do try: redirect() funciona lançando
   }

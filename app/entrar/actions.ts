@@ -3,7 +3,7 @@
 import { headers } from "next/headers";
 import { zitadel, ZitadelError } from "@/lib/zitadel/api";
 import { guardarPedido, guardarSessao, lerEstado, salvarEstado } from "@/lib/zitadel/cookie";
-import { ERRO_PEDIDO, emailValido, finalizar, lerConfig, lerRegras, mensagem, normalizarEmail, pedidoValido, texto, userIdValido, type Resultado } from "@/lib/zitadel/fluxo";
+import { ERRO_PEDIDO, REDIRECIONANDO, emailValido, finalizar, lerConfig, lerRegras, mensagem, normalizarEmail, pedidoValido, texto, userIdValido, type Resultado } from "@/lib/zitadel/fluxo";
 import { LIMITES, limitador } from "@/lib/zitadel/limite";
 import { senhaOk } from "@/lib/zitadel/senha";
 
@@ -34,6 +34,8 @@ async function seguir(authRequest: string | undefined, sessao: { sessionId: stri
     }
     return { ir: destino };
   } catch (e) {
+    // Já finalizado: outro envio já está levando a pessoa ao site.
+    if (e instanceof ZitadelError && e.jaFinalizado) return { ok: REDIRECIONANDO };
     return { erro: e instanceof ZitadelError && e.status < 500 ? ERRO_PEDIDO : mensagem(e) };
   }
 }

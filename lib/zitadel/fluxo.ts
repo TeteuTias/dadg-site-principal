@@ -6,6 +6,7 @@ import { REGRAS_PADRAO, type Regras } from "./senha";
 export type Resultado = { erro?: string; ok?: string; ir?: string; voltar?: string; campos?: Record<string, string> };
 
 export const ERRO_SERVIDOR = "Não foi possível falar com o servidor de login agora. Tente de novo em instantes.";
+export const REDIRECIONANDO = "Redirecionando…";
 export const ERRO_PEDIDO = "Este pedido de login expirou ou não é válido. Volte ao site e clique em “Entrar” de novo.";
 
 /** Mensagem amigável para um erro qualquer, sem detalhes internos. */

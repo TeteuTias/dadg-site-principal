@@ -7,6 +7,8 @@ export class ZitadelError extends Error {
   }
   get naoEncontrado() { return this.status === 404 || this.code === 5; }
   get jaExiste() { return this.status === 409 || this.code === 6; }
+  /** Ao finalizar um pedido de login: 400 FailedPrecondition = esse pedido já foi finalizado. */
+  get jaFinalizado() { return this.status === 400 && this.code === 9; }
   get bloqueado() { return /locked|blocked|bloquead/i.test(this.message); }
   get senhaInvalida() { return /password.*invalid|invalid.*password|senha.*inv/i.test(this.message); }
   get codigoInvalido() { return /code.*(invalid|expired)|(invalid|expired).*code|c[oó]digo/i.test(this.message); }
