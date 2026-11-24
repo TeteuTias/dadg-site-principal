@@ -3,7 +3,7 @@ import { EncryptJWT, jwtDecrypt, type JWTPayload } from "jose";
 import { cookies } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
 import * as oidc from "openid-client";
-import { dividir, juntar, promptPedido, retornoSeguro, sobras, type Cookie, type Usuario } from "./util";
+import { dividir, ehPrefetch, juntar, promptPedido, retornoSeguro, sobras, type Cookie, type Usuario } from "./util";
 
 export type { Usuario } from "./util";
 
@@ -241,6 +241,7 @@ export async function concluirLogin(req: NextRequest) {
 }
 
 export async function sair(req: NextRequest) {
+  if (ehPrefetch(req.headers)) return new NextResponse(null, { status: 204 });
   const s = await lerSessao(req.cookies);
   let destino = new URL(`${baseUrl()}/`);
   try {
@@ -253,8 +254,9 @@ export async function sair(req: NextRequest) {
     }
     destino = oidc.buildEndSessionUrl(config, {
       ...(s?.idToken ? { id_token_hint: s.idToken } : {}),
-      post_logout_redirect_uri: `${baseUrl()}/`,
-      state: oidc.randomState(),
+      // Única volta aceita pelo servidor de login; a /entrar/logout encerra as sessões da tela de login e lê o state.
+      post_logout_redirect_uri: `${baseUrl()}/entrar/logout`,
+      state: "site",
     });
   } catch (e) {
     console.error("[auth] logout sem servidor de login:", e instanceof Error ? e.name : typeof e);

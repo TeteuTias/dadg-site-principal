@@ -33,6 +33,11 @@ export function retornoSeguro(valor: string | null | undefined): string {
   return typeof valor === "string" && /^\/(?![/\\])[^\\\x00-\x1f\x7f]*$/.test(valor) ? valor : "/";
 }
 
+/** Pré-carregamento (Link do Next, prerender do navegador): não pode deslogar. */
+export function ehPrefetch(h: Headers): boolean {
+  return h.has("next-router-prefetch") || h.get("purpose") === "prefetch" || /prefetch/i.test(h.get("sec-purpose") ?? "");
+}
+
 /** ?prompt=create|login; o antigo ?screen_hint=signup do Auth0 vira create. */
 export function promptPedido(q: URLSearchParams): "create" | "login" | undefined {
   const p = q.get("prompt");

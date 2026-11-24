@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { zitadel, ZitadelError, type AddHumanUser, type IdpInfo } from "@/lib/zitadel/api";
+import { baseUrl, zitadel, ZitadelError, type AddHumanUser, type IdpInfo } from "@/lib/zitadel/api";
 import { guardarSessao, lerEstado, salvarEstado } from "@/lib/zitadel/cookie";
 import { finalizar, pedidoValido } from "@/lib/zitadel/fluxo";
 
@@ -60,7 +60,7 @@ export async function GET(req: NextRequest) {
     console.error("[entrar] retorno do Google falhou:", e instanceof ZitadelError ? `HTTP ${e.status} code=${e.code ?? "-"}` : e instanceof Error ? e.name : typeof e);
     destino = falha;
   }
-  return NextResponse.redirect(destino.startsWith("/") ? new URL(destino, req.nextUrl.origin) : destino);
+  return NextResponse.redirect(destino.startsWith("/") ? new URL(destino, baseUrl()) : destino);
 }
 
 /** Reserva, se o Zitadel não mandar addHumanUser: claims do Google (às vezes embrulhadas em "User"). */

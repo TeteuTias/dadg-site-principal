@@ -95,14 +95,19 @@ test("login, callback, sessão em partes, renovação no proxy e logout", async 
     assert.equal(r2.cookies.getAll().length, renovados.length + 1);
     assert.equal((await auth.manterSessao(comCookies("https://site.test/api/auth/logout", partes))).cookies.getAll().length, 0, "não mexe nas rotas de login");
 
+    // pré-carregamento do link de sair: 204 e nada revogado
+    const prefetch = await auth.sair(new NextRequest("https://site.test/api/auth/logout", { headers: { "next-router-prefetch": "1", cookie: `${renovados[0].name}=${renovados[0].value}` } }));
+    assert.equal(prefetch.status, 204);
+    assert.equal(chamadas.filter((c) => c[0] === "revoke").length, 0);
+
     // logout: revoga o refresh token novo, apaga tudo e sai do servidor de login
     const sair = await auth.sair(comCookies("https://site.test/api/auth/logout", renovados));
     assert.deepEqual(chamadas.at(-1), ["revoke", "rt2", { token_type_hint: "refresh_token" }]);
     const fim = new URL(sair.headers.get("location")!);
     assert.equal(fim.origin + fim.pathname, "https://login.test/oidc/v1/end_session");
-    assert.equal(fim.searchParams.get("post_logout_redirect_uri"), "https://site.test/");
+    assert.equal(fim.searchParams.get("post_logout_redirect_uri"), "https://site.test/entrar/logout");
+    assert.equal(fim.searchParams.get("state"), "site");
     assert.equal(fim.searchParams.get("id_token_hint"), "i".repeat(1500));
-    assert.ok(fim.searchParams.get("state"));
     assert.deepEqual(sair.cookies.getAll().map((c) => [c.name, c.maxAge]), [["dadg_site_session.0", 0]]);
   } finally {
     process.env = anterior;

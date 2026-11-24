@@ -47,7 +47,7 @@ export async function proxy(req: NextRequest) {
   if (pathname.startsWith("/panel")) {
     const session = await getSession(req).catch(() => null)
     if (!session) {
-      return NextResponse.redirect(new URL(`/api/auth/login?returnTo=${encodeURIComponent(pathname)}`, req.url));
+      return NextResponse.redirect(new URL(`/api/auth/login?returnTo=${encodeURIComponent(pathname)}`, process.env.APP_BASE_URL || req.url));
     }
   }
 

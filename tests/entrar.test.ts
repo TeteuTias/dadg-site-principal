@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { destinoPermitido } from "../lib/zitadel/destino";
+import { destinoDoLogout, destinoPermitido } from "../lib/zitadel/destino";
+import { ehPrefetch } from "../lib/auth/util";
 import { checarSenha, senhaOk, REGRAS_PADRAO } from "../lib/zitadel/senha";
 import { criarLimitador, LIMITES } from "../lib/zitadel/limite";
 import { loadIsolated } from "./helpers/isolated";
@@ -81,4 +82,25 @@ test("userIdValido aceita IDs auth0|hex e recusa o resto", () => {
 
 test("normalizarEmail tira espaços e maiúsculas", () => {
   assert.equal(fluxo.normalizarEmail("  Fulano@Gmail.COM "), "fulano@gmail.com");
+});
+
+test("logout: state do servidor de login vira destino fixo, nunca localhost em produção", () => {
+  const ir = (q: string, producao = true) => destinoDoLogout(new URLSearchParams(q), "https://www.dadg.com.br", producao);
+  assert.equal(ir("state=site"), "https://www.dadg.com.br/");
+  assert.equal(ir("state=certificados"), "https://certificados.dadg.com.br/");
+  assert.equal(ir("state=https://evil.com"), "https://www.dadg.com.br/");
+  assert.equal(ir("state=__proto__"), "https://www.dadg.com.br/");
+  assert.equal(ir(""), "https://www.dadg.com.br/");
+  assert.equal(ir("post_logout_redirect=https%3A%2F%2Fwww.admin.congressocieps.com.br%2F&state=site"), "https://www.admin.congressocieps.com.br/");
+  assert.equal(ir("post_logout_redirect=https%3A%2F%2Fevil.com%2F"), "https://www.dadg.com.br/");
+  assert.equal(ir("post_logout_redirect=http%3A%2F%2Flocalhost%3A3100%2F"), "https://www.dadg.com.br/");
+  assert.equal(destinoDoLogout(new URLSearchParams(""), "https://www.dadg.com.br/", true), "https://www.dadg.com.br/");
+  assert.equal(ir("post_logout_redirect=http%3A%2F%2Flocalhost%3A3001%2F", false), "http://localhost:3001/");
+});
+
+test("pré-carregamento não pode deslogar", () => {
+  assert.equal(ehPrefetch(new Headers({ "next-router-prefetch": "1" })), true);
+  assert.equal(ehPrefetch(new Headers({ purpose: "prefetch" })), true);
+  assert.equal(ehPrefetch(new Headers({ "sec-purpose": "prefetch;prerender" })), true);
+  assert.equal(ehPrefetch(new Headers({ accept: "text/html" })), false);
 });

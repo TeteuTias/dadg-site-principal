@@ -70,3 +70,20 @@ test("painel sem sessão vai ao login e as demais rotas passam pela renovação 
   assert.equal((await get("/perfil")).status, 200);
   assert.deepEqual(handled, ["/panel/eventos", "/perfil"]);
 });
+
+test("redirecionamento do painel usa APP_BASE_URL, não o endereço interno atrás do Caddy", async () => {
+  const anterior = process.env.APP_BASE_URL;
+  process.env.APP_BASE_URL = "https://www.dadg.com.br";
+  try {
+    const { NextRequest, NextResponse } = await import("next/server");
+    const route = loadIsolated("proxy.ts", {
+      "./lib/auth": { getSession: async () => null, manterSessao: async () => NextResponse.next() },
+      "./lib/RateLimit": { rateLimit: async () => ({ canAccess: true }) },
+    });
+    const res = await route.proxy(new NextRequest("https://localhost:3100/panel/eventos"));
+    assert.equal(res.headers.get("location"), "https://www.dadg.com.br/api/auth/login?returnTo=%2Fpanel%2Feventos");
+  } finally {
+    if (anterior === undefined) delete process.env.APP_BASE_URL;
+    else process.env.APP_BASE_URL = anterior;
+  }
+});
