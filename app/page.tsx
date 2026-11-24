@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import ImpactStats from './components/ImpactStats';
 import WaveDivider from './components/WaveDivider';
 import FAQ from './components/FAQ';
+import { InfoCard } from './components/site-sections';
 import { useTheme } from 'next-themes';
 
 // Reusable animation variant for sections
@@ -327,6 +328,28 @@ export default function Home() {
           </div>
         </div>
       </motion.section>
+
+      {/* CONTA DADG — sem animação de entrada para o texto já vir visível no HTML (verificação do Google) */}
+      <section
+        aria-label="Sua conta DADG IMEPAC"
+        className={`relative z-10 w-full pb-16 sm:pb-20 transition-colors duration-500 ${isDark ? 'bg-[#001021]' : 'bg-white'}`}
+      >
+        <div className="page-shell">
+          <InfoCard
+            title="Sua conta DADG IMEPAC"
+            description="Com uma conta gratuita (e-mail e senha ou Entrar com Google) você se inscreve em eventos, acompanha sua presença, acessa seus certificados e participa dos processos seletivos do DADG IMEPAC. A mesma conta vale para o Congresso CIEPS. Usamos do Google apenas seu nome, e-mail e foto, só para criar a conta e fazer o login — nunca para publicidade."
+          >
+            <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold">
+              <Link href="/privacidade" className="text-[var(--brand-800)] underline underline-offset-4 dark:text-sky-300">
+                Política de Privacidade
+              </Link>
+              <Link href="/termos" className="text-[var(--brand-800)] underline underline-offset-4 dark:text-sky-300">
+                Termos de Uso
+              </Link>
+            </div>
+          </InfoCard>
+        </div>
+      </section>
 
       {/* Wave: Cards → Footer */}
       <WaveDivider bg={isDark ? "#001021" : "#ffffff"} fill="#001f45" flip />

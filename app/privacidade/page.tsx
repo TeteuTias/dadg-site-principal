@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { InfoCard, PageHero } from "@/app/components/site-sections";
 
 export const metadata: Metadata = {
-  title: "Política de Privacidade | DADG",
+  title: "Política de Privacidade",
   description:
     "Como o DADG e o CIEPS coletam, usam, compartilham e protegem dados pessoais, e como exercer seus direitos previstos na LGPD.",
 };
