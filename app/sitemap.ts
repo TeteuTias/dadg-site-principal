@@ -11,5 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/coordenadorias",
     "/coordenadorias/clam",
     "/processos-seletivos",
+    "/privacidade",
+    "/termos",
   ].map((path) => ({ url: `https://www.dadg.com.br${path}` }));
 }

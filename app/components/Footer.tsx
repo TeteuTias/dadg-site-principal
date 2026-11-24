@@ -108,9 +108,15 @@ export default function Footer() {
           <p className="text-blue-200/40 text-xs text-center sm:text-left">
             &copy; {new Date().getFullYear()} DADG — Diretório Acadêmico Diogo Guimarães · IMEPAC Araguari
           </p>
-          <p className="text-blue-200/30 text-xs">
-            Todos os direitos reservados
-          </p>
+          <div className="flex items-center gap-4 text-xs">
+            <Link href="/privacidade" className="text-blue-200/40 hover:text-white transition-colors">
+              Privacidade
+            </Link>
+            <Link href="/termos" className="text-blue-200/40 hover:text-white transition-colors">
+              Termos de uso
+            </Link>
+            <p className="text-blue-200/30">Todos os direitos reservados</p>
+          </div>
         </div>
       </div>
     </footer>
