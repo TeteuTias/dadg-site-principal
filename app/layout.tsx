@@ -11,6 +11,7 @@ import MenuDrawer from "./components/MenuDrawer";
 import MobileBottomNav from "./components/MobileBottomNav";
 import Footer from "./components/Footer";
 import UpcomingSchedulePopup from "./components/UpcomingSchedulePopup";
+import ForaDoEntrar from "./components/ForaDoEntrar";
 import { getSiteSettings } from "@/lib/siteSettings";
 import { Inter, Playfair_Display } from "next/font/google";
 import { ThemeProvider } from "./components/ThemeProvider";
@@ -96,15 +97,17 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       <body className={`${inter.variable} ${playfair.variable} font-sans antialiased`}>
         <a href="#conteudo" className="sr-only focus:not-sr-only focus:fixed focus:top-0 focus:z-[2000] bg-white p-3 text-blue-900">Pular para o conteúdo</a>
         <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange>
-          <UpcomingSchedulePopup />
+          <ForaDoEntrar><UpcomingSchedulePopup /></ForaDoEntrar>
           <UserProvider isAuthenticated={Boolean(session?.user)}>
-            <MenuDrawer blogEnabled={blogEnabled} />
-            <MobileBottomNav blogEnabled={blogEnabled} />
+            <ForaDoEntrar>
+              <MenuDrawer blogEnabled={blogEnabled} />
+              <MobileBottomNav blogEnabled={blogEnabled} />
+            </ForaDoEntrar>
             <div className="main-content pb-16 md:pb-0 flex flex-col min-h-screen">
               <div id="conteudo" tabIndex={-1} className="flex-grow">
                 {children}
               </div>
-              <Footer />
+              <ForaDoEntrar><Footer /></ForaDoEntrar>
             </div>
           </UserProvider>
 
