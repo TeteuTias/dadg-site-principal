@@ -1,81 +1,70 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ArrowLeft, Award, CalendarCheck, ClipboardList, Presentation } from "lucide-react";
-
-const VANTAGENS = [
-  { icone: CalendarCheck, texto: "Inscrição em eventos e controle de presença" },
-  { icone: Award, texto: "Seus certificados, sempre à mão" },
-  { icone: ClipboardList, texto: "Processos seletivos do DADG" },
-  { icone: Presentation, texto: "A mesma conta vale para o Congresso CIEPS" },
-];
+import { ArrowLeft } from "lucide-react";
 
 /**
- * Moldura das telas de /entrar (sem header/rodapé do site): lado da marca (computador) + formulário.
+ * Moldura das telas de /entrar (sem header/rodapé do site).
+ * Computador: foto real do IMEPAC à esquerda (identidade do DADG) e o formulário numa folha clara à direita.
+ * Celular: faixa com a foto e a marca no topo, formulário logo abaixo.
  * `voltar`: site de onde a pessoa veio (padrão: home do DADG).
  */
 export function Moldura({ titulo, subtitulo, site, voltar = "/", children }: { titulo: string; subtitulo?: ReactNode; site?: string; voltar?: string; children: ReactNode }) {
+  // -mb-16: o layout raiz reserva pb-16 no celular para o menu de baixo, que não aparece no /entrar
   return (
-    <div className="flex min-h-[100dvh] items-center py-6 sm:py-10">
-      <div className="page-shell w-full">
-        <div className="mx-auto mb-4 max-w-5xl">
-          <a href={voltar} className="inline-flex items-center gap-1.5 rounded-lg px-1 py-1 text-sm text-slate-500 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">
-            <ArrowLeft className="h-4 w-4" aria-hidden /> Voltar para o site
-          </a>
+    <div className="-mb-16 grid min-h-[100dvh] bg-[#f7f5f0] dark:bg-[#06111f] md:mb-0 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
+      {/* Foto + marca */}
+      <aside className="relative h-48 overflow-hidden bg-[var(--brand-950)] sm:h-56 lg:sticky lg:top-0 lg:h-[100dvh]">
+        <Image src="/imepac-hero.jpg" alt="Prédio histórico do IMEPAC em Araguari" fill priority sizes="(min-width: 1024px) 48vw, 100vw" className="object-cover object-[50%_40%]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[rgba(4,26,49,0.96)] via-[rgba(4,26,49,0.5)] to-[rgba(4,26,49,0.12)]" />
+        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[rgba(4,26,49,0.78)] to-transparent lg:h-40" />
+
+        <Link href="/" className="absolute left-5 top-5 flex items-center gap-3 sm:left-8 sm:top-7 lg:left-12 lg:top-10">
+          <span className="relative h-11 w-11 overflow-hidden rounded-full bg-white ring-1 ring-white/40 lg:h-12 lg:w-12">
+            <Image src="/logoDadg02.png" alt="" fill sizes="48px" className="object-cover" />
+          </span>
+          <span className="leading-tight text-white">
+            <span className="block text-sm font-semibold tracking-[0.24em]">DADG</span>
+            <span className="block text-xs text-white/70">IMEPAC Araguari</span>
+          </span>
+        </Link>
+
+        <div className="absolute inset-x-0 bottom-0 hidden p-12 text-white lg:block">
+          <span className="block h-px w-14 bg-[#d9c07c]" />
+          <p className="mt-6 max-w-md font-serif text-[2.6rem] leading-[1.08] text-balance">Uma conta para toda a sua vida acadêmica.</p>
+          <p className="mt-5 max-w-md text-[15px] leading-relaxed text-white/75">
+            Eventos, certificados, processos seletivos e o Congresso CIEPS no mesmo login.
+          </p>
+          <p className="mt-10 text-xs tracking-wide text-white/50">Diretório Acadêmico Diogo Guimarães</p>
         </div>
-        <div className="glass-panel-strong surface-outline mx-auto grid max-w-5xl overflow-hidden rounded-[32px] border border-white/70 shadow-[0_30px_80px_rgba(7,48,89,0.14)] dark:border-white/10 lg:grid-cols-[0.92fr_1.08fr]">
-          <aside className="relative hidden overflow-hidden bg-[#001f45] p-10 text-white lg:flex lg:flex-col lg:justify-between">
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_10%,rgba(79,143,214,0.35),transparent_45%),radial-gradient(circle_at_10%_95%,rgba(217,192,124,0.18),transparent_40%)]" />
-            <div className="pointer-events-none absolute -bottom-10 -right-10 h-56 w-56 bg-[radial-gradient(#ffffff_1.5px,transparent_1.5px)] [background-size:16px_16px] opacity-[0.07]" />
+      </aside>
 
-            <Link href="/" className="relative flex w-fit items-center gap-3">
-              <span className="relative h-12 w-12 overflow-hidden rounded-full border border-white/30 bg-white">
-                <Image src="/logoDadg02.png" alt="" fill sizes="48px" className="object-cover" />
+      {/* Formulário */}
+      <main className="relative -mt-6 rounded-t-[28px] bg-[#f7f5f0] px-5 pb-12 pt-8 dark:bg-[#06111f] sm:px-10 lg:mt-0 lg:flex lg:min-h-[100dvh] lg:flex-col lg:rounded-none lg:px-16 lg:py-10">
+        <a href={voltar} className="inline-flex min-h-11 items-center gap-1.5 rounded-lg text-sm text-slate-500 transition hover:text-[var(--brand-900)] dark:text-slate-400 dark:hover:text-white">
+          <ArrowLeft className="h-4 w-4" aria-hidden /> Voltar para o site
+        </a>
+
+        <div className="mx-auto mt-6 w-full max-w-[380px] lg:my-auto lg:mt-0">
+          {site ? (
+            <p className="mb-6 flex max-w-full items-center gap-2 text-xs font-medium uppercase tracking-[0.14em] text-[var(--brand-700)] dark:text-blue-300">
+              <span className="h-px w-6 shrink-0 bg-current" />
+              <span className="truncate">
+                Entrando em <span className="normal-case tracking-normal">{site.replace(/^https?:\/\//, "").replace(/^www\./, "")}</span>
               </span>
-              <span>
-                <span className="block text-xs font-semibold uppercase tracking-[0.32em] text-blue-200/80">DADG</span>
-                <span className="block text-sm font-medium text-white">Imepac Araguari</span>
-              </span>
-            </Link>
-
-            <div className="relative">
-              <p className="font-serif text-[2.3rem] leading-[1.1]">Uma conta para toda a sua vida acadêmica.</p>
-              <ul className="mt-8 space-y-4">
-                {VANTAGENS.map(({ icone: Icone, texto }) => (
-                  <li key={texto} className="flex items-center gap-3 text-[15px] text-blue-50/85">
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/10">
-                      <Icone className="h-[18px] w-[18px] text-blue-200" strokeWidth={1.8} />
-                    </span>
-                    {texto}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <p className="relative text-xs text-blue-200/50">DADG · Congresso CIEPS</p>
-          </aside>
-
-          <main className="px-5 py-9 sm:px-10 sm:py-12">
-            <div className="mx-auto w-full max-w-sm">
-              <Link href="/" className="mb-8 flex w-fit items-center gap-3 lg:hidden">
-                <span className="relative h-10 w-10 overflow-hidden rounded-full border border-slate-200 bg-white dark:border-white/20">
-                  <Image src="/logoDadg02.png" alt="" fill sizes="40px" className="object-cover" />
-                </span>
-                <span className="text-sm font-semibold uppercase tracking-[0.28em] text-slate-500 dark:text-slate-400">DADG</span>
-              </Link>
-              {site ? (
-                <p className="mb-5 inline-flex max-w-full items-center gap-2 rounded-full border border-blue-100 bg-blue-50/80 px-3 py-1 text-xs font-medium text-[var(--brand-800)] dark:border-blue-400/20 dark:bg-blue-500/10 dark:text-blue-200">
-                  <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--brand-500)]" />
-                  <span className="truncate">Entrando em <strong className="font-semibold">{site}</strong></span>
-                </p>
-              ) : null}
-              <h1 className="font-serif text-3xl font-bold text-[#002B5B] sm:text-[2.1rem] dark:text-white">{titulo}</h1>
-              {subtitulo ? <p className="mt-2 text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">{subtitulo}</p> : null}
-              <div className="mt-7">{children}</div>
-            </div>
-          </main>
+            </p>
+          ) : null}
+          <h1 className="font-serif text-[2.1rem] font-bold leading-tight text-[var(--brand-950)] sm:text-[2.4rem] dark:text-white">{titulo}</h1>
+          {subtitulo ? <p className="mt-3 text-[15px] leading-relaxed text-slate-600 dark:text-slate-400">{subtitulo}</p> : null}
+          <div className="mt-8">{children}</div>
         </div>
-      </div>
+
+        <p className="mx-auto mt-12 w-full max-w-[380px] text-xs text-slate-400 dark:text-slate-500 lg:mt-0">
+          DADG · Congresso CIEPS ·{" "}
+          <Link href="/privacidade" className="underline-offset-2 hover:underline">Privacidade</Link> ·{" "}
+          <Link href="/termos" className="underline-offset-2 hover:underline">Termos</Link>
+        </p>
+      </main>
     </div>
   );
 }
