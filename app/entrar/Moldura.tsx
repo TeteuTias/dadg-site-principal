@@ -7,15 +7,17 @@ import { ArrowLeft } from "lucide-react";
  * Moldura das telas de /entrar (sem header/rodapé do site).
  * Computador: foto real do IMEPAC à esquerda (identidade do DADG) e o formulário numa folha clara à direita.
  * Celular: faixa com a foto e a marca no topo, formulário logo abaixo.
- * `voltar`: site de onde a pessoa veio (padrão: home do DADG).
+ * `voltar`: site de onde a pessoa veio (padrão: home do DADG). `site` continua aceito pelas páginas, mas não aparece mais na tela.
  */
-export function Moldura({ titulo, subtitulo, site, voltar = "/", children }: { titulo: string; subtitulo?: ReactNode; site?: string; voltar?: string; children: ReactNode }) {
-  // -mb-16: o layout raiz reserva pb-16 no celular para o menu de baixo, que não aparece no /entrar
+const GRADE = "-mb-16 grid min-h-[100dvh] bg-[#f7f5f0] dark:bg-[#06111f] md:mb-0 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]";
+const FOLHA = "relative -mt-6 rounded-t-[28px] bg-[#f7f5f0] px-5 pb-12 pt-8 dark:bg-[#06111f] sm:px-10 lg:mt-0 lg:flex lg:min-h-[100dvh] lg:flex-col lg:rounded-none lg:px-16 lg:py-10";
+
+/** Foto + marca. A foto vai no arquivo original (1800 px, `unoptimized`): a versão otimizada do Next escolhia ~1080 px pela
+ * largura da coluna e esticava para a altura da tela, o que deixava a foto pixelada no computador. */
+function Lateral() {
   return (
-    <div className="-mb-16 grid min-h-[100dvh] bg-[#f7f5f0] dark:bg-[#06111f] md:mb-0 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
-      {/* Foto + marca */}
       <aside className="relative h-48 overflow-hidden bg-[var(--brand-950)] sm:h-56 lg:sticky lg:top-0 lg:h-[100dvh]">
-        <Image src="/imepac-hero.jpg" alt="Prédio histórico do IMEPAC em Araguari" fill priority sizes="(min-width: 1024px) 48vw, 100vw" className="object-cover object-[50%_40%]" />
+        <Image src="/imepac-hero.jpg" alt="Prédio histórico do IMEPAC em Araguari" fill priority unoptimized className="object-cover object-[50%_40%]" />
         <div className="absolute inset-0 bg-gradient-to-t from-[rgba(4,26,49,0.96)] via-[rgba(4,26,49,0.5)] to-[rgba(4,26,49,0.12)]" />
         <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[rgba(4,26,49,0.78)] to-transparent lg:h-40" />
 
@@ -38,22 +40,22 @@ export function Moldura({ titulo, subtitulo, site, voltar = "/", children }: { t
           <p className="mt-10 text-xs tracking-wide text-white/50">Diretório Acadêmico Diogo Guimarães</p>
         </div>
       </aside>
+  );
+}
 
-      {/* Formulário */}
-      <main className="relative -mt-6 rounded-t-[28px] bg-[#f7f5f0] px-5 pb-12 pt-8 dark:bg-[#06111f] sm:px-10 lg:mt-0 lg:flex lg:min-h-[100dvh] lg:flex-col lg:rounded-none lg:px-16 lg:py-10">
+export function Moldura({ titulo, subtitulo, voltar = "/", children }: { titulo: string; subtitulo?: ReactNode; site?: string; voltar?: string; children: ReactNode }) {
+  // -mb-16: o layout raiz reserva pb-16 no celular para o menu de baixo, que não aparece no /entrar
+  return (
+    <div className={GRADE}>
+      <Lateral />
+
+      {/* Formulário (entra com um fade curto; quem pede menos movimento não vê a animação) */}
+      <main className={FOLHA}>
         <a href={voltar} className="inline-flex min-h-11 items-center gap-1.5 rounded-lg text-sm text-slate-500 transition hover:text-[var(--brand-900)] dark:text-slate-400 dark:hover:text-white">
           <ArrowLeft className="h-4 w-4" aria-hidden /> Voltar para o site
         </a>
 
-        <div className="mx-auto mt-6 w-full max-w-[380px] lg:my-auto lg:mt-0">
-          {site ? (
-            <p className="mb-6 flex max-w-full items-center gap-2 text-xs font-medium uppercase tracking-[0.14em] text-[var(--brand-700)] dark:text-blue-300">
-              <span className="h-px w-6 shrink-0 bg-current" />
-              <span className="truncate">
-                Entrando em <span className="normal-case tracking-normal">{site.replace(/^https?:\/\//, "").replace(/^www\./, "")}</span>
-              </span>
-            </p>
-          ) : null}
+        <div className="mx-auto mt-6 w-full max-w-[380px] animate-in fade-in slide-in-from-bottom-2 duration-500 motion-reduce:animate-none lg:my-auto lg:mt-0">
           <h1 className="font-serif text-[2.1rem] font-bold leading-tight text-[var(--brand-950)] sm:text-[2.4rem] dark:text-white">{titulo}</h1>
           {subtitulo ? <p className="mt-3 text-[15px] leading-relaxed text-slate-600 dark:text-slate-400">{subtitulo}</p> : null}
           <div className="mt-8">{children}</div>
@@ -64,6 +66,32 @@ export function Moldura({ titulo, subtitulo, site, voltar = "/", children }: { t
           <Link href="/privacidade" className="underline-offset-2 hover:underline">Privacidade</Link> ·{" "}
           <Link href="/termos" className="underline-offset-2 hover:underline">Termos</Link>
         </p>
+      </main>
+    </div>
+  );
+}
+
+/** Esqueleto da troca de página do /entrar (app/entrar/loading.tsx): mesma foto à esquerda e blocos no lugar do formulário. */
+export function MolduraEsqueleto() {
+  const barra = "rounded-lg bg-slate-200/80 dark:bg-white/10";
+  return (
+    <div className={GRADE} aria-busy="true" aria-live="polite">
+      <Lateral />
+      <main className={FOLHA}>
+        <div className={`${barra} h-11 w-40 animate-pulse`} />
+        <div className="mx-auto mt-6 w-full max-w-[380px] animate-pulse lg:my-auto lg:mt-0">
+          <span className="sr-only">Carregando...</span>
+          <div className={`${barra} h-10 w-3/4`} />
+          <div className={`${barra} mt-4 h-4 w-full`} />
+          <div className={`${barra} mt-2 h-4 w-2/3`} />
+          <div className={`${barra} mt-10 h-12 w-full rounded-xl`} />
+          <div className={`${barra} mt-6 h-4 w-24`} />
+          <div className={`${barra} mt-2 h-12 w-full rounded-xl`} />
+          <div className={`${barra} mt-4 h-4 w-24`} />
+          <div className={`${barra} mt-2 h-12 w-full rounded-xl`} />
+          <div className="mt-8 h-12 w-full rounded-xl bg-[rgba(4,26,49,0.14)] dark:bg-white/10" />
+        </div>
+        <div className={`${barra} mx-auto mt-12 h-3 w-[220px] lg:mt-0`} />
       </main>
     </div>
   );
