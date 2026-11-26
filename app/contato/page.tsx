@@ -1,7 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Instagram, Mail } from "lucide-react";
 import { InfoCard, PageHero } from "@/app/components/site-sections";
 import { socialAccounts } from "@/app/lib/site-content";
+
+export const metadata: Metadata = {
+  title: "Contato",
+  description:
+    "Fale com o DADG IMEPAC: e-mail, Instagram das coordenadorias e ouvidoria para reclamações, sugestões, elogios e denúncias.",
+  alternates: { canonical: "/contato" },
+  openGraph: { title: "Contato | DADG IMEPAC", description: "Fale com o DADG IMEPAC: e-mail, Instagram das coordenadorias e ouvidoria para reclamações, sugestões, elogios e denúncias.", url: "/contato" },
+};
 
 export default function ContatoPage() {
   return (

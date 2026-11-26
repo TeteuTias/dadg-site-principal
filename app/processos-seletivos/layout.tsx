@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Processos seletivos das ligas acadêmicas | DADG",
+  alternates: { canonical: "/processos-seletivos" },
+  title: "Processos seletivos das ligas acadêmicas",
   description:
     "Consulte os processos seletivos da CLAM, faça sua inscrição e escolha as ligas acadêmicas de medicina em que quer concorrer.",
   openGraph: {

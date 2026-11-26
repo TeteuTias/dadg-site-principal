@@ -16,7 +16,7 @@ export default function Footer() {
             Diretório Acadêmico<br />Diogo Guimarães
           </h3>
           <p className="text-blue-200/60 text-sm leading-relaxed mt-2 max-w-xs">
-            Representância oficial dos estudantes de Medicina da IMEPAC Araguari, com compromisso com a excelência e o bem-estar discente.
+            Representação oficial dos estudantes de Medicina da IMEPAC Araguari, com compromisso com a excelência e o bem-estar discente.
           </p>
           <div className="flex items-start mt-6 text-blue-300/70 text-sm">
             <MapPin className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
@@ -83,7 +83,7 @@ export default function Footer() {
               <Instagram className="w-5 h-5" />
             </a>
             <a
-              href="mailto:contato@dadgimepac.com.br"
+              href="mailto:contato@dadg.com.br"
               aria-label="E-mail do DADG"
               className="w-11 h-11 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center transition-colors"
             >

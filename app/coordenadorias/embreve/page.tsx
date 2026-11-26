@@ -1,5 +1,8 @@
+import type { Metadata } from "next";
 import Typewriter from "@/app/components/TypeWriter"
 import WaveAnimation from "@/app/components/WaveComponent"
+
+export const metadata: Metadata = { title: "Em breve", robots: { index: false, follow: true } };
 
 export default function Page() {
     return (

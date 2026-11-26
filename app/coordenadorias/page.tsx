@@ -1,8 +1,17 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { PageHero, SectionHeading } from "@/app/components/site-sections";
 import { coordinatorCards } from "@/app/lib/site-content";
+
+export const metadata: Metadata = {
+  title: "Coordenadorias",
+  description:
+    "CAEP, CAES, CLAM, CAC e CLEV: conheça as coordenadorias do DADG IMEPAC e o trabalho de cada uma.",
+  alternates: { canonical: "/coordenadorias" },
+  openGraph: { title: "Coordenadorias | DADG IMEPAC", description: "CAEP, CAES, CLAM, CAC e CLEV: conheça as coordenadorias do DADG IMEPAC e o trabalho de cada uma.", url: "/coordenadorias" },
+};
 
 export default function CoordenadoriasPage() {
   return (

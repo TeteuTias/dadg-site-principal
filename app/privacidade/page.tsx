@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { InfoCard, PageHero } from "@/app/components/site-sections";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/privacidade" },
   title: "Política de Privacidade",
   description:
     "Como o DADG e o CIEPS coletam, usam, compartilham e protegem dados pessoais, e como exercer seus direitos previstos na LGPD.",
@@ -84,6 +85,11 @@ export default function PrivacidadePage() {
                     presença, trabalhos acadêmicos enviados e certificados.
                   </>,
                   <>
+                    <strong>Ouvidoria:</strong> tipo, assunto, descrição e anexo opcional da manifestação. Nome, e-mail
+                    e turma só quando você escolhe se identificar; no envio anônimo esses dados não são pedidos nem
+                    guardados, e o seu IP não é salvo junto com a manifestação.
+                  </>,
+                  <>
                     <strong>Pagamentos:</strong> quando houver, são processados por plataformas de pagamento
                     parceiras. O site não guarda número de cartão.
                   </>,
@@ -104,6 +110,7 @@ export default function PrivacidadePage() {
                   "Registro de presença.",
                   "Emissão e validação de certificados.",
                   "Processos seletivos (CLAM).",
+                  "Receber, apurar e responder manifestações da ouvidoria.",
                   "Comunicação operacional, como e-mails de confirmação e de redefinição de senha.",
                   "Segurança e prevenção de fraude.",
                   "Cumprimento de obrigações legais.",

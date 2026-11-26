@@ -1,211 +1,87 @@
-import { TOPICS } from "@/lib/ouvidoria-topics";
-// app/api/ouvidoria/route.ts
 import { NextResponse } from "next/server";
+import {
+  conferirFicha,
+  dentroDoLimite,
+  emitirFicha,
+  ipDoPedido,
+  LIMITES,
+  nomeSeguro,
+  tipoPeloConteudo,
+  validar,
+} from "@/lib/ouvidoria";
+import { avisarNovaManifestacao, registrar, semMetadados, type Anexo } from "@/lib/ouvidoria-servidor";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
-// ===== Config =====
-const SCRIPT_URL = process.env.OUVIDORIA_SCRIPT_URL;
+const semCache = { "Cache-Control": "private, no-store" };
+const erro = (mensagem: string, status = 400) => NextResponse.json({ ok: false, error: mensagem }, { status, headers: semCache });
 
-const MIN_MESSAGE = 20;
-const MAX_MESSAGE = 2000;
-const MAX_NAME = 80;
-
-const MIN_PHONE_DIGITS = 10;
-const MAX_PHONE_DIGITS = 13;
-
-const MIN_TURMA = 1;
-const MAX_TURMA = 999;
-
-// Tópicos permitidos (sempre em "forma normalizada")
-function topicKey(x: unknown) {
-  return String(x ?? "")
-    .toLowerCase()
-    .normalize("NFKC")
-    .replace(/[\u200B-\u200D\uFEFF]/g, "")
-    .replace(/\u00A0/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-const ALLOWED_TOPICS = TOPICS;
-
-// ===== Anti-spam: rate limit em memória (5 req/min por IP) =====
-const bucket = new Map<string, { count: number; resetAt: number }>();
-
-function rateLimit(key: string, limit: number, windowMs: number) {
-  const now = Date.now();
-  const entry = bucket.get(key);
-
-  if (!entry || now > entry.resetAt) {
-    bucket.set(key, { count: 1, resetAt: now + windowMs });
-    return { ok: true };
-  }
-
-  if (entry.count >= limit) return { ok: false };
-
-  entry.count += 1;
-  return { ok: true };
-}
-
-function norm(x: unknown) {
-  return String(x ?? "").trim();
-}
-
-function onlyDigits(x: unknown) {
-  return String(x ?? "").replace(/\D/g, "");
-}
-
-function getClientIp(req: Request) {
-  const xff = req.headers.get("x-forwarded-for");
-  if (xff) return xff.split(",")[0].trim();
-  const xri = req.headers.get("x-real-ip");
-  if (xri) return xri.trim();
-  return "unknown";
-}
-
-async function fetchWithTimeout(url: string, init: RequestInit, timeoutMs: number) {
-  const controller = new AbortController();
-  const t = setTimeout(() => controller.abort(), timeoutMs);
-  try {
-    return await fetch(url, { ...init, signal: controller.signal });
-  } finally {
-    clearTimeout(t);
-  }
+/** Ficha do formulário: o envio só vale alguns segundos depois de abrir a página. */
+export async function GET() {
+  return NextResponse.json({ ficha: emitirFicha() }, { headers: semCache });
 }
 
 export async function POST(req: Request) {
+  const ip = ipDoPedido(req.headers);
+  // Além do limite geral do proxy: 20 tentativas e 5 manifestações gravadas a cada 15 min por IP.
+  if (!dentroDoLimite(`tentativa:${ip}`, 20, 15 * 60_000))
+    return erro("Muitas tentativas seguidas. Aguarde alguns minutos e tente de novo.", 429);
+
+  // Sem Content-Length (envio em partes) não dá para limitar antes de ler: o navegador sempre manda.
+  const tamanho = Number(req.headers.get("content-length"));
+  if (!Number.isFinite(tamanho) || tamanho <= 0) return erro("Envio inválido. Recarregue a página e tente de novo.", 411);
+  if (tamanho > LIMITES.anexoBytes + 64 * 1024) return erro("O anexo passou de 4 MB.", 413);
+
+  let form: FormData;
   try {
-    if (!SCRIPT_URL) {
-      return NextResponse.json(
-        { ok: false, error: "OUVIDORIA_SCRIPT_URL não configurada." },
-        { status: 500 }
-      );
-    }
+    form = await req.formData();
+  } catch {
+    return erro("Não foi possível ler o formulário. Recarregue a página e tente de novo.");
+  }
 
-    const ip = getClientIp(req);
-    const rl = rateLimit(ip, 5, 60_000);
-    if (!rl.ok) {
-      return NextResponse.json(
-        { ok: false, error: "Muitas tentativas. Aguarde 1 minuto e tente novamente." },
-        { status: 429 }
-      );
-    }
+  // Campo invisível: só robô preenche. Responde como se desse certo, sem gravar.
+  if (String(form.get("site") ?? "").trim()) return NextResponse.json({ ok: true, protocolo: null }, { headers: semCache });
 
-    const body = await req.json().catch(() => ({}));
+  const ficha = conferirFicha(form.get("ficha"));
+  if (ficha === "rapida") return erro("Envio rápido demais. Confira os dados e envie de novo.");
+  if (ficha === "vencida") return erro("O formulário ficou aberto por muito tempo. Recarregue a página e envie de novo.");
+  if (ficha !== "ok") return erro("Formulário inválido. Recarregue a página e tente de novo.");
 
-    const website = norm(body.website);
-    if (website) return NextResponse.json({ ok: true });
+  const v = validar({
+    tipo: form.get("tipo"),
+    categoria: form.get("categoria"),
+    mensagem: form.get("mensagem"),
+    anonimo: form.get("anonimo"),
+    nome: form.get("nome"),
+    email: form.get("email"),
+    turma: form.get("turma"),
+    consentimento: form.get("consentimento"),
+  });
+  if (!v.ok) return erro(v.erro);
 
-    const topic = topicKey(body.topic);
-    const classNumberRaw = norm(body.classNumber);
-    const name = norm(body.name);
-    const phone = norm(body.phone ?? body.telefone);
-    const phoneDigits = onlyDigits(phone);
-    const message = norm(body.message);
+  let anexo: Anexo | null = null;
+  const arquivo = form.get("anexo");
+  if (arquivo && typeof arquivo !== "string" && arquivo.size > 0) {
+    if (arquivo.size > LIMITES.anexoBytes) return erro("O anexo passou de 4 MB.", 413);
+    const dados = new Uint8Array(await arquivo.arrayBuffer());
+    const tipo = tipoPeloConteudo(dados);
+    if (!tipo) return erro("Anexo não aceito. Envie uma imagem (JPG, PNG ou WEBP) ou um PDF.");
+    // Imagens são regravadas sem metadados (EXIF com GPS, aparelho, autor). Anônimo: nome do arquivo também sai.
+    const limpos = tipo === "application/pdf" ? dados : await semMetadados(dados, tipo);
+    if (!limpos) return erro("Não conseguimos ler essa imagem. Tente outra foto ou envie em PDF.");
+    anexo = { nome: nomeSeguro(v.dados.anonimo ? "anexo" : arquivo.name || "anexo", tipo), tipo, dados: limpos };
+  }
 
-    if (!ALLOWED_TOPICS.has(topic)) {
-      return NextResponse.json({ ok: false, error: "Tópico inválido." }, { status: 400 });
-    }
+  if (!dentroDoLimite(`envio:${ip}`, 5, 15 * 60_000))
+    return erro("Você enviou várias manifestações seguidas. Aguarde alguns minutos e tente de novo.", 429);
 
-    const classNumber = parseInt(classNumberRaw, 10);
-    if (!Number.isFinite(classNumber) || classNumber < MIN_TURMA || classNumber > MAX_TURMA) {
-      return NextResponse.json(
-        { ok: false, error: `Turma inválida (use um número entre ${MIN_TURMA} e ${MAX_TURMA}).` },
-        { status: 400 }
-      );
-    }
-
-    if (topic === "certificados" && !name) {
-      return NextResponse.json(
-        { ok: false, error: "Para o tópico Certificados, o nome completo é obrigatório." },
-        { status: 400 }
-      );
-    }
-
-    if (name.length > MAX_NAME) {
-      return NextResponse.json(
-        { ok: false, error: `Nome muito longo (máx ${MAX_NAME} caracteres).` },
-        { status: 400 }
-      );
-    }
-
-    if (topic === "certificados") {
-      if (
-        !phoneDigits ||
-        phoneDigits.length < MIN_PHONE_DIGITS ||
-        phoneDigits.length > MAX_PHONE_DIGITS
-      ) {
-        return NextResponse.json(
-          { ok: false, error: "Telefone inválido. Informe um número com DDD." },
-          { status: 400 }
-        );
-      }
-    } else if (phoneDigits) {
-      if (phoneDigits.length < MIN_PHONE_DIGITS || phoneDigits.length > MAX_PHONE_DIGITS) {
-        return NextResponse.json(
-          { ok: false, error: "Telefone inválido. Informe um número com DDD." },
-          { status: 400 }
-        );
-      }
-    }
-
-    if (message.length < MIN_MESSAGE || message.length > MAX_MESSAGE) {
-      return NextResponse.json(
-        { ok: false, error: `Mensagem inválida (mín ${MIN_MESSAGE}, máx ${MAX_MESSAGE} caracteres).` },
-        { status: 400 }
-      );
-    }
-
-    const payload = {
-      topic,
-      classNumber,
-      name,
-      phone,
-      message,
-      website: "",
-    };
-
-    const r = await fetchWithTimeout(
-      SCRIPT_URL,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      },
-      12_000
-    );
-
-    const text = await r.text();
-    let data: any = null;
-
-    try {
-      data = JSON.parse(text);
-    } catch {
-      console.error("OUVIDORIA upstream invalid response");
-      return NextResponse.json(
-        { ok: false, error: "Falha no serviço de envio (resposta inválida do script)." },
-        { status: 502 }
-      );
-    }
-
-    if (!r.ok || !data?.ok) {
-      console.error("OUVIDORIA upstream failure", r.status);
-      return NextResponse.json(
-        { ok: false, error: "Falha ao enviar. Tente novamente em instantes." },
-        { status: 502 }
-      );
-    }
-
-    return NextResponse.json({ ok: true });
-  } catch (err: any) {
-    if (err?.name === "AbortError") {
-      return NextResponse.json(
-        { ok: false, error: "Tempo excedido ao enviar. Tente novamente." },
-        { status: 504 }
-      );
-    }
-
-    return NextResponse.json({ ok: false, error: "Erro interno." }, { status: 500 });
+  try {
+    const protocolo = await registrar(v.dados, anexo);
+    avisarNovaManifestacao(protocolo, v.dados);
+    return NextResponse.json({ ok: true, protocolo }, { status: 201, headers: semCache });
+  } catch (e) {
+    console.error("[ouvidoria] falha ao registrar:", e instanceof Error ? e.name : typeof e);
+    return erro("Não conseguimos registrar agora. Tente de novo em alguns minutos.", 503);
   }
 }

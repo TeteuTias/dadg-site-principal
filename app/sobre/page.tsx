@@ -1,7 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { InfoCard, PageHero } from "@/app/components/site-sections";
+
+export const metadata: Metadata = {
+  title: "Sobre o DADG",
+  description:
+    "Conheça o Diretório Acadêmico Diogo Guimarães, a representação dos estudantes de Medicina da IMEPAC Araguari: quem somos, o que fazemos e como participar.",
+  alternates: { canonical: "/sobre" },
+  openGraph: { title: "Sobre o DADG | DADG IMEPAC", description: "Conheça o Diretório Acadêmico Diogo Guimarães, a representação dos estudantes de Medicina da IMEPAC Araguari: quem somos, o que fazemos e como participar.", url: "/sobre" },
+};
 
 export default function SobrePage() {
   return (

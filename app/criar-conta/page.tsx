@@ -1,5 +1,14 @@
+import type { Metadata } from "next";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { PageHero } from "@/app/components/site-sections";
+
+export const metadata: Metadata = {
+  title: "Criar conta",
+  description:
+    "Crie sua conta no site do DADG para se inscrever em eventos, acompanhar presença e reunir seus certificados.",
+  alternates: { canonical: "/criar-conta" },
+  openGraph: { title: "Criar conta | DADG IMEPAC", description: "Crie sua conta no site do DADG para se inscrever em eventos, acompanhar presença e reunir seus certificados.", url: "/criar-conta" },
+};
 
 const SIGNUP = "/api/auth/login?prompt=create&returnTo=%2Fperfil";
 const LOGIN = "/api/auth/login?returnTo=%2Fperfil";

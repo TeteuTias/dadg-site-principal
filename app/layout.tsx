@@ -63,8 +63,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/imepac-hero.jpg",
-        width: 1200,
-        height: 630,
+        width: 1800,
+        height: 1013,
         alt: "Campus IMEPAC Araguari — Diretório Acadêmico Diogo Guimarães",
       },
     ],

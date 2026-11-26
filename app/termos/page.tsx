@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { InfoCard, PageHero } from "@/app/components/site-sections";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/termos" },
   title: "Termos de Uso",
   description:
     "Regras de uso dos sites do DADG e do CIEPS: conta única, inscrições, certificados, conteúdos enviados e responsabilidades.",

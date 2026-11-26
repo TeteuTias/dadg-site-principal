@@ -1,9 +1,17 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import CoordinatorTemplate from "@/app/components/coordinator-template";
 import { SectionHeading } from "@/app/components/site-sections";
 import { coordinatorProfiles } from "@/app/lib/site-content";
 import GetAllNamesAndAcronym from "@/app/lib/models/src/AcademicLeagues/GetAllNamesAndAcronym";
+
+export const metadata: Metadata = {
+  title: `${coordinatorProfiles.clam.title}: ${coordinatorProfiles.clam.subtitle}`,
+  description: coordinatorProfiles.clam.summary,
+  alternates: { canonical: "/coordenadorias/clam" },
+  openGraph: { title: `${coordinatorProfiles.clam.title} | DADG IMEPAC`, description: coordinatorProfiles.clam.summary, url: "/coordenadorias/clam" },
+};
 
 export const dynamic = "force-dynamic";
 

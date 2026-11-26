@@ -6,12 +6,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/certificados",
     "/mural",
     "/ouvidoria",
+    "/ouvidoria/acompanhar",
     "/sobre",
     "/contato",
     "/coordenadorias",
+    "/coordenadorias/caep",
+    "/coordenadorias/caes",
     "/coordenadorias/clam",
+    "/coordenadorias/cac",
+    "/coordenadorias/clev",
     "/processos-seletivos",
     "/privacidade",
     "/termos",
+    "/criar-conta",
   ].map((path) => ({ url: `https://www.dadg.com.br${path}` }));
 }
