@@ -1,9 +1,68 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { ArrowRight, CalendarDays, ClipboardList, FileText, Grid, QrCode } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import { ArrowRight, CalendarDays, ClipboardList, FileText, Grid } from "lucide-react";
 import { useUserContext } from "@/lib/userProvider";
+
+// QR ilustrativo (não é lido por câmera): grade 25x25 fixa, com os 3 cantos de leitura arredondados e o símbolo do DADG no meio.
+const N = 25;
+const MODULOS = (() => {
+  let s = 1897;
+  const rnd = () => ((s = (s * 1103515245 + 12345) % 2147483648) / 2147483648);
+  const canto = (x: number, y: number) =>
+    (x < 8 && y < 8) || (x >= N - 8 && y < 8) || (x < 8 && y >= N - 8);
+  const meio = (x: number, y: number) => x >= 9 && x <= 15 && y >= 9 && y <= 15;
+  const l: [number, number][] = [];
+  for (let y = 0; y < N; y++)
+    for (let x = 0; x < N; x++) if (!canto(x, y) && !meio(x, y) && rnd() > 0.52) l.push([x, y]);
+  return l;
+})();
+
+function CantoQr({ x, y }: { x: number; y: number }) {
+  return (
+    <g>
+      <rect x={x + 0.5} y={y + 0.5} width={6} height={6} rx={1.9} fill="none" stroke="currentColor" strokeWidth={1} />
+      <rect x={x + 2} y={y + 2} width={3} height={3} rx={0.9} fill="currentColor" />
+    </g>
+  );
+}
+
+function QrIlustrado({ className = "", animar = true }: { className?: string; animar?: boolean }) {
+  const reduzir = useReducedMotion();
+  return (
+    <div aria-hidden="true" className={`pointer-events-none ${className}`}>
+      <div className="relative rounded-[22px] border border-white/15 bg-white/[0.06] p-3 shadow-[0_18px_40px_rgba(0,10,30,0.35)] backdrop-blur-sm">
+        {/* cantos de mira */}
+        <span className="absolute -left-1.5 -top-1.5 h-5 w-5 rounded-tl-lg border-l-2 border-t-2 border-blue-300/80" />
+        <span className="absolute -right-1.5 -top-1.5 h-5 w-5 rounded-tr-lg border-r-2 border-t-2 border-blue-300/80" />
+        <span className="absolute -bottom-1.5 -left-1.5 h-5 w-5 rounded-bl-lg border-b-2 border-l-2 border-blue-300/80" />
+        <span className="absolute -bottom-1.5 -right-1.5 h-5 w-5 rounded-br-lg border-b-2 border-r-2 border-blue-300/80" />
+        <div className="relative overflow-hidden rounded-[14px] bg-white p-2.5">
+          <svg viewBox={`0 0 ${N} ${N}`} className="block h-full w-full text-[#062a52]" shapeRendering="geometricPrecision">
+            {MODULOS.map(([x, y]) => (
+              <rect key={`${x}-${y}`} x={x + 0.07} y={y + 0.07} width={0.86} height={0.86} rx={0.32} fill="currentColor" />
+            ))}
+            <CantoQr x={0} y={0} />
+            <CantoQr x={N - 7} y={0} />
+            <CantoQr x={0} y={N - 7} />
+          </svg>
+          <div className="absolute left-1/2 top-1/2 flex h-[30%] w-[30%] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-xl bg-[#062a52] p-1 ring-4 ring-white">
+            <img src="/dadg_sem_fundo.png" alt="" className="h-full w-full object-contain" loading="lazy" />
+          </div>
+          {animar && !reduzir && (
+            <motion.div
+              className="absolute inset-x-0 h-10 bg-gradient-to-b from-transparent via-blue-400/25 to-transparent"
+              initial={{ top: "-20%" }}
+              animate={{ top: ["-20%", "100%"] }}
+              transition={{ duration: 2.8, repeat: Infinity, repeatDelay: 1.2, ease: "easeInOut" }}
+            />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const item = {
   hidden: { opacity: 0, y: 30 },
@@ -36,7 +95,8 @@ export default function QuickAccess() {
     >
       <motion.div variants={item} className={`${glass} col-span-2 flex flex-col p-8 sm:p-10 md:row-span-2`}>
         <div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-blue-400 opacity-10 blur-[70px]" />
-        <QrCode aria-hidden="true" strokeWidth={1} className="pointer-events-none absolute -bottom-8 -right-8 h-48 w-48 text-white opacity-[0.05]" />
+        <QrIlustrado animar={false} className="absolute -bottom-10 -right-10 w-44 rotate-[-8deg] opacity-[0.09] xl:hidden" />
+        <QrIlustrado className="absolute bottom-9 right-9 hidden w-36 rotate-[4deg] xl:block" />
 
         <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-blue-300">Área do aluno</p>
         <h3 className="mb-4 font-serif text-3xl font-bold text-white sm:text-4xl">
