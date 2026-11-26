@@ -193,7 +193,7 @@ export default function OuvidoriaPage() {
         <form
           onSubmit={enviar}
           noValidate
-          className="glass-panel surface-outline relative mx-auto max-w-3xl space-y-9 rounded-[32px] border border-white/70 p-5 sm:p-9 dark:border-white/10"
+          className="glass-panel surface-outline relative space-y-9 rounded-[32px] border border-white/70 px-5 py-6 sm:px-10 sm:py-12 dark:border-white/10 [&>*]:mx-auto [&>*]:max-w-3xl"
         >
           {/* Só robô preenche este campo. */}
           <div className="absolute -left-[9999px] h-px w-px overflow-hidden" aria-hidden>
