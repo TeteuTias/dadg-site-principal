@@ -3,11 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Shield, Activity, HeartHandshake, Building2, BookOpen, MessageCircle, HelpCircle, Mail, ChevronDown } from 'lucide-react';
+import { Shield, Activity, HeartHandshake, Building2, BookOpen, MessageCircle, HelpCircle, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ImpactStats from './components/ImpactStats';
 import WaveDivider from './components/WaveDivider';
 import FAQ from './components/FAQ';
+import HeroPrincipal, { HERO_FUNDO } from './components/HeroPrincipal';
 import { InfoCard } from './components/site-sections';
 import { useTheme } from 'next-themes';
 
@@ -30,51 +31,11 @@ export default function Home() {
   return (
     <main className={`min-h-[100dvh] w-full flex flex-col transition-colors duration-500 ${isDark ? 'bg-[#001021] text-blue-50' : 'bg-white text-gray-800'}`}>
 
-      {/* HERO SECTION */}
-      <section
-        aria-label="Seção principal do Diretório Acadêmico Diogo Guimarães"
-        className="relative w-full min-h-[100dvh] pt-28 pb-20 flex flex-col items-center justify-center text-center px-6 overflow-hidden"
-      >
-        {/* Grid background */}
-        <div className={`absolute inset-0 z-0 h-full w-full transition-colors duration-500 ${isDark ? 'bg-[#001021] bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)]' : 'bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)]'} bg-[size:6rem_4rem]`} />
-
-        <motion.div
-          className="relative z-10 flex flex-col items-center w-full max-w-6xl mx-auto"
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: { opacity: 0 },
-            visible: { opacity: 1, transition: { staggerChildren: 0.2 } }
-          }}
-        >
-          <motion.h1
-            variants={fadeInUp}
-            className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight font-serif transition-colors duration-500 ${isDark ? 'text-white' : 'text-[#002B5B]'}`}
-          >
-            Diretório Acadêmico <br className="hidden sm:block" />
-            <span>Diogo Guimarães</span>
-          </motion.h1>
-
-          <motion.p
-            variants={fadeInUp}
-            className={`text-base sm:text-lg md:text-xl max-w-2xl mb-8 font-light leading-relaxed mx-auto transition-colors duration-500 ${isDark ? 'text-blue-100/80' : 'text-slate-500'}`}
-          >
-            Conectando estudantes de medicina, promovendo a excelência acadêmica e forjando os líderes da saúde do amanhã.
-          </motion.p>
-
-          <motion.div
-            variants={fadeInUp}
-            className="mt-4 sm:mt-8 flex justify-center"
-          >
-            <div className="animate-bounce">
-              <ChevronDown size={36} className="text-slate-400 opacity-70" />
-            </div>
-          </motion.div>
-        </motion.div>
-      </section>
+      {/* HERO (HeroPrincipal.tsx) */}
+      <HeroPrincipal />
 
       {/* Wave: Hero → ImpactStats */}
-      <WaveDivider bg={isDark ? "#001021" : "#ffffff"} fill="#002B5B" />
+      <WaveDivider bg={HERO_FUNDO} fill="#002B5B" />
 
       {/* IMPACT STATS */}
       <ImpactStats />
