@@ -21,7 +21,7 @@ export default function HeroPrincipal() {
   return (
     <section
       aria-label="Seção principal do Diretório Acadêmico Diogo Guimarães"
-      className="relative isolate flex min-h-[100dvh] w-full flex-col items-center justify-center overflow-hidden px-5 pb-36 pt-32 text-center md:pb-24"
+      className="relative isolate flex min-h-[100dvh] w-full flex-col items-center justify-center overflow-hidden px-5 pb-28 pt-32 text-center md:pb-24"
       style={{ background: HERO_FUNDO }}
     >
       {/* foto */}
@@ -115,7 +115,7 @@ export default function HeroPrincipal() {
       {/* indicador de rolagem */}
       <motion.div
         aria-hidden="true"
-        className="absolute bottom-24 left-1/2 flex -translate-x-1/2 md:bottom-8 flex-col items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.3em] text-blue-100/50"
+        className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 md:flex flex-col items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.3em] text-blue-100/50"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.4, duration: 0.8 }}
