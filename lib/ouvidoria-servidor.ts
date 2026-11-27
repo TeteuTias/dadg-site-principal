@@ -143,12 +143,12 @@ async function comPrazo(url: string, init: RequestInit, ms = 8000) {
 }
 
 /**
- * E-mail para a diretoria pelo Brevo (só se BREVO_API_KEY existir no servidor).
+ * E-mail para a ouvidoria: pelo servidor de e-mail do DADG (OUVIDORIA_SMTP_SENHA) ou, sem ele, pelo Brevo (BREVO_API_KEY).
  * Vai só o aviso (protocolo, tipo, assunto) e o link do painel: o conteúdo e a identificação ficam no painel.
  */
 async function avisarPorEmail(protocolo: string, m: Manifestacao): Promise<"enviado" | "sem-chave" | "falhou"> {
   const chave = process.env.BREVO_API_KEY;
-  if (!chave) return "sem-chave";
+  if (!chave && !process.env.OUVIDORIA_SMTP_SENHA) return "sem-chave";
   const para = (process.env.OUVIDORIA_AVISO_PARA || "contato@dadg.com.br").split(",").map((e) => ({ email: e.trim() })).filter((e) => e.email);
   const de = process.env.OUVIDORIA_AVISO_DE || "nao-responda@dadg.com.br";
   const tipo = rotuloTipo(m.tipo);
@@ -164,6 +164,34 @@ async function avisarPorEmail(protocolo: string, m: Manifestacao): Promise<"envi
     `Leia e responda no painel: ${PAINEL()}`,
     `(o texto e os dados de quem enviou ficam só no painel, que exige login de administrador)`,
   ];
+  const assuntoEmail = `[Ouvidoria] ${tipo} · ${assunto} · ${protocolo}`;
+  // Servidor de e-mail do próprio DADG (Stalwart na mesma VPS), autenticado como a caixa da ouvidoria.
+  if (process.env.OUVIDORIA_SMTP_SENHA) {
+    try {
+      const nodemailer = await import("nodemailer");
+      const usuario = process.env.OUVIDORIA_SMTP_USUARIO || "ouvidoria@dadg.com.br";
+      const t = nodemailer.createTransport({
+        host: process.env.OUVIDORIA_SMTP_HOST || "127.0.0.1",
+        port: Number(process.env.OUVIDORIA_SMTP_PORTA || 465),
+        secure: true,
+        auth: { user: usuario, pass: process.env.OUVIDORIA_SMTP_SENHA },
+        tls: { servername: process.env.OUVIDORIA_SMTP_NOME_TLS || "mail.dadg.com.br" },
+        connectionTimeout: 8000,
+        socketTimeout: 10000,
+      });
+      await t.sendMail({
+        from: { name: "Ouvidoria DADG", address: usuario },
+        to: para.map((p) => p.email),
+        subject: assuntoEmail,
+        text: linhas.join("\n"),
+      });
+      return "enviado";
+    } catch (e) {
+      console.error("[ouvidoria] SMTP:", e instanceof Error ? e.message : e);
+      return "falhou";
+    }
+  }
+  if (!chave) return "sem-chave";
   try {
     const r = await comPrazo("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
@@ -171,7 +199,7 @@ async function avisarPorEmail(protocolo: string, m: Manifestacao): Promise<"envi
       body: JSON.stringify({
         sender: { name: "Ouvidoria DADG", email: de },
         to: para,
-        subject: `[Ouvidoria] ${tipo} · ${assunto} · ${protocolo}`,
+        subject: assuntoEmail,
         textContent: linhas.join("\n"),
       }),
     });
